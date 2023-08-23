@@ -3,6 +3,7 @@ import Image from 'next/image'
 import { Lato } from 'next/font/google'
 import { ContactForm } from '@/components/ContactForm';
 import { ModulesPreview } from '@/components/ModulesPreview';
+import { ClientLogos } from '@/components/ClientsLogo';
 
 const lato = Lato({ weight: ['100', '300', '400', '700', '900'], subsets: ['latin'] })
 export default function Home() {
@@ -19,6 +20,8 @@ export default function Home() {
       </div>
 
       <ModulesPreview />
+
+      <ClientLogos />
     </div>
   )
 }
