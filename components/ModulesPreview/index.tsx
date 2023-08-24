@@ -12,8 +12,8 @@ export function ModulesPreview() {
     }
 
     return (
-        <div className="flex gap-6">
-            <div className='w-fit items-start flex flex-col gap-4 mt-8'>
+        <div className="flex gap-6 mt-12">
+            <div className='w-fit items-start flex flex-col gap-4'>
                 <Button variant={handleButtonVariant(0)} onClick={() => setSelectedOption(0)}>
                     <MessagesSquare size={16} className={selectedOption == 0 ? 'text-slate-200 mr-2' : 'text-slate-600 mr-2'} />
                     VOCA Opinião

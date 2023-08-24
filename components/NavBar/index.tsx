@@ -2,18 +2,20 @@ import Image from "next/image";
 
 export function NavBar() {
     return (
-        <nav className="flex justify-between items-center shadow-md px-4 py-3">
-            <Image
-                src='/logo-voca.png'
-                alt="Logomarcar VOCA"
-                width={160}
-                height={80}
-            />
-            <div className="flex gap-6 text-slate-800">
-                <MenuItem name="Home" />
-                <MenuItem name="Quem Somos" />
-                <MenuItem name="Como Funciona" />
-                <MenuItem name="Fale Conosco" />
+        <nav className="shadow-sm shadow-teal-900 px-4 py-3 z-10 sticky bg-gradient-to-t from-teal-700 to-teal-900">
+            <div className="flex justify-between items-center max-w-7xl m-auto">
+                <Image
+                    src='/logo-voca-negativo.png'
+                    alt="Logomarcar VOCA"
+                    width={160}
+                    height={80}
+                />
+                <div className="flex gap-6 text-slate-800">
+                    <MenuItem name="Home" />
+                    <MenuItem name="Quem Somos" />
+                    <MenuItem name="Como Funciona" />
+                    <MenuItem name="Fale Conosco" />
+                </div>
             </div>
         </nav>
     )
@@ -21,7 +23,7 @@ export function NavBar() {
 
 function MenuItem({ name }: { name: string }) {
     return (
-        <p className="text-md cursor-pointer border-b-2 border-b-transparent hover:border-slate-700 ">
+        <p className="text-md text-teal-50 cursor-pointer border-b-2 border-b-transparent hover:border-teal-600 ">
             {name}
         </p>
     )

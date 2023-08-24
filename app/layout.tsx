@@ -17,10 +17,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body className={`${inter.className}`}>
         <NavBar />
-        <div className='px-4 py-8'>
-          {children}
+        <div className='px-4 py-8 bg-gradient-to-br from-zinc-100'>
+          <div className='max-w-7xl m-auto'>
+            {children}
+          </div>
         </div>
       </body>
     </html>

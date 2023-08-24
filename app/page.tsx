@@ -1,20 +1,38 @@
 "use client"
 import Image from 'next/image'
-import { Lato } from 'next/font/google'
+import { Red_Hat_Display } from 'next/font/google'
 import { ContactForm } from '@/components/ContactForm';
 import { ModulesPreview } from '@/components/ModulesPreview';
 import { ClientLogos } from '@/components/ClientsLogo';
+import { ListChecks, Star } from 'lucide-react';
+import { Benefits } from '@/components/Benefits';
 
-const lato = Lato({ weight: ['100', '300', '400', '700', '900'], subsets: ['latin'] })
+const redHatDisplayFont = Red_Hat_Display({ weight: ['300', '400', '700'], subsets: ['latin'] })
+
 export default function Home() {
   return (
-    <div className={lato.className}>
-      <div className='grid grid-cols-2 gap-4 justify-self-center items-center align-middle'>
-        <p className='text-4xl font-semibold text-teal-700 tracking-wide'>
-          Damos voz ao colaborador, ajudando as empresas a cuidar das pessoas, para que as pessoas queiram cuidar das empresas
-        </p>
+    <div className={redHatDisplayFont.className}>
+      <div className='flex gap-4 items-center justify-between'>
+        <div className='flex flex-col gap-4'>
+          <p className='text-4xl font-semibold text-teal-800 tracking-wide'>
+            Você está pronto para revolucionar a gestão de pessoas da sua empresa?
+          </p>
+          <p className='text-lg text-teal-900'>
+            Conheça o VOCA: Integrando ideias, potencializando pessoas.
+          </p>
 
-        <div className='justify-self-center'>
+          <div className='flex gap-2 items-center text-teal-800 mt-6'>
+            <Star className='text-teal-700' size={20} />
+            <span className='text-sm'>Nota 10 em Atendimento</span>
+          </div>
+          <div className='flex gap-2 items-center text-teal-800'>
+            <ListChecks className='text-teal-700' size={20} />
+            <span className='text-sm'>Plataforma Completa</span>
+          </div>
+
+        </div>
+
+        <div className=''>
           <ContactForm />
         </div>
       </div>
@@ -22,6 +40,8 @@ export default function Home() {
       <ModulesPreview />
 
       <ClientLogos />
+
+      <Benefits />
     </div>
   )
 }
