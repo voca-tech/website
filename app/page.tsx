@@ -6,12 +6,13 @@ import { ModulesPreview } from '@/components/ModulesPreview';
 import { ClientLogos } from '@/components/ClientsLogo';
 import { ListChecks, Star } from 'lucide-react';
 import { Benefits } from '@/components/Benefits';
+import { Testimonials } from '@/components/Testimonials';
 
 const redHatDisplayFont = Red_Hat_Display({ weight: ['300', '400', '700'], subsets: ['latin'] })
 
 export default function Home() {
   return (
-    <div className={redHatDisplayFont.className}>
+    <div className={`${redHatDisplayFont.className} flex flex-col gap-12`}>
       <div className='flex gap-4 items-center justify-between'>
         <div className='flex flex-col gap-4'>
           <p className='text-4xl font-semibold text-teal-800 tracking-wide'>
@@ -42,6 +43,8 @@ export default function Home() {
       <ClientLogos />
 
       <Benefits />
+
+      <Testimonials />
     </div>
   )
 }
