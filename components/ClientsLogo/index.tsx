@@ -15,6 +15,7 @@ export function ClientLogos() {
             <div className="flex gap-16">
                 {logos.map(logo => (
                     <Image
+                        key={logo.name}
                         src={logo.src}
                         alt={logo.name}
                         width={logo.width}

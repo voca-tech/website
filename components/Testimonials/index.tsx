@@ -12,10 +12,10 @@ import { Separator } from "../ui/separator";
 
 export function Testimonials() {
     const users = [
-        { name: 'Carol Guerra', company: 'Credi10', avatar: '/avatars/user1.jpg', testimonial: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Esse ipsatis ullam id earum. Laudantium nihil fuga odio saepe placeat est autem ratione sequi sunt?' },
-        { name: 'Rodrigo Carvalho', company: 'Grupo Akaer', avatar: '/avatars/user2.jpg', testimonial: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Esse ipsatis ullam id earum. Laudantium nihil fuga odio saepe placeat est autem ratione sequi sunt?' },
-        { name: 'Bárbara Silveira', company: 'Belas Artes', avatar: '/avatars/user4.jpg', testimonial: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Esse ipsatis ullam id earum. Laudantium nihil fuga odio saepe placeat est autem ratione sequi sunt?' },
-        { name: 'João Costa', company: 'Woodbridge', avatar: '/avatars/user3.jpg', testimonial: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Esse ipsatis ullam id earum. Laudantium nihil fuga odio saepe placeat est autem ratione sequi sunt?' },
+        { id: 1, name: 'Carol Guerra', company: 'Credi10', avatar: '/avatars/user1.jpg', testimonial: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Esse ipsatis ullam id earum. Laudantium nihil fuga odio saepe placeat est autem ratione sequi sunt?' },
+        { id: 2, name: 'Rodrigo Carvalho', company: 'Grupo Akaer', avatar: '/avatars/user2.jpg', testimonial: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Esse ipsatis ullam id earum. Laudantium nihil fuga odio saepe placeat est autem ratione sequi sunt?' },
+        { id: 3, name: 'Bárbara Silveira', company: 'Belas Artes', avatar: '/avatars/user4.jpg', testimonial: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Esse ipsatis ullam id earum. Laudantium nihil fuga odio saepe placeat est autem ratione sequi sunt?' },
+        { id: 4, name: 'João Costa', company: 'Woodbridge', avatar: '/avatars/user3.jpg', testimonial: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Esse ipsatis ullam id earum. Laudantium nihil fuga odio saepe placeat est autem ratione sequi sunt?' },
     ]
 
     return (
@@ -27,7 +27,7 @@ export function Testimonials() {
 
             <div className="grid gap-4 grid-cols-4">
                 {users.map(user => (
-                    <Card>
+                    <Card key={user.id}>
                         <CardHeader className="flex flex-row gap-4 py-4">
                             <Image 
                                 src={user.avatar}
