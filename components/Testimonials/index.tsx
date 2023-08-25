@@ -45,9 +45,9 @@ export function Testimonials() {
                         <CardContent>
                             <p>{user.testimonial}</p>
                         </CardContent>
-                        <CardFooter>
+                        {/* <CardFooter>
                             <p>Card Footer</p>
-                        </CardFooter>
+                        </CardFooter> */}
                     </Card>
                 ))}
             </div>

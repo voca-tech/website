@@ -5,7 +5,7 @@ import { ContactForm } from '@/components/ContactForm';
 import { ModulesPreview } from '@/components/ModulesPreview';
 import { ClientLogos } from '@/components/ClientsLogo';
 import { ListChecks, Star } from 'lucide-react';
-import { Benefits } from '@/components/Benefits';
+import { BenefitsAndKPIs } from '@/components/BenefitsAndKpis';
 import { Testimonials } from '@/components/Testimonials';
 
 const redHatDisplayFont = Red_Hat_Display({ weight: ['300', '400', '700'], subsets: ['latin'] })
@@ -33,8 +33,18 @@ export default function Home() {
 
         </div>
 
-        <div className=''>
+        <div className='flex flex-col gap-4'>
           <ContactForm />
+          <div className='flex gap-4 items-center justify-center bg-white py-2 rounded-lg shadow border border-slate-200 hover:cursor-pointer hover:bg-gradient-to-tr hover:from-green-50 hover:to-green-100 transition-all'>
+            <p className='text-green-600 font-bold'>Fale com a gente no Whatsapp</p>
+            <Image
+              src='/whatsapp.svg'
+              alt='Whatsapp Icon'
+              width={50}
+              height={50}
+              className='text-green-600'
+            />
+          </div>
         </div>
       </div>
 
@@ -42,7 +52,7 @@ export default function Home() {
 
       <ClientLogos />
 
-      <Benefits />
+      <BenefitsAndKPIs />
 
       <Testimonials />
     </div>

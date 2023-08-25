@@ -43,7 +43,7 @@ export function ContactForm() {
     }
 
     return (
-        <Card className='shadow-md drop-shadow-md shadow-zinc-300 w-[30rem]'>
+        <Card className='shadow w-[30rem]'>
             <CardHeader>
                 <CardTitle>Agendar Demonstração</CardTitle>
                 <CardDescription>Entraremos em contato para marcar uma apresentação do nosso produto</CardDescription>
@@ -81,7 +81,7 @@ export function ContactForm() {
                             <CalendarSearch size={18} className='text-zinc-600 mr-2' />
                             Prefiro selecionar um horário disponível
                         </Button>
-                        <Button type="submit" className='float-right'>Enviar</Button>
+                        <Button type="submit" className='float-right'>Agendar</Button>
                     </form>
                 </Form>
             </CardContent>

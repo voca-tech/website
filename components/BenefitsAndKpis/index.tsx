@@ -1,6 +1,6 @@
 import { AlarmCheck, HeartPulse, Lightbulb, MessagesSquare } from "lucide-react";
 
-export function Benefits() {
+export function BenefitsAndKPIs() {
     return (
         <div className="px-8 py-6 shadow-2xl shadow-teal-900 bg-gradient-to-tl from-teal-500 to-teal-800 text-zinc-200 rounded">
             <h3 className="px-6 py-2 bg-teal-100 shadow rounded-full text-teal-800 w-fit mx-auto font-bold">
