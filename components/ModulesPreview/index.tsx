@@ -13,7 +13,7 @@ export function ModulesPreview() {
 
     return (
         <div className="flex gap-6">
-            <div className='w-fit items-start flex flex-col gap-4'>
+            <div className='w-fit items-start flex flex-col gap-6'>
                 <Button variant={handleButtonVariant(0)} onClick={() => setSelectedOption(0)}>
                     <MessagesSquare size={16} className={selectedOption == 0 ? 'text-slate-200 mr-2' : 'text-slate-600 mr-2'} />
                     VOCA Opinião

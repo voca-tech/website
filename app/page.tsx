@@ -12,7 +12,7 @@ const redHatDisplayFont = Red_Hat_Display({ weight: ['300', '400', '700'], subse
 
 export default function Home() {
   return (
-    <div className={`${redHatDisplayFont.className} flex flex-col gap-12`}>
+    <div className={`${redHatDisplayFont.className} flex flex-col gap-16`}>
       <div className='flex gap-4 items-center justify-between'>
         <div className='flex flex-col gap-4'>
           <p className='text-4xl font-semibold text-teal-800 tracking-wide'>
