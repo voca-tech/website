@@ -16,7 +16,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en">
+    <html lang="en" className='scroll-smooth'>
       <body className={`${inter.className}`}>
         <NavBar />
         <div className='px-4 py-8 bg-gradient-to-br from-zinc-100'>
