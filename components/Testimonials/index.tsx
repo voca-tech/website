@@ -19,10 +19,10 @@ export function Testimonials() {
     ]
 
     return (
-        <div className="flex flex-col gap-4 justify-center items-center">
+        <div className="flex flex-col gap-4 justify-center items-center mt-8 md:mt-0">
             <div className="flex gap-2 items-center">
                 {/* <Sparkles /> */}
-                <h2 className="text-2xl text-zinc-500">O que estão falando sobre o <span className="text-teal-700 font-bold">VOCA</span></h2>
+                <h2 className="text-2xl text-zinc-500 text-center">O que estão falando sobre o <span className="text-teal-700 font-bold">VOCA</span></h2>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">

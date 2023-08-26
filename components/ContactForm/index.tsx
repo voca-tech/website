@@ -48,7 +48,7 @@ export function ContactForm() {
                 <CardTitle>Agendar Demonstração</CardTitle>
                 <CardDescription>Entraremos em contato para marcar uma apresentação do nosso produto</CardDescription>
             </CardHeader>
-            <CardContent>
+            <CardContent className="pt-0 pb-4">
                 <Form {...contactForm}>
                     <form onSubmit={contactForm.handleSubmit(onSubmit)} className="space-y-4">
                         <FormField
@@ -77,11 +77,13 @@ export function ContactForm() {
                                 </FormItem>
                             )}
                         />
-                        <Button type="button" variant='link' className='p-0 text-xs'>
-                            <CalendarSearch size={18} className='text-zinc-600 mr-2' />
-                            Prefiro selecionar um horário disponível
-                        </Button>
-                        <Button type="submit" className='float-right'>Agendar</Button>
+                        <div className="flex flex-col justify-between md:flex-row-reverse gap-2">
+                            <Button type="submit" className='md:w-1/3'>Agendar</Button>
+                            <Button type="button" variant='link' className='p-0 text-xs'>
+                                <CalendarSearch size={18} className='text-zinc-600 mr-2' />
+                                Prefiro selecionar um horário disponível
+                            </Button>
+                        </div>
                     </form>
                 </Form>
             </CardContent>
