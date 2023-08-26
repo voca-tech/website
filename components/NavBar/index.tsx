@@ -21,7 +21,7 @@ export function NavBar() {
 
                 <div className="md:hidden text-white hover:cursor-pointer">
                     <Popover>
-                        <PopoverTrigger><Menu /></PopoverTrigger>
+                        <PopoverTrigger className="flex items-center"><Menu /></PopoverTrigger>
                         <PopoverContent>
                             <div className="flex flex-col gap-6 text-teal-800">
                                 <PopoverMenuItem name="Home" />

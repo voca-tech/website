@@ -10,7 +10,7 @@ export function ClientLogos() {
     ]
 
     return (
-        <div className="flex flex-col gap-4 justify-center items-center ">
+        <div className="flex flex-col gap-4 justify-center items-center text-center">
             <h2 className="text-2xl text-zinc-500">Conheça alguns dos <span className="text-teal-700 font-bold">nossos clientes</span></h2>
             <div className="flex flex-wrap justify-center gap-6 md:gap-16">
                 {logos.map(logo => (
