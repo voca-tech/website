@@ -7,13 +7,14 @@ import { ClientLogos } from '@/components/ClientsLogo';
 import { ListChecks, Star } from 'lucide-react';
 import { BenefitsAndKPIs } from '@/components/BenefitsAndKpis';
 import { Testimonials } from '@/components/Testimonials';
+import { WhatsappLink } from '@/components/WhatsappLink';
 
 const redHatDisplayFont = Red_Hat_Display({ weight: ['300', '400', '700'], subsets: ['latin'] })
 
 export default function Home() {
   return (
     <div className={`${redHatDisplayFont.className} flex flex-col gap-16`}>
-      <div className='flex gap-4 items-center justify-between'>
+      <div className='flex flex-col lg:flex-row gap-4 items-center justify-between'>
         <div className='flex flex-col gap-4'>
           <p className='text-4xl font-semibold text-teal-800 tracking-wide'>
             Você está pronto para revolucionar a gestão de pessoas da sua empresa?
@@ -33,18 +34,9 @@ export default function Home() {
 
         </div>
 
-        <div className='flex flex-col gap-4'>
+        <div className='flex flex-col gap-4 w-full'>
           <ContactForm />
-          <div className='flex gap-4 items-center justify-center bg-white py-2 rounded-lg shadow border border-slate-200 hover:cursor-pointer hover:bg-gradient-to-tr hover:from-green-50 hover:to-green-100 transition-all'>
-            <p className='text-green-600 font-bold'>Fale com a gente no Whatsapp</p>
-            <Image
-              src='/whatsapp.svg'
-              alt='Whatsapp Icon'
-              width={50}
-              height={50}
-              className='text-green-600'
-            />
-          </div>
+          <WhatsappLink />
         </div>
       </div>
 

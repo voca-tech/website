@@ -25,7 +25,7 @@ export function Testimonials() {
                 <h2 className="text-2xl text-zinc-500">O que estão falando sobre o <span className="text-teal-700 font-bold">VOCA</span></h2>
             </div>
 
-            <div className="grid gap-4 grid-cols-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
                 {users.map(user => (
                     <Card key={user.id}>
                         <CardHeader className="flex flex-row gap-4 py-4">

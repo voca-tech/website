@@ -43,7 +43,7 @@ export function ContactForm() {
     }
 
     return (
-        <Card className='shadow w-[30rem]'>
+        <Card className='shadow'>
             <CardHeader>
                 <CardTitle>Agendar Demonstração</CardTitle>
                 <CardDescription>Entraremos em contato para marcar uma apresentação do nosso produto</CardDescription>
