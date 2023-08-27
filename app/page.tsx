@@ -32,7 +32,7 @@ export default function Home() {
             de pessoas, clima organizacional, desempenho e muito mais.
           </h1>
           <p className="mt-2 text-md sm:text-xl text-md tracking-tight text-slate-600">
-            Nosso propósito é ajudar a sua empresa a <strong>cuidar das pessoas</strong>, para que elas queiram cuidar da empresa!
+            Conheça o <span className='font-medium text-teal-800'>VOCA</span>. Ajudamos a sua empresa a <strong>cuidar das pessoas</strong>, para que elas queiram cuidar da empresa!
           </p>
 
           {/* <div className='flex gap-2 items-center text-teal-800 mt-6'>
