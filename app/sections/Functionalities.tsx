@@ -1,10 +1,10 @@
 "use client"
 import { useState } from "react";
-import { Button } from "../ui/button";
 import { ActivitySquare, GaugeCircle, GraduationCap, MessagesSquare, Newspaper } from 'lucide-react';
 import Image from "next/image";
+import { Button } from "@/components/ui/button";
 
-export function ModulesPreview() {
+export default function FunctionalitiesSection() {
     const [selectedOption, setSelectedOption] = useState(0)
 
     function handleButtonVariant(index: number) {

@@ -8,9 +8,9 @@ import {
     CardTitle,
 } from "@/components/ui/card"
 import Image from "next/image";
-import { Separator } from "../ui/separator";
+import { Separator } from "@/components/ui/separator";
 
-export function Testimonials() {
+export default function TestimonialsSection() {
     const users = [
         { id: 1, name: 'Carol Guerra', company: 'Credi10', avatar: '/avatars/user1.jpg', testimonial: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Esse ipsatis ullam id earum. Laudantium nihil fuga odio saepe placeat est autem ratione sequi sunt?' },
         { id: 2, name: 'Rodrigo Carvalho', company: 'Grupo Akaer', avatar: '/avatars/user2.jpg', testimonial: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Esse ipsatis ullam id earum. Laudantium nihil fuga odio saepe placeat est autem ratione sequi sunt?' },

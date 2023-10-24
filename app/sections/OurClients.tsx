@@ -1,6 +1,6 @@
 import Image from "next/image"
 
-export function ClientLogos() {
+export default function OurClientsSection() {
     const logos = [
         { name: 'Akaer', src: '/clients/akaer.png', width: 80, height: 80 },
         { name: 'Credi10', src: '/clients/credi10.png', width: 80, height: 80 },
