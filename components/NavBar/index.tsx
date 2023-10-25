@@ -4,7 +4,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 
 export function NavBar() {
     return (
-        <nav className="shadow-sm shadow-teal-900 px-4 py-3 z-10 bg-gradient-to-t from-teal-700 to-teal-900">
+        <nav className="px-4 py-3 z-10 bg-voca-green">
             <div className="flex justify-between items-center max-w-7xl m-auto">
                 <Image
                     src='/logo-voca-negativo.png'

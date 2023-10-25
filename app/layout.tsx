@@ -2,6 +2,7 @@ import { NavBar } from '@/components/NavBar'
 import './globals.css'
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
+import Footer from './sections/Footer'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -20,15 +21,13 @@ export default function RootLayout({
       <body className={`${inter.className}`}>
         <NavBar />
 
-        <div className='px-4 py-8 bg-gradient-to-br from-zinc-100'>
-          <div className='max-w-7xl m-auto'>
+        <div className=''>
+          <div className='m-auto'>
             {children}
           </div>
         </div>
 
-        <footer className='mt-12 py-20 bg-gradient-to-tr from-teal-700 to-teal-900 m-auto'>
-          <p className='text-white text-center m-auto'>Footer</p>
-        </footer>
+        <Footer />
       </body>
     </html>
   )

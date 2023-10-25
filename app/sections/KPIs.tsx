@@ -2,15 +2,14 @@ import { AlarmCheck, HeartPulse, Lightbulb, MessagesSquare } from "lucide-react"
 
 export default function KPIsSection() {
     return (
-        <div className="px-8 py-6 shadow-2xl shadow-teal-900 bg-gradient-to-tl from-teal-500 to-teal-800 text-zinc-200 rounded">
-            <h3 className="px-6 py-2 bg-teal-100 shadow rounded-full text-teal-800 w-fit mx-auto font-bold text-center">
-                Resultados já alcançados
-            </h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-8">
-                <Section icon={<HeartPulse size={38} />} value={65} description="De aumento no engajamento com pesquisas recorrentes de clima organizacional" />
-                <Section icon={<Lightbulb size={38} />} value={47} description="De contribuição em espaços reservados para inovação" />
-                <Section icon={<MessagesSquare size={38} />} value={78} description="No aumento da comunicação interna entre times" />
-                <Section icon={<AlarmCheck size={38} />} value={48} description="De tempo economizado em avaliações de desempenho" />
+        <div className="bg-voca-yellow bg-zig-zag">
+            <div className="py-16 px-6 max-w-7xl m-auto text-slate-800">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-20">
+                    <Section icon={<HeartPulse size={32} />} value='+60%' description="dos colaboradores utilizam a plataforma diariamente" />
+                    <Section icon={<Lightbulb size={32} />} value='96%' description="Taxa de resposta em pesquisas pulso customizadas" />
+                    <Section icon={<MessagesSquare size={32} />} value='50%' description="Onboarding de colaboradores mais rápido e eficiente" />
+                    <Section icon={<AlarmCheck size={32} />} value='+1M' description="De leituras de emoção por texto na plataforma" />
+                </div>
             </div>
         </div>
     )
@@ -18,20 +17,18 @@ export default function KPIsSection() {
 
 interface SectionProps {
     icon: React.ReactNode,
-    value: number,
+    value: string,
     description: string,
 }
 
 function Section({ icon, value, description }: SectionProps) {
     return (
-        <div className="flex items-start gap-4">
-            <div className="text-teal-100">
+        <div className="flex flex-col items-center gap-4">
+            <div className="text-voca-green">
                 {icon}
             </div>
-            <div className="flex flex-col gap-1 h-full">
-                <h2 className="text-4xl text-white font-bold">{value}%</h2>
-                <p className="text-teal-50">{description}</p>
-            </div>
+            <h2 className="text-3xl text-slate-800 font-bold">{value}</h2>
+            <p className="text-slate-600 text-center">{description}</p>
         </div>
     )
 }

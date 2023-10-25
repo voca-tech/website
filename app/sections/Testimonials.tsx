@@ -19,37 +19,44 @@ export default function TestimonialsSection() {
     ]
 
     return (
-        <div className="flex flex-col gap-4 justify-center items-center mt-8 md:mt-0">
-            <div className="flex gap-2 items-center">
-                {/* <Sparkles /> */}
-                <h2 className="text-2xl text-zinc-500 text-center">O que estão falando sobre o <span className="text-teal-700 font-bold">VOCA</span></h2>
-            </div>
+        <div className="bg-voca-blue-200">
+            <div className="flex flex-col gap-10 py-16 px-6 justify-center items-center max-w-7xl m-auto">
+                <div className="flex flex-col gap-1 items-center">
+                    {/* <Sparkles /> */}
+                    <h2 className="text-2xl text-teal-800 font-bold text-center">
+                        ELES TÊM VOZ NA VEIA
+                    </h2>
+                    <h4 className="text-lg text-teal-700 text-center">
+                        Clientes que fazem do VOCA uma extensão <br /> de suas empresas
+                    </h4>
+                </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
-                {users.map(user => (
-                    <Card key={user.id}>
-                        <CardHeader className="flex flex-row gap-4 py-4">
-                            <Image 
-                                src={user.avatar}
-                                alt="User photo"
-                                width={50}
-                                height={50}
-                                className="rounded-full aspect-square shadow-md bg-cover"
-                            />
-                            <div>
-                                <CardTitle>{user.name}</CardTitle>
-                                <CardDescription className="mt-1">{user.company}</CardDescription>
-                            </div>
-                        </CardHeader>
-                        <Separator className="w-5/6 mx-auto mb-4"/>
-                        <CardContent>
-                            <p>{user.testimonial}</p>
-                        </CardContent>
-                        {/* <CardFooter>
+                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+                    {users.map(user => (
+                        <Card key={user.id}>
+                            <CardHeader className="flex flex-row gap-4 py-4">
+                                <Image
+                                    src={user.avatar}
+                                    alt="User photo"
+                                    width={50}
+                                    height={50}
+                                    className="rounded-full aspect-square shadow-md bg-cover"
+                                />
+                                <div>
+                                    <CardTitle>{user.name}</CardTitle>
+                                    <CardDescription className="mt-1">{user.company}</CardDescription>
+                                </div>
+                            </CardHeader>
+                            <Separator className="w-5/6 mx-auto mb-4" />
+                            <CardContent>
+                                <p>{user.testimonial}</p>
+                            </CardContent>
+                            {/* <CardFooter>
                             <p>Card Footer</p>
                         </CardFooter> */}
-                    </Card>
-                ))}
+                        </Card>
+                    ))}
+                </div>
             </div>
         </div>
     )

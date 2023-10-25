@@ -13,7 +13,7 @@ const lexendFont = Lexend({ weight: ['200', '300', '400', '500', '600', '700'], 
 
 export default function Home() {
   return (
-    <div className={`${lexendFont.className} flex flex-col gap-4 md:gap-16`}>
+    <div className={`${lexendFont.className} flex flex-col`}>
       <HeroSection />
 
       <ChallengesSection />
