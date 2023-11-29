@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/card"
 import Image from "next/image";
 import { Separator } from "@/components/ui/separator";
+import { WhatsappLink } from "@/components/WhatsappLink";
 
 export default function TestimonialsSection() {
     const users = [
@@ -57,6 +58,8 @@ export default function TestimonialsSection() {
                         </Card>
                     ))}
                 </div>
+
+                <WhatsappLink />
             </div>
         </div>
     )

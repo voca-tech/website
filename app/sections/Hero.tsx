@@ -26,7 +26,7 @@ export default function HeroSection() {
                         Transforme o engajamento dos colaboradores em insights que direcionam as decisões estratégicas do seu negócio
                     </p>
 
-                    {/* <WhatsappLink /> */}
+                    <WhatsappLink />
                 </div>
 
                 <div className='flex flex-col gap-4 w-full'>

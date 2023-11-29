@@ -4,6 +4,7 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronsLeft, ChevronsRight } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { WhatsappLink } from "@/components/WhatsappLink";
 
 interface SectionLayoutProps {
     Image: JSX.Element;
@@ -61,6 +62,7 @@ export default function Functionalities() {
                     <h1 className="text-4xl font-semibold">{title}</h1>
                     <div className="mt-16 flex flex-col gap-8 font-light">
                         {children}
+                        <WhatsappLink />
                     </div>
                 </div>
                 <Button className={cn("my-auto rounded-full aspect-square text-white", selectedIndex == numberOfOptions && 'invisible')} variant='ghost' onClick={handleNextSection}>
