@@ -5,8 +5,10 @@ export default function OurClientsSection() {
         { name: 'Akaer', src: '/clients/akaer.png', width: 100, height: 100 },
         { name: 'Credi10', src: '/clients/credi10.png', width: 100, height: 100 },
         { name: 'Belas Artes', src: '/clients/belasartes.png', width: 100, height: 100 },
+        { name: 'novoNordisk', src: '/clients/novoNordisk.png', width: 80, height: 60 },
         { name: 'Woodbridge', src: '/clients/woodbridge.png', width: 200, height: 100 },
-        // { name: 'DHS', src: '/clients/dhs.png' },
+        { name: 'DHS', src: '/clients/dhs.png', width: 100, height: 100 },
+        { name: 'DHS', src: '/clients/homeroCosta.png', width: 100, height: 100 },
     ]
 
     return (
@@ -24,7 +26,7 @@ export default function OurClientsSection() {
                             alt={logo.name}
                             width={logo.width}
                             height={logo.height}
-                            className="grayscale hover:scale-110 transition-all"
+                            className="grayscale hover:scale-110 hover:grayscale-0 transition-all object-contain"
                         />
                     ))}
 

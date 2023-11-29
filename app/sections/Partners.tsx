@@ -2,11 +2,10 @@ import Image from "next/image"
 
 export default function PartnersSection() {
     const logos = [
-        { name: 'Akaer', src: '/clients/akaer.png', width: 100, height: 100 },
-        { name: 'Credi10', src: '/clients/credi10.png', width: 100, height: 100 },
-        { name: 'Belas Artes', src: '/clients/belasartes.png', width: 100, height: 100 },
-        { name: 'Woodbridge', src: '/clients/woodbridge.png', width: 200, height: 100 },
-        // { name: 'DHS', src: '/clients/dhs.png' },
+        { name: 'Watson', src: '/partners/watson.png', width: 90, height: 90 },
+        { name: 'UFMG', src: '/partners/ufmg.png', width: 130, height: 100 },
+        { name: 'FiemgLab', src: '/partners/fiemgLab.png', width: 100, height: 100 },
+        { name: 'Seed', src: '/partners/seed.png', width: 70, height: 70 },
     ]
 
     return (
@@ -25,7 +24,7 @@ export default function PartnersSection() {
                             alt={logo.name}
                             width={logo.width}
                             height={logo.height}
-                            className="grayscale hover:scale-110 transition-all"
+                            className="grayscale hover:scale-110 hover:grayscale-0 transition-all object-contain"
                         />
                     ))}
 
