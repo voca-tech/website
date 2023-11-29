@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button"
-import { ArrowBigDown, ChevronsDown, ChevronsUp, StepBack, StepForward } from "lucide-react"
+import { ArrowBigDown, ArrowBigLeftDash, ArrowBigRightDash, ArrowLeftSquare, ArrowRightSquare, ChevronsDown, ChevronsUp, StepBack, StepForward } from "lucide-react"
 import Image from "next/image"
 import {
     Card,
@@ -33,20 +33,20 @@ export default function ChallengesSection() {
                         <p>- Governança e Compliance</p>
                         {!showDetails ? (
                             <Button
-                                variant='secondary'
+                                variant='ghost'
                                 onClick={() => setShowDetails((currentState) => !currentState)}
                                 className="mr-auto"
                             >
-                                <ChevronsDown size={18} className="mr-1"/>
+                                <ChevronsDown size={18} className="mr-1" />
                                 <p>Ver Mais</p>
                             </Button>
                         ) : (
                             <Button
-                                variant="secondary"
+                                variant="ghost"
                                 onClick={() => setShowDetails((currentState) => !currentState)}
                                 className="mr-auto"
                             >
-                                <ChevronsUp size={18} className="mr-1"/>
+                                <ChevronsUp size={18} className="mr-1" />
                                 <p>Ver Menos</p>
                             </Button>
                         )}
@@ -67,14 +67,10 @@ function DetailsSection() {
 
     function CardElement({ title, content }: CardProps) {
         return (
-            <Card className="w-full h-full col-span-3">
-                <CardHeader>
-                    <CardTitle>{title}</CardTitle>
-                </CardHeader>
-                <CardContent className="flex flex-col gap-4">
-                    {content}
-                </CardContent>
-            </Card>
+            <div className="px-4 py-6 bg-white shadow-lg rounded-2xl bg-opacity-20 border border-slate-300 col-span-3 h-full">
+                <h2 className="text-xl font-bold leading-5 text-slate-100">{title}</h2>
+                <div className="mt-4 text-slate-200 flex flex-col gap-4">{content}</div>
+            </div>
         )
     }
 
@@ -93,15 +89,15 @@ function DetailsSection() {
     return (
         <div className="mt-8 grid grid-cols-11 gap-4 items-center justify-between">
             <Button variant={"ghost"} className={`${currentPage == 0 && 'invisible'}`} onClick={handlePreviousPage}>
-                <StepBack />
+                <ArrowLeftSquare size={28} />
             </Button>
 
             {cardsContent[currentPage].map((card: CardProps) => (
                 <CardElement key={card.title} title={card.title} content={card.content} />
             ))}
 
-            <Button variant={"ghost"} className={`${currentPage == numberOfPages - 1 && 'invisible'}`} onClick={handleNextPage}>
-                <StepForward />
+            <Button variant="ghost" className={`p-0 ${currentPage == numberOfPages - 1 && 'invisible'}`} onClick={handleNextPage}>
+                <ArrowRightSquare size={28} />
             </Button>
         </div>
     )
