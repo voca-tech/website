@@ -3,7 +3,7 @@ import { AlarmCheck, BookOpenCheck, HeartPulse, Lightbulb, MessagesSquare, Rocke
 export default function KPIsSection() {
     return (
         <div className="bg-voca-yellow bg-zig-zag">
-            <div className="py-16 px-6 max-w-7xl m-auto text-slate-800">
+            <div className="py-14 px-6 max-w-7xl m-auto text-slate-800">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-20">
                     <Section icon={<Users  size={40} />} value='62%' description="dos colaboradores utilizam a plataforma diariamente" />
                     <Section icon={<Rocket size={40} />} value='96%' description="Taxa de resposta nas pesquisas customizadas" />

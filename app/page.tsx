@@ -5,7 +5,7 @@ import ChallengesSection from './sections/Challenges';
 import DashboardPreviewSection from './sections/DashboardsPreview';
 import PartnersSection from './sections/Partners';
 import KPIsSection from './sections/KPIs';
-import FunctionalitiesSection from './sections/Functionalities';
+import Functionalities from './sections/Functionalities';
 import OurClientsSection from './sections/OurClients';
 import TestimonialsSection from './sections/Testimonials';
 
@@ -20,7 +20,7 @@ export default function Home() {
 
       <KPIsSection />
 
-      <FunctionalitiesSection />
+      <Functionalities />
 
       <DashboardPreviewSection />
 

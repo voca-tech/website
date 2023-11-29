@@ -3,7 +3,7 @@ import { WhatsappLink } from "@/components/WhatsappLink";
 
 export default function HeroSection() {
     return (
-        <div className="bg-gradient-to-b from-voca-green to-voca-green/70 items-center py-16">
+        <div className="bg-gradient-to-b from-voca-green to-voca-green/70 items-center py-14">
             <div className='flex flex-col lg:flex-row gap-8 items-center justify-between font-light max-w-7xl px-6 m-auto'>
                 <div className='flex flex-col text-center sm:text-start gap-6'>
                     <h1 className="text-3xl sm:text-5xl tracking-tight text-slate-100 ">
