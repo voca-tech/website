@@ -13,8 +13,8 @@ export default function ChallengesSection() {
     const [showDetails, setShowDetails] = useState(false)
 
     return (
-        <div id="challenges" className="bg-gradient-to-b from-voca-green/70 to-voca-green items-center py-14">
-            <div className="max-w-5xl px-6 m-auto text-slate-200">
+        <div id="challenges" className="bg-gradient-to-b from-voca-green/70 to-voca-green items-center py-14 px-6">
+            <div className="max-w-5xl m-auto text-slate-200">
                 <h1 className="text-center text-4xl font-semibold">Sua empresa passa por algum desses desafios?</h1>
                 <div className="flex justify-between gap-6 mt-10">
                     <Image

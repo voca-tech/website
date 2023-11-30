@@ -78,7 +78,7 @@ export function ContactForm() {
                             )}
                         />
                         {/* <div className="flex flex-col justify-between md:flex-row-reverse gap-2"> */}
-                        <Button type="submit" variant='default' className='rounded w-full'>Agendar</Button>
+                        <Button type="submit" variant='default' className='rounded w-full bg-voca-green/90'>Agendar</Button>
                         {/* <Button type="button" variant='link' className='p-0 text-xs'>
                                 <CalendarSearch size={18} className='text-zinc-600 mr-2' />
                                 Prefiro selecionar um horário disponível

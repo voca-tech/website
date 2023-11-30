@@ -3,8 +3,8 @@ import { WhatsappLink } from "@/components/WhatsappLink";
 
 export default function HeroSection() {
     return (
-        <div className="bg-gradient-to-b from-voca-green to-voca-green/70 items-center py-14">
-            <div className='grid grid-cols-1 lg:grid-cols-8 gap-20 items-center justify-between font-light max-w-7xl px-6 m-auto'>
+        <div className="bg-gradient-to-b from-voca-green to-voca-green/70 items-center py-14 px-6">
+            <div className='grid grid-cols-1 lg:grid-cols-8 gap-20 items-center justify-between font-light max-w-7xl  m-auto'>
                 <div className='flex flex-col items-center lg:items-start text-center lg:text-start gap-6 lg:col-span-5'>
                     <h1 className="text-3xl sm:text-5xl tracking-tight text-slate-100 ">
                         Plataforma de{' '}

@@ -10,9 +10,9 @@ export default function Footer() {
     const pathname = usePathname()
 
     return (
-        <footer className="bg-slate-800 text-white">
+        <footer className="bg-slate-800 py-16 px-6">
 
-            <div className='py-16 px-6 max-w-7xl m-auto flex flex-col gap-10'>
+            <div className='max-w-7xl m-auto flex flex-col gap-10 text-white'>
                 <Image
                     src='/logo-voca-negativo.png'
                     alt="Logo da empresa VOCA"

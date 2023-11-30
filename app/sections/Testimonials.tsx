@@ -16,8 +16,8 @@ export default function TestimonialsSection() {
     ]
 
     return (
-        <div id="testimonials" className="bg-gradient-to-tl from-sky-100 to-sky-300">
-            <div className="flex flex-col gap-10 py-16 px-6 justify-center items-center max-w-7xl m-auto">
+        <div id="testimonials" className="bg-gradient-to-tl from-sky-100 to-sky-300 py-16 px-6">
+            <div className="flex flex-col gap-10 justify-center items-center max-w-7xl m-auto">
                 <div className="flex flex-col gap-1 items-center">
                     {/* <Sparkles /> */}
                     <h2 className="text-3xl text-cyan-800 font-bold text-center">
