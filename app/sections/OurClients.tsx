@@ -12,13 +12,13 @@ export default function OurClientsSection() {
     ]
 
     return (
-        <div className="bg-white py-16 px-6">
+        <div className="bg-white py-8 lg:py-16 px-6">
 
             <div className="flex flex-col gap-10 justify-center items-center text-center max-w-7xl m-auto">
-                <h2 className="text-2xl text-teal-700">Uma jornada à quatro mãos, com empresas que <br /> dão voz aos seus colaboradores!
+                <h2 className="text-lg lg:text-2xl text-teal-700">Uma jornada à quatro mãos, com empresas que <br /> dão voz aos seus colaboradores!
                     {/* <span className="text-teal-700 font-bold">nossos clientes</span> */}
                 </h2>
-                <div className="flex flex-wrap justify-center gap-6 md:gap-16">
+                <div className="flex flex-wrap justify-center gap-10 md:gap-x-20">
                     {logos.map(logo => (
                         <Image
                             key={logo.name}

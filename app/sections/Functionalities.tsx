@@ -50,25 +50,63 @@ export default function Functionalities() {
     }
 
     function SectionLayout({ Image, title, children }: SectionLayoutProps) {
-        return (
-            <div className="mt-10 grid grid-cols-12 gap-2">
-                <Button className={cn("my-auto rounded-full aspect-square text-white", selectedIndex == 0 && 'invisible')} variant='ghost' onClick={handlePreviousSection}>
-                    <ChevronsLeft />
-                </Button>
-                <div className="col-span-5">
-                    {Image}
-                </div>
-                <div className="text-white col-span-5">
-                    <h1 className="text-4xl font-semibold">{title}</h1>
-                    <div className="mt-16 flex flex-col gap-8 font-light">
-                        {children}
-                        <WhatsappLink />
+
+        function DesktopView() {
+            return (
+                <div className="mt-10 grid grid-cols-12 gap-2">
+                    <Button className={cn("my-auto rounded-full aspect-square text-white", selectedIndex == 0 && 'invisible')} variant='ghost' onClick={handlePreviousSection}>
+                        <ChevronsLeft />
+                    </Button>
+                    <div className="col-span-5">
+                        {Image}
                     </div>
+                    <div className="text-white col-span-5">
+                        <h1 className="text-4xl font-semibold">{title}</h1>
+                        <div className="mt-16 flex flex-col gap-8 font-light">
+                            {children}
+                            <WhatsappLink />
+                        </div>
+                    </div>
+                    <Button className={cn("my-auto rounded-full aspect-square text-white", selectedIndex == numberOfOptions - 1 && 'invisible')} variant='ghost' onClick={handleNextSection}>
+                        <ChevronsRight className="my-auto" />
+                    </Button>
                 </div>
-                <Button className={cn("my-auto rounded-full aspect-square text-white", selectedIndex == numberOfOptions - 1 && 'invisible')} variant='ghost' onClick={handleNextSection}>
-                    <ChevronsRight className="my-auto" />
-                </Button>
-            </div>
+            )
+        }
+
+        function MobileView() {
+            return (
+                <div className="mt-2 flex flex-col items-center gap-2">
+                    {/* <Button className={cn("my-auto rounded-full aspect-square text-white", selectedIndex == 0 && 'invisible')} variant='ghost' onClick={handlePreviousSection}>
+                        <ChevronsLeft />
+                    </Button> */}
+                    <div className="">
+                        {Image}
+                    </div>
+                    <div className="text-white text-center">
+                        <h1 className="text-4xl font-semibold">{title}</h1>
+                        <div className="mt-8 flex flex-col gap-4 font-light items-center">
+                            {children}
+                            <WhatsappLink />
+                        </div>
+                    </div>
+                    {/* <Button className={cn("my-auto rounded-full aspect-square text-white", selectedIndex == numberOfOptions - 1 && 'invisible')} variant='ghost' onClick={handleNextSection}>
+                        <ChevronsRight className="my-auto" />
+                    </Button> */}
+                </div>
+            )
+        }
+
+        return (
+            <>
+                <div className="hidden lg:block">
+                    <DesktopView />
+                </div>
+
+                <div className="visible lg:hidden">
+                    <MobileView />
+                </div>
+            </>
         )
     }
 
@@ -174,7 +212,7 @@ export default function Functionalities() {
                             key={option.value}
                             variant={option.value == selectedOption.value ? 'default' : 'ghost'}
                             onClick={() => setSelectedIndex(option.value)}
-                            className="md:py-7"
+                            className="text-xs md:text-base md:py-7"
                         >
                             {option.name}
                         </Button>

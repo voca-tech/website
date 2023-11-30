@@ -1,12 +1,6 @@
 import { Button } from "@/components/ui/button"
-import { ArrowBigDown, ArrowBigLeftDash, ArrowBigRightDash, ArrowLeftSquare, ArrowRightSquare, ChevronsDown, ChevronsUp, StepBack, StepForward } from "lucide-react"
+import { ArrowLeftSquare, ArrowRightSquare, ChevronsDown, ChevronsUp } from "lucide-react"
 import Image from "next/image"
-import {
-    Card,
-    CardContent,
-    CardHeader,
-    CardTitle,
-} from "@/components/ui/card"
 import { useState } from "react"
 
 export default function ChallengesSection() {
@@ -16,26 +10,26 @@ export default function ChallengesSection() {
         <div id="challenges" className="bg-gradient-to-b from-voca-green/70 to-voca-green items-center py-14 px-6">
             <div className="max-w-5xl m-auto text-slate-200">
                 <h1 className="text-center text-4xl font-semibold">Sua empresa passa por algum desses desafios?</h1>
-                <div className="flex justify-between gap-6 mt-10">
+                <div className="flex flex-col lg:flex-row items-center justify-between gap-6 mt-10">
                     <Image
                         src='/illustrations/superHero.png'
                         alt="Super herói"
                         width={500}
                         height={350}
                     />
-                    <div className="flex flex-col gap-6">
-                        <p>- Baixa frequencia de feedbacks</p>
-                        <p>- Fragilidade na saúde emocional</p>
-                        <p>- Transformar dados em recomendação</p>
-                        <p>- Melhorar a experiência do colaborador</p>
-                        <p>- Equipes espalhadas / Distância entre gestor e time</p>
-                        <p>- Voz para os colaboradores</p>
-                        <p>- Governança e Compliance</p>
+                    <div className="flex flex-col gap-6 items-center text-center lg:items-start">
+                        <p>· Baixa frequencia de feedbacks</p>
+                        <p>· Fragilidade na saúde emocional</p>
+                        <p>· Transformar dados em recomendação</p>
+                        <p>· Melhorar a experiência do colaborador</p>
+                        <p>· Equipes espalhadas / Distância entre gestor e time</p>
+                        <p>· Voz para os colaboradores</p>
+                        <p>· Governança e Compliance</p>
                         {!showDetails ? (
                             <Button
                                 variant='ghost'
                                 onClick={() => setShowDetails((currentState) => !currentState)}
-                                className="mr-auto"
+                                className=""
                             >
                                 <ChevronsDown size={18} className="mr-1" />
                                 <p>Ver Mais</p>
@@ -44,7 +38,7 @@ export default function ChallengesSection() {
                             <Button
                                 variant="ghost"
                                 onClick={() => setShowDetails((currentState) => !currentState)}
-                                className="mr-auto"
+                                className=""
                             >
                                 <ChevronsUp size={18} className="mr-1" />
                                 <p>Ver Menos</p>
@@ -67,7 +61,7 @@ function DetailsSection() {
 
     function CardElement({ title, content }: CardProps) {
         return (
-            <div className="px-4 py-6 bg-white shadow-lg rounded-2xl bg-opacity-20 border border-slate-300 col-span-3 h-full">
+            <div className="px-4 py-6 bg-white shadow-lg rounded-2xl bg-opacity-20 border border-slate-300 h-full">
                 <h2 className="text-xl font-bold leading-5 text-slate-100">{title}</h2>
                 <div className="mt-4 text-slate-200 flex flex-col gap-4">{content}</div>
             </div>
@@ -86,20 +80,59 @@ function DetailsSection() {
         }
     }
 
+    function MobileView() {
+        return (
+            <div className="mt-8 flex flex-col gap-4 items-center justify-center mx-auto">
+                <div className="flex flex-col gap-4">
+                    {cardsContent[currentPage].map((card: CardProps) => (
+                        <CardElement key={card.title} title={card.title} content={card.content} />
+                    ))}
+                </div>
+
+                <div className="flex items-center justify-between gap-4">
+                    <Button variant="ghost" className={`${currentPage == 0 && 'text-slate-400'}`} onClick={handlePreviousPage}>
+                        <ArrowLeftSquare size={28} />
+                    </Button>
+                    <p className="text-sm">{currentPage + 1} / {numberOfPages}</p>
+                    <Button variant="ghost" className={`${currentPage == numberOfPages - 1 && 'text-slate-400'}`} onClick={handleNextPage}>
+                        <ArrowRightSquare size={28} />
+                    </Button>
+                </div>
+
+            </div>
+        )
+    }
+
+    function DesktopView() {
+        return (
+            <div className="mt-8 grid grid-cols-12 gap-4 items-center justify-between">
+                <Button variant={"ghost"} className={`${currentPage == 0 && 'invisible'} col-span-1`} onClick={handlePreviousPage}>
+                    <ArrowLeftSquare size={28} />
+                </Button>
+
+                <div className="grid grid-cols-3 gap-4 col-span-10">
+                    {cardsContent[currentPage].map((card: CardProps) => (
+                        <CardElement key={card.title} title={card.title} content={card.content} />
+                    ))}
+                </div>
+
+                <Button variant="ghost" className={`${currentPage == numberOfPages - 1 && 'invisible'} col-span-1`} onClick={handleNextPage}>
+                    <ArrowRightSquare size={28} />
+                </Button>
+            </div>
+        )
+    }
+
     return (
-        <div className="mt-8 grid grid-cols-11 gap-4 items-center justify-between">
-            <Button variant={"ghost"} className={`${currentPage == 0 && 'invisible'}`} onClick={handlePreviousPage}>
-                <ArrowLeftSquare size={28} />
-            </Button>
+        <>
+            <div className="hidden lg:block">
+                <DesktopView />
+            </div>
 
-            {cardsContent[currentPage].map((card: CardProps) => (
-                <CardElement key={card.title} title={card.title} content={card.content} />
-            ))}
-
-            <Button variant="ghost" className={`p-0 ${currentPage == numberOfPages - 1 && 'invisible'}`} onClick={handleNextPage}>
-                <ArrowRightSquare size={28} />
-            </Button>
-        </div>
+            <div className="visible lg:hidden">
+                <MobileView />
+            </div>
+        </>
     )
 }
 

@@ -6,7 +6,7 @@ export default function HeroSection() {
         <div className="bg-gradient-to-b from-voca-green to-voca-green/70 items-center py-14 px-6">
             <div className='grid grid-cols-1 lg:grid-cols-8 gap-20 items-center justify-between font-light max-w-7xl  m-auto'>
                 <div className='flex flex-col items-center lg:items-start text-center lg:text-start gap-6 lg:col-span-5'>
-                    <h1 className="text-3xl sm:text-5xl tracking-tight text-slate-100 ">
+                    <h1 className="text-4xl sm:text-5xl tracking-tight text-slate-100 ">
                         Plataforma de{' '}
                         <span className="relative whitespace-nowrap text-teal-200">
                             <svg
@@ -22,7 +22,7 @@ export default function HeroSection() {
                         comunicação interna e inteligência de dados
                     </h1>
 
-                    <p className="text-md sm:text-xl text-md tracking-tight text-white">
+                    <p className="text-xl sm:text-2xl text-md tracking-tight text-white">
                         Transforme o engajamento dos colaboradores em insights que direcionam as decisões estratégicas do seu negócio
                     </p>
 

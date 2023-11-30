@@ -9,10 +9,10 @@ export default function TestimonialsSection() {
         { id: 2, name: 'Luciene', role: 'Gestora de RH na Engeform', avatar: '/avatars/user1.jpg', testimonial: 'Fiquei muito feliz de ser reconhecida como a mais elogiada do mês. Isso tem um poder enorme na minha motivação' },
         { id: 3, name: 'Cristiano', role: 'Gestor de RH da Belas Artes', avatar: '/avatars/user1.jpg', testimonial: 'O VOCA é uma ferramenta muito importante para fortalecer a comunicação no ambiente corporativo. Não há dúvidas que tem ajudado muito o RH.' },
         { id: 4, name: 'Jucimara', role: 'Gestore de RH na Woodbridge', avatar: '/avatars/user1.jpg', testimonial: 'Aplicamos a pesquisa em nossa planta e o resultado tem sido aceito, com 96% de adesão.' },
-        { id: 5, name: 'André', role: 'Gestor de RH da Engerform', avatar: '/avatars/user1.jpg', testimonial: 'O VOCA nos ajudou de forma simples a resolver problemas complexos.' },
-        { id: 6, name: 'Lorryane', role: 'Gestora de RH da Cred110', avatar: '/avatars/user1.jpg', testimonial: 'O VOCA encaixou como uma luva, o módulo de treinamentos era exatamente o que precisávamos.' },
-        { id: 7, name: 'Cristiane', role: 'Gestora de RH da Belas Artes', avatar: '/avatars/user1.jpg', testimonial: 'O VOCA permite avaliar se devemos efetivar ou não um colaborador antes do término do seu período de experiência, evitando custos desnecessários para a empresa.' },
-        { id: 8, name: 'Mauricio', role: 'Gestor de RH na Akaer', avatar: '/avatars/user1.jpg', testimonial: 'Ouvir o colaborador de forma simples no onboarding e offboarding, além da avaliação de desempenho, são diferenças que não encontramos fácil no mercado.' },
+        // { id: 5, name: 'André', role: 'Gestor de RH da Engerform', avatar: '/avatars/user1.jpg', testimonial: 'O VOCA nos ajudou de forma simples a resolver problemas complexos.' },
+        // { id: 6, name: 'Lorryane', role: 'Gestora de RH da Cred110', avatar: '/avatars/user1.jpg', testimonial: 'O VOCA encaixou como uma luva, o módulo de treinamentos era exatamente o que precisávamos.' },
+        // { id: 7, name: 'Cristiane', role: 'Gestora de RH da Belas Artes', avatar: '/avatars/user1.jpg', testimonial: 'O VOCA permite avaliar se devemos efetivar ou não um colaborador antes do término do seu período de experiência, evitando custos desnecessários para a empresa.' },
+        // { id: 8, name: 'Mauricio', role: 'Gestor de RH na Akaer', avatar: '/avatars/user1.jpg', testimonial: 'Ouvir o colaborador de forma simples no onboarding e offboarding, além da avaliação de desempenho, são diferenças que não encontramos fácil no mercado.' },
     ]
 
     return (
@@ -20,10 +20,10 @@ export default function TestimonialsSection() {
             <div className="flex flex-col gap-10 justify-center items-center max-w-7xl m-auto">
                 <div className="flex flex-col gap-1 items-center">
                     {/* <Sparkles /> */}
-                    <h2 className="text-3xl text-cyan-800 font-bold text-center">
+                    <h2 className="text-2xl text-cyan-800 font-bold text-center">
                         ELES TÊM VOZ NA VEIA
                     </h2>
-                    <h4 className="text-xl text-cyan-800 text-center">
+                    <h4 className="text-lg text-cyan-800 text-center">
                         Clientes que fazem do VOCA uma extensão <br /> de suas empresas
                     </h4>
                 </div>

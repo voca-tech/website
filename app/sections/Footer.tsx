@@ -20,7 +20,7 @@ export default function Footer() {
                     height={100}
                 />
 
-                <div className="grid grid-cols-3 w-full gap-12">
+                <div className="flex flex-col lg:grid lg:grid-cols-3 w-full gap-12">
                     <div className="flex flex-col gap-4">
                         <p>Cuidamos de pessoas para que elas possam cuidar das empresas</p>
 

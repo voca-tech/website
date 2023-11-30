@@ -10,13 +10,13 @@ export default function PartnersSection() {
     ]
 
     return (
-        <div className="bg-white py-16 px-6">
+        <div className="bg-white py-8 lg:py-16 px-6">
             <div className="flex flex-col gap-8 justify-center items-center text-center">
                 <div>
                     <h2 className="text-2xl text-teal-700 font-bold">PARCEIROS</h2>
-                    <h4 className="text-teal-700">que comprovam nossa qualidade</h4>
+                    <h4 className="text-lg lg:text-2xl text-teal-700">que comprovam nossa qualidade</h4>
                 </div>
-                <div className="flex flex-wrap justify-center gap-6 md:gap-16">
+                <div className="flex flex-wrap items-center justify-center gap-10 md:gap-16">
                     {logos.map(logo => (
                         <Image
                             key={logo.name}
