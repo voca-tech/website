@@ -65,7 +65,7 @@ export default function Functionalities() {
                         <WhatsappLink />
                     </div>
                 </div>
-                <Button className={cn("my-auto rounded-full aspect-square text-white", selectedIndex == numberOfOptions && 'invisible')} variant='ghost' onClick={handleNextSection}>
+                <Button className={cn("my-auto rounded-full aspect-square text-white", selectedIndex == numberOfOptions - 1 && 'invisible')} variant='ghost' onClick={handleNextSection}>
                     <ChevronsRight className="my-auto" />
                 </Button>
             </div>
