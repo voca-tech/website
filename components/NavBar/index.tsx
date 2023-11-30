@@ -1,22 +1,30 @@
+'use client'
+
+import { usePathname } from 'next/navigation'
 import { Menu } from "lucide-react";
 import Image from "next/image";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
+import Link from "next/link";
+import { cn } from '@/lib/utils';
 
 export function NavBar() {
     return (
-        <nav className="shadow-sm shadow-teal-900 px-4 py-3 z-10 bg-gradient-to-t from-teal-700 to-teal-900">
+        <nav id="home" className="px-4 py-3 z-10 bg-voca-green">
             <div className="flex justify-between items-center max-w-7xl m-auto">
-                <Image
-                    src='/logo-voca-negativo.png'
-                    alt="Logomarcar VOCA"
-                    width={160}
-                    height={80}
-                />
+                <Link href='/'>
+                    <Image
+                        src='/logo-voca-negativo.png'
+                        alt="Logomarcar VOCA"
+                        width={160}
+                        height={80}
+                    />
+                </Link>
                 <div className="hidden md:visible md:flex gap-6 text-slate-800">
-                    <MenuItem name="Home" />
-                    <MenuItem name="Quem Somos" />
-                    <MenuItem name="Como Funciona" />
-                    <MenuItem name="Fale Conosco" />
+                    <MenuItem name="Início" reference="#home" />
+                    <MenuItem name="Dores que resolvemos" reference="#challenges" />
+                    <MenuItem name="Funcionalidades" reference="#functionalities" />
+                    <MenuItem name="Depoimentos" reference="#testimonials" />
+                    {/* <MenuItem name="Fale Conosco" reference="#contact" /> */}
                 </div>
 
                 <div className="md:hidden text-white hover:cursor-pointer">
@@ -24,10 +32,11 @@ export function NavBar() {
                         <PopoverTrigger className="flex items-center"><Menu /></PopoverTrigger>
                         <PopoverContent>
                             <div className="flex flex-col gap-6 text-teal-800">
-                                <PopoverMenuItem name="Home" />
-                                <PopoverMenuItem name="Quem Somos" />
-                                <PopoverMenuItem name="Como Funciona" />
-                                <PopoverMenuItem name="Fale Conosco" />
+                                <MenuItem name="Início" reference="#home" isMobile />
+                                <MenuItem name="Dores que resolvemos" reference="#challenges" isMobile />
+                                <MenuItem name="Funcionalidades" reference="#functionalities" isMobile />
+                                <MenuItem name="Depoimentos" reference="#testimonials" isMobile />
+                                {/* <PopoverMenuItem name="Fale Conosco" reference="#contact" /> */}
                             </div>
                         </PopoverContent>
                     </Popover>
@@ -37,18 +46,21 @@ export function NavBar() {
     )
 }
 
-function MenuItem({ name }: { name: string }) {
-    return (
-        <p className="text-md text-teal-50 cursor-pointer border-b-2 border-b-transparent hover:border-teal-600 ">
-            {name}
-        </p>
-    )
+interface MenuItemProps {
+    name: string,
+    reference: string,
+    isMobile?: boolean
 }
 
-function PopoverMenuItem({ name }: { name: string }) {
+function MenuItem({ name, reference, isMobile = false }: MenuItemProps) {
+    const pathname = usePathname()
+
     return (
-        <p className="text-md text-teal-900 cursor-pointer ">
+        <Link
+            href={pathname === '/' ? `${reference}` : `/${reference}`}
+            className={cn("text-md cursor-pointer border-b-2 border-b-transparent hover:border-teal-600 w-fit", isMobile ? "text-teal-700" : "text-teal-50")}
+        >
             {name}
-        </p>
+        </Link>
     )
 }

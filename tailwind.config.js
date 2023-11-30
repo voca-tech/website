@@ -6,7 +6,7 @@ module.exports = {
     './components/**/*.{ts,tsx}',
     './app/**/*.{ts,tsx}',
     './src/**/*.{ts,tsx}',
-	],
+  ],
   theme: {
     container: {
       center: true,
@@ -30,6 +30,15 @@ module.exports = {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
       },
+      colors: {
+        'voca-green': '#007980',
+        'voca-gray': { 200: '#939594', 600: '#525051' },
+        'voca-yellow': '#E6EE9B',
+        'voca-blue': { 200: '#99C9CD'}
+      },
+      backgroundImage: {
+        'zig-zag': "url('/illustrations/zigzag.png')"
+      }
     },
   },
   plugins: [require("tailwindcss-animate")],
