@@ -4,7 +4,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 
 export function NavBar() {
     return (
-        <nav className="px-4 py-3 z-10 bg-voca-green">
+        <nav id="home" className="px-4 py-3 z-10 bg-voca-green">
             <div className="flex justify-between items-center max-w-7xl m-auto">
                 <Image
                     src='/logo-voca-negativo.png'
@@ -13,10 +13,11 @@ export function NavBar() {
                     height={80}
                 />
                 <div className="hidden md:visible md:flex gap-6 text-slate-800">
-                    <MenuItem name="Home" />
-                    <MenuItem name="Quem Somos" />
-                    <MenuItem name="Como Funciona" />
-                    <MenuItem name="Fale Conosco" />
+                    <MenuItem name="Início" reference="home" />
+                    <MenuItem name="Dores que resolvemos" reference="challenges" />
+                    <MenuItem name="Funcionalidades" reference="functionalities" />
+                    <MenuItem name="Depoimentos" reference="testimonials" />
+                    {/* <MenuItem name="Fale Conosco" reference="contact" /> */}
                 </div>
 
                 <div className="md:hidden text-white hover:cursor-pointer">
@@ -24,10 +25,11 @@ export function NavBar() {
                         <PopoverTrigger className="flex items-center"><Menu /></PopoverTrigger>
                         <PopoverContent>
                             <div className="flex flex-col gap-6 text-teal-800">
-                                <PopoverMenuItem name="Home" />
-                                <PopoverMenuItem name="Quem Somos" />
-                                <PopoverMenuItem name="Como Funciona" />
-                                <PopoverMenuItem name="Fale Conosco" />
+                                <PopoverMenuItem name="Início" reference="home" />
+                                <PopoverMenuItem name="Dores que resolvemos" reference="challenges" />
+                                <PopoverMenuItem name="Funcionalidades" reference="functionalities" />
+                                <PopoverMenuItem name="Depoimentos" reference="testimonials" />
+                                {/* <PopoverMenuItem name="Fale Conosco" reference="contact" /> */}
                             </div>
                         </PopoverContent>
                     </Popover>
@@ -37,15 +39,23 @@ export function NavBar() {
     )
 }
 
-function MenuItem({ name }: { name: string }) {
+interface MenuItemProps {
+    name: string,
+    reference: string
+}
+
+function MenuItem({ name, reference }: MenuItemProps) {
     return (
-        <p className="text-md text-teal-50 cursor-pointer border-b-2 border-b-transparent hover:border-teal-600 ">
+        <a
+            href={`#${reference}`}
+            className="text-md text-teal-50 cursor-pointer border-b-2 border-b-transparent hover:border-teal-600 "
+        >
             {name}
-        </p>
+        </a>
     )
 }
 
-function PopoverMenuItem({ name }: { name: string }) {
+function PopoverMenuItem({ name, reference }: MenuItemProps) {
     return (
         <p className="text-md text-teal-900 cursor-pointer ">
             {name}

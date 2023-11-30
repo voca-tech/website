@@ -166,7 +166,7 @@ export default function Functionalities() {
     }
 
     return (
-        <div className={`bg-gradient-to-br ${selectedOption.customStyles} py-14 px-4`}>
+        <div id="functionalities" className={`bg-gradient-to-br ${selectedOption.customStyles} py-14 px-4`}>
             <div className="max-w-7xl mx-auto">
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 bg-white/70 w-full p-4 rounded-md shadow-md">
                     {options.map(option => (
@@ -183,26 +183,5 @@ export default function Functionalities() {
                 {selectedOption.component}
             </div>
         </div>
-    )
-}
-
-
-function ModuleIllustration({ index }: { index: number }) {
-    const config = [
-        { src: '/illustrations/chat.png' },
-        { src: '/illustrations/meeting.png' },
-        { src: '/illustrations/team-work.png' },
-        { src: '/illustrations/chat.png' },
-        { src: '/illustrations/meeting.png' },
-    ]
-
-    return (
-        <Image
-            src={config[index].src}
-            alt="Ilustração"
-            width={500}
-            height={300}
-            className="h-96 aspect-square"
-        />
     )
 }
