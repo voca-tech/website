@@ -114,50 +114,94 @@ const cardsContent: CardProps[][] = [
             title: 'Equipes espalhadas / Distância entre gestor e time',
             content:
                 <>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptatum odit deserunt voluptatem impedit excepturi ipsam eum corporis omnis cumque, sed fugit necessitatibus</p>
-                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+                    <p>Em um mundo globalizado, equipes distribuídas tornaram-se comuns. No entanto, a distância física não deve significar distância emocional ou operacional.</p>
+                    <p>Equipes bem conectadas e alinhadas, mesmo estando remotas, apresentam até 25% mais produtividade. (Harvard Business Review)</p>
                 </>
         },
         {
-            title: 'Avaliação de Desempenho',
+            title: 'Avaliações de Desempenho, Experiência e Desligamento',
             content:
                 <>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptatum odit deserunt voluptatem impedit excepturi ipsam eum corporis omnis cumque, sed fugit necessitatibus</p>
-                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+                    <p>Processos ineficientes de avaliação de desempenho podem resultar em falta de reconhecimento, o que afeta diretamente a experiência do colaborador e contribui para taxas elevadas de turnover.</p>
+                    <p>Empresas com avaliações de desempenho consistentes registram um aumento de 14% na satisfação do cliente. (Gallup)</p>
                 </>
         },
         {
-            title: 'Compliance / ESG',
+            title: 'Treinamento de Equipes e Gamificação',
             content:
                 <>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptatum odit deserunt voluptatem impedit excepturi ipsam eum corporis omnis cumque, sed fugit necessitatibus</p>
-                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+                    <p>O treinamento convencional pode ser muito chato. A gamificação transforma a aprendizagem em uma experiência mais envolvente, incentivando a participação ativa e a retenção de conhecimento.</p>
+                    <p>87% dos colaboradores afirmam que a gamificação torna o seu ambiente de trabalho mais produtivo e engajador. (TalentLMS)</p>
                 </>
         }
     ],
     [
         {
-            title: 'Cultura',
+            title: 'Compliance, ESG e Auditorias',
             content:
                 <>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptatum odit deserunt voluptatem impedit excepturi ipsam eum corporis omnis cumque, sed fugit necessitatibus</p>
-                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+                    <p>Manter-se em conformidade com regulamentações e padrões do mercado é vital, mas pode ser complexo e desafiador. Processos claros e ferramentas adequadas são essenciais para assegurar que todas as normas estão sendo seguidas.</p>
+                    <p>93% dos investidores aceitariam pagar prêmio extra por ações de empresas com práticas ESG. (International Finance Corporation)</p>
                 </>
         },
         {
-            title: 'Voz para colaboradores',
+            title: 'Desalinhamento da Cultura Corporativa',
             content:
                 <>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptatum odit deserunt voluptatem impedit excepturi ipsam eum corporis omnis cumque, sed fugit necessitatibus</p>
-                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+                    <p>Uma cultura corporativa não clara ou desalinhada pode causar conflitos internos e afetar a entrega de valor ao cliente.</p>
+                    <p>94% dos executivos e 88% dos funcionários acreditam que uma cultura corporativa sólida é fundamental para o sucesso dos negócios. (Deloitte)</p>
                 </>
         },
         {
-            title: 'Baixa frequencia feedback',
+            title: 'Voz para os colaboradores',
             content:
                 <>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptatum odit deserunt voluptatem impedit excepturi ipsam eum corporis omnis cumque, sed fugit necessitatibus</p>
-                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+                    <p>Colaboradores que sentem que não têm voz estão menos engajados e menos propensos a dar o extra pela empresa.</p>
+                    <p>Empresas que promovem a escuta ativa têm 4,6 vezes mais chances de reter os melhores talentos. (Institute for Corporate Productivity)</p>
+                </>
+        }
+    ],
+    [
+        {
+            title: 'Baixa Frequência de Feedbacks',
+            content:
+                <>
+                    <p>A ausência de feedback regular pode desmotivar colaboradores e gerar incertezas sobre seu desempenho.</p>
+                    <p>60% dos funcionários desejam feedback diário ou semanal. (PwC)</p>
+                </>
+        },
+        {
+            title: 'Melhorar a Experiência do Colaborador',
+            content:
+                <>
+                    <p> Uma experiência ruim do colaborador pode resultar em alta rotatividade e baixa satisfação no trabalho.</p>
+                    <p>Empresas com uma experiência positiva para o colaborador superam seus concorrentes em até 82%. (Glassdoor)</p>
+                </>
+        },
+        {
+            title: 'Transformar Dados em Recomendações',
+            content:
+                <>
+                    <p>Dados sem ação são apenas números. Transformá-los em recomendações significativas é o que realmente agrega valor.</p>
+                    <p>Líderes que confiam e usam seus dados tem uma vantagem competitiva: as empresas onde atuam conquistam até 22% mais lucratividade. (Capgemini)</p>
+                </>
+        }
+    ],
+    [
+        {
+            title: 'Desconhecimento do Clima Organizacional',
+            content:
+                <>
+                    <p>Ignorar o clima organizacional pode levar à desmotivação, baixa produtividade e até mesmo conflitos internos.</p>
+                    <p>89% dos profissionais de RH afirmam que o feedback regular sobre o clima organizacional é essencial para o sucesso da empresa. (SHRM)</p>
+                </>
+        },
+        {
+            title: 'Fragilidade na Saúde Emocional dos Times',
+            content:
+                <>
+                    <p>A saúde emocional dos colaboradores impacta diretamente em sua produtividade, engajamento e satisfação no trabalho.</p>
+                    <p>Para cada dólar investido na saúde do colaborador, US$ 4,00 retornam como lucro para a empresa. (World Economic Forum)</p>
                 </>
         }
     ]
