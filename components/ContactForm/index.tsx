@@ -25,8 +25,8 @@ import { Button } from "../ui/button"
 import { CalendarSearch } from "lucide-react"
 
 const formSchema = z.object({
-    userName: z.string().min(3),
-    email: z.string().email()
+    userName: z.string().min(3, 'Por favor insira o seu nome'),
+    email: z.string().email('Por favor insira um Email válido')
 })
 
 export function ContactForm() {
@@ -43,10 +43,10 @@ export function ContactForm() {
     }
 
     return (
-        <Card className='shadow'>
+        <Card className='shadow-xl'>
             <CardHeader>
                 <CardTitle>Agendar Demonstração</CardTitle>
-                <CardDescription>Entraremos em contato para marcar uma apresentação do nosso produto</CardDescription>
+                <CardDescription>Entraremos em contato para marcar uma reunião sobre como o nosso produto se encaixa na sua empresa</CardDescription>
             </CardHeader>
             <CardContent className="pt-0 pb-4">
                 <Form {...contactForm}>
@@ -58,7 +58,7 @@ export function ContactForm() {
                                 <FormItem>
                                     <FormLabel>Seu Nome</FormLabel>
                                     <FormControl>
-                                        <Input placeholder="Digite seu nome" {...field} />
+                                        <Input placeholder="Digite seu nome" className="bg-white/80" {...field} />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
@@ -71,19 +71,19 @@ export function ContactForm() {
                                 <FormItem>
                                     <FormLabel>Seu Email</FormLabel>
                                     <FormControl>
-                                        <Input placeholder="Digite seu Email" {...field} />
+                                        <Input placeholder="Digite seu Email" className="bg-white/80" {...field} />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
                             )}
                         />
-                        <div className="flex flex-col justify-between md:flex-row-reverse gap-2">
-                            <Button type="submit" className='md:w-1/3'>Agendar</Button>
-                            <Button type="button" variant='link' className='p-0 text-xs'>
+                        {/* <div className="flex flex-col justify-between md:flex-row-reverse gap-2"> */}
+                        <Button type="submit" variant='default' className='rounded w-full'>Agendar</Button>
+                        {/* <Button type="button" variant='link' className='p-0 text-xs'>
                                 <CalendarSearch size={18} className='text-zinc-600 mr-2' />
                                 Prefiro selecionar um horário disponível
-                            </Button>
-                        </div>
+                            </Button> */}
+                        {/* </div> */}
                     </form>
                 </Form>
             </CardContent>
