@@ -6,11 +6,11 @@ export default function PartnersSection() {
         { name: 'UFMG', src: '/partners/ufmg.png', width: 130, height: 100 },
         { name: 'FiemgLab', src: '/partners/fiemgLab.png', width: 100, height: 100 },
         { name: 'Seed', src: '/partners/seed.png', width: 70, height: 70 },
+        { name: 'Plugae', src: '/partners/plugae.png', width: 150, height: 150 },
     ]
 
     return (
         <div className="bg-white py-16 px-6">
-
             <div className="flex flex-col gap-8 justify-center items-center text-center">
                 <div>
                     <h2 className="text-2xl text-teal-700 font-bold">PARCEIROS</h2>
