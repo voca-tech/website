@@ -1,12 +1,19 @@
+'use client'
+
+import { usePathname } from 'next/navigation'
+import { Button } from "@/components/ui/button";
 import { Instagram, Linkedin } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 
 export default function Footer() {
+    const pathname = usePathname()
+
     return (
-        <footer className="bg-black text-white">
+        <footer className="bg-slate-800 text-white">
 
             <div className='py-16 px-6 max-w-7xl m-auto flex flex-col gap-10'>
-                <Image 
+                <Image
                     src='/logo-voca-negativo.png'
                     alt="Logo da empresa VOCA"
                     width={200}
@@ -18,23 +25,44 @@ export default function Footer() {
                         <p>Cuidamos de pessoas para que elas possam cuidar das empresas</p>
 
                         <div className="flex gap-4">
-                            <Instagram />
-                            <Linkedin />
+                            <a href="https://www.instagram.com/vocarh/" target="_blank">
+                                <Button variant='link' size='icon'><Instagram /></Button>
+                            </a>
+                            <a href="https://www.linkedin.com/company/vocarh/" target="_blank">
+                                <Button variant='link' size='icon'><Linkedin /></Button>
+                            </a>
                         </div>
                     </div>
 
                     <div className="flex flex-col gap-4">
-                        <p>Início</p>
-                        <p>Termos de Uso</p>
-                        <p>Política de Privacidade</p>
+                        <MenuItem name="Início" reference={pathname === '/' ? '#home' : '/'} />
+                        <MenuItem name='Termos de Uso' reference='/termsOfUse' />
+                        <MenuItem name='Política de Privacidade' reference='/privacyPolicy' />
                     </div>
 
                     <div className="flex flex-col gap-4">
                         <p>contato@voca.com.br</p>
                         <p>CNPJ: 28.037.495/0001-42</p>
+                        <p>Copyright © 2023 · VOCA · Todos os direitos reservados</p>
                     </div>
                 </div>
             </div>
         </footer>
+    )
+}
+
+interface MenuItemProps {
+    name: string,
+    reference: string
+}
+
+function MenuItem({ name, reference }: MenuItemProps) {
+    return (
+        <Link
+            href={`${reference}`}
+            className="text-md w-fit text-slate-50 cursor-pointer border-b-2 border-b-transparent hover:border-slate-200 "
+        >
+            {name}
+        </Link>
     )
 }
