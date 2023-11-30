@@ -30,7 +30,7 @@ export default function TestimonialsSection() {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 w-full">
                     {users.map(user => (
-                        <div className="px-8 pb-4 mt-8 bg-white rounded-lg shadow-lg flex flex-col gap-4 items-center text-center">
+                        <div key={user.id} className="px-8 pb-4 mt-8 bg-white rounded-lg shadow-lg flex flex-col gap-4 items-center text-center">
                             <Avatar className="-mt-10">
                                 <AvatarImage src={user.avatar} />
                             </Avatar>

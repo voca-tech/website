@@ -45,7 +45,7 @@ export default function PrivacyPolicy() {
                 2.	OBTENÇÃO DOS DADOS E INFORMAÇÕES
                 <br />
                 <br />
-                Podemos coletar informações que podem identificá-lo ("informações pessoais") de diversas formas, seja quando você acessa nossos sites, utiliza nosso aplicativo, interage conosco nas redes sociais ou por meio de terceiros parceiros.
+                Podemos coletar informações que podem identificá-lo (&quot;informações pessoais&quot;) de diversas formas, seja quando você acessa nossos sites, utiliza nosso aplicativo, interage conosco nas redes sociais ou por meio de terceiros parceiros.
                 <br />
                 <br />
                 As informações pessoais que coletamos são dados que você pode nos fornecer voluntariamente e podem incluir: seu nome, endereço de e-mail, número de telefone, idade, perfil de aptidão pessoal, comentários, fotografias, voz, apresentações de vídeo ou imagem.
