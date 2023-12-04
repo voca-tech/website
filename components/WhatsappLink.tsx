@@ -1,7 +1,7 @@
 import Image from "next/image";
 
 import logo from '@/public/whatsapp.svg'
-import { Button } from "../ui/button";
+import { Button } from "./ui/button";
 
 export function WhatsappLink() {
     return (

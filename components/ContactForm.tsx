@@ -1,3 +1,4 @@
+'use client'
 import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from 'zod'
 import { useForm } from 'react-hook-form'
@@ -20,9 +21,14 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/ui/card"
-import { Input } from "../ui/input"
-import { Button } from "../ui/button"
+import { Input } from "./ui/input"
+import { Button } from "./ui/button"
 import { CalendarSearch } from "lucide-react"
+
+export interface FormDataProps {
+    userName: string;
+    email: string;
+  };
 
 const formSchema = z.object({
     userName: z.string().min(3, 'Por favor insira o seu nome'),
@@ -30,7 +36,7 @@ const formSchema = z.object({
 })
 
 export function ContactForm() {
-    const contactForm = useForm<z.infer<typeof formSchema>>({
+    const contactForm = useForm<FormDataProps>({
         resolver: zodResolver(formSchema),
         defaultValues: {
             userName: "",

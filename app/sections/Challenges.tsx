@@ -1,3 +1,4 @@
+'use client'
 import { Button } from "@/components/ui/button"
 import { ArrowLeftSquare, ArrowRightSquare, ChevronsDown, ChevronsUp } from "lucide-react"
 import Image from "next/image"
