@@ -29,13 +29,13 @@ import { useState } from "react"
 
 export interface FormDataProps {
     leadName: string;
-    companyName: string;
+    phone: string;
     email: string;
 };
 
 const formSchema = z.object({
     leadName: z.string().min(3, 'Por favor insira o seu nome'),
-    companyName: z.string().min(2, 'Por favor insira o nome da empresa'),
+    phone: z.string().min(8, 'Por favor insira um numero de telefone válido'),
     email: z.string().email('Por favor insira um Email válido')
 })
 
@@ -47,7 +47,7 @@ export function ContactForm() {
         resolver: zodResolver(formSchema),
         defaultValues: {
             leadName: "",
-            companyName: "",
+            phone: "",
             email: ""
         },
     })
@@ -104,12 +104,12 @@ export function ContactForm() {
                         />
                         <FormField
                             control={contactForm.control}
-                            name="companyName"
+                            name="email"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Nome da Empresa</FormLabel>
+                                    <FormLabel>Seu Email Corporativo</FormLabel>
                                     <FormControl>
-                                        <Input placeholder="Digite o nome da sua empresa" className="bg-white/80" {...field} />
+                                        <Input placeholder="Digite seu Email" className="bg-white/80" {...field} />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
@@ -117,12 +117,12 @@ export function ContactForm() {
                         />
                         <FormField
                             control={contactForm.control}
-                            name="email"
+                            name="phone"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Seu Email Corporativo</FormLabel>
+                                    <FormLabel>Telefone para Contato</FormLabel>
                                     <FormControl>
-                                        <Input placeholder="Digite seu Email" className="bg-white/80" {...field} />
+                                        <Input placeholder="Digite o seu telefone" className="bg-white/80" {...field} />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
