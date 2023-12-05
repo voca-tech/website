@@ -6,7 +6,6 @@ import { useForm } from 'react-hook-form'
 import {
     Form,
     FormControl,
-    FormDescription,
     FormField,
     FormItem,
     FormLabel,
@@ -17,35 +16,59 @@ import {
     Card,
     CardContent,
     CardDescription,
-    CardFooter,
     CardHeader,
     CardTitle,
 } from "@/components/ui/card"
 import { Input } from "./ui/input"
 import { Button } from "./ui/button"
-import { CalendarSearch } from "lucide-react"
+import { CheckCheck } from "lucide-react"
+import { sendEmail } from "@/lib/utils"
+import { useToast } from "@/components/ui/use-toast"
+import { LoadingSpinner } from "./Loading"
+import { useState } from "react"
 
 export interface FormDataProps {
-    userName: string;
+    leadName: string;
+    companyName: string;
     email: string;
-  };
+};
 
 const formSchema = z.object({
-    userName: z.string().min(3, 'Por favor insira o seu nome'),
+    leadName: z.string().min(3, 'Por favor insira o seu nome'),
+    companyName: z.string().min(2, 'Por favor insira o nome da empresa'),
     email: z.string().email('Por favor insira um Email válido')
 })
 
 export function ContactForm() {
+    const { toast } = useToast()
+    const [isFormSubmitted, setIsFormSubmitted] = useState(false)
+
     const contactForm = useForm<FormDataProps>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            userName: "",
+            leadName: "",
+            companyName: "",
             email: ""
         },
     })
+    const { isSubmitting } = contactForm.formState
 
-    function onSubmit(values: z.infer<typeof formSchema>) {
-        console.log(values)
+    async function onSubmit(data: FormDataProps) {
+        const status = await sendEmail(data)
+        if (status === 200) {
+            toast({
+                title: "Sucesso!",
+                description: "Em breve nosso time irá entrar em contato 😉",
+                variant: "success"
+            })
+            setIsFormSubmitted(true)
+        } else {
+            toast({
+                title: "Algo de errado 😢",
+                description: "Por favor, tente novamente mais tarde",
+                variant: 'destructive'
+            })
+        }
     }
 
     return (
@@ -54,12 +77,21 @@ export function ContactForm() {
                 <CardTitle>Agendar Demonstração</CardTitle>
                 <CardDescription>Entraremos em contato para marcar uma reunião sobre como o nosso produto se encaixa na sua empresa</CardDescription>
             </CardHeader>
+            {/* <Button type="button" onClick={() => {
+                toast({
+                    title: "Sucesso!",
+                    description: "Em breve nosso time irá entrar em contato 😉",
+                    variant: "success"
+                })
+            }}>
+                Toast
+            </Button> */}
             <CardContent className="pt-0 pb-4">
                 <Form {...contactForm}>
                     <form onSubmit={contactForm.handleSubmit(onSubmit)} className="space-y-4">
                         <FormField
                             control={contactForm.control}
-                            name="userName"
+                            name="leadName"
                             render={({ field }) => (
                                 <FormItem>
                                     <FormLabel>Seu Nome</FormLabel>
@@ -72,10 +104,23 @@ export function ContactForm() {
                         />
                         <FormField
                             control={contactForm.control}
+                            name="companyName"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Nome da Empresa</FormLabel>
+                                    <FormControl>
+                                        <Input placeholder="Digite o nome da sua empresa" className="bg-white/80" {...field} />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={contactForm.control}
                             name="email"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Seu Email</FormLabel>
+                                    <FormLabel>Seu Email Corporativo</FormLabel>
                                     <FormControl>
                                         <Input placeholder="Digite seu Email" className="bg-white/80" {...field} />
                                     </FormControl>
@@ -84,7 +129,20 @@ export function ContactForm() {
                             )}
                         />
                         {/* <div className="flex flex-col justify-between md:flex-row-reverse gap-2"> */}
-                        <Button type="submit" variant='default' className='rounded w-full bg-voca-green/90'>Agendar</Button>
+                        {isFormSubmitted ? (
+                            <p className="flex gap-2 items-center justify-center text-center text-sm text-teal-900">
+                                <CheckCheck size={16}/>
+                                Informações enviadas com sucesso!
+                            </p>
+                        ) : (
+                            <Button type="submit" variant='default' className='rounded w-full bg-voca-green/90' disabled={isSubmitting}>
+                                {isSubmitting ? (
+                                    <LoadingSpinner />
+                                ) : (
+                                    <span>Agendar</span>
+                                )}
+                            </Button>
+                        )}
                         {/* <Button type="button" variant='link' className='p-0 text-xs'>
                                 <CalendarSearch size={18} className='text-zinc-600 mr-2' />
                                 Prefiro selecionar um horário disponível
@@ -94,6 +152,6 @@ export function ContactForm() {
                 </Form>
             </CardContent>
 
-        </Card>
+        </Card >
     )
 }
