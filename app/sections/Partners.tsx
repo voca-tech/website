@@ -24,7 +24,7 @@ export default function PartnersSection() {
                             alt={logo.name}
                             width={logo.width}
                             height={logo.height}
-                            className="grayscale hover:scale-110 hover:grayscale-0 transition-all object-contain"
+                            className="grayscale hover:scale-110 hover:grayscale-0 transition-all object-contain h-auto"
                         />
                     ))}
 
