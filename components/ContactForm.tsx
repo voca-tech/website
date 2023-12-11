@@ -35,7 +35,7 @@ export interface FormDataProps {
 
 const formSchema = z.object({
     leadName: z.string().min(3, 'Por favor insira o seu nome'),
-    phone: z.string().min(8, 'Por favor insira um numero de telefone válido'),
+    phone: z.string().optional(),
     email: z.string().email('Por favor insira um Email válido')
 })
 
@@ -94,7 +94,7 @@ export function ContactForm() {
                             name="leadName"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Seu Nome</FormLabel>
+                                    <FormLabel>Seu Nome*</FormLabel>
                                     <FormControl>
                                         <Input placeholder="Digite seu nome" className="bg-white/80" {...field} />
                                     </FormControl>
@@ -107,7 +107,7 @@ export function ContactForm() {
                             name="email"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Seu Email Corporativo</FormLabel>
+                                    <FormLabel>Seu Email Corporativo*</FormLabel>
                                     <FormControl>
                                         <Input placeholder="Digite seu Email" className="bg-white/80" {...field} />
                                     </FormControl>
