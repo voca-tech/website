@@ -7,7 +7,7 @@ export default function OurClientsSection() {
         { name: 'Belas Artes', src: '/clients/belasartes.png', width: 100, height: 100 },
         { name: 'NovoNordisk', src: '/clients/novoNordisk.png', width: 80, height: 60 },
         { name: 'Woodbridge', src: '/clients/woodbridge.png', width: 200, height: 100 },
-        { name: 'DHS', src: '/clients/dhs.png', width: 100, height: 100 },
+        // { name: 'DHS', src: '/clients/dhs.png', width: 100, height: 100 },
         { name: 'HomeroCosta', src: '/clients/homeroCosta.png', width: 100, height: 100 },
     ]
 
