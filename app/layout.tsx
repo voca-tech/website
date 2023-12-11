@@ -1,8 +1,9 @@
-import { NavBar } from '@/components/NavBar'
+import { NavBar } from '@/components/NavigationBar'
 import './globals.css'
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import Footer from './sections/Footer'
+import { Toaster } from '@/components/ui/toaster'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -22,6 +23,7 @@ export default function RootLayout({
         <NavBar />
 
         <div className=''>
+          <Toaster />
           <div className='m-auto'>
             {children}
           </div>

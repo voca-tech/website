@@ -1,4 +1,3 @@
-"use client"
 import { Lexend } from 'next/font/google'
 import HeroSection from './sections/Hero';
 import ChallengesSection from './sections/Challenges';
