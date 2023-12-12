@@ -63,7 +63,7 @@ function DetailsSection() {
     function CardElement({ title, content }: CardProps) {
         return (
             <div className="px-4 py-6 bg-white shadow-lg rounded-2xl bg-opacity-20 border border-slate-300 h-full">
-                <h2 className="text-xl font-bold leading-5 text-slate-100">{title}</h2>
+                <h2 className="text-lg font-bold text-slate-100">{title}</h2>
                 <div className="mt-4 text-slate-200 flex flex-col gap-4">{content}</div>
             </div>
         )
