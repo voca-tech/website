@@ -64,7 +64,9 @@ export default function Functionalities() {
                         <h1 className="text-4xl font-semibold">{title}</h1>
                         <div className="mt-16 flex flex-col gap-8 font-light">
                             {children}
-                            <WhatsappLink />
+                            {/* <div className="flex justify-center"> */}
+                                <WhatsappLink />
+                            {/* </div> */}
                         </div>
                     </div>
                     <Button className={cn("my-auto rounded-full aspect-square text-white", selectedIndex == numberOfOptions - 1 && 'invisible')} variant='ghost' onClick={handleNextSection}>
@@ -206,13 +208,13 @@ export default function Functionalities() {
     return (
         <div id="functionalities" className={`bg-gradient-to-br ${selectedOption.customStyles} py-14 px-4`}>
             <div className="max-w-7xl mx-auto">
-                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 bg-white/70 w-full p-4 rounded-md shadow-md">
+                <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-6  gap-4 bg-white/70 w-full p-4 rounded-md shadow-md">
                     {options.map(option => (
                         <Button
                             key={option.value}
                             variant={option.value == selectedOption.value ? 'default' : 'ghost'}
                             onClick={() => setSelectedIndex(option.value)}
-                            className="text-xs md:text-base md:py-7"
+                            className="text-xs md:text-base md:py-7 lg:px-6"
                         >
                             {option.name}
                         </Button>

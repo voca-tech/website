@@ -9,9 +9,9 @@ export default function TestimonialsSection() {
         { id: 3, name: 'Cristiano', role: 'Gestor de RH da Belas Artes', avatar: '/avatars/ba-cristiano.jpg', testimonial: 'O VOCA é uma ferramenta muito importante para fortalecer a comunicação no ambiente corporativo. Não há dúvidas que tem ajudado muito o RH.' },
         // { id: 4, name: 'Jucimara', role: 'Gestore de RH na Woodbridge', avatar: '/avatars/akaer-mauricio.jpg', testimonial: 'Aplicamos a pesquisa em nossa planta e o resultado tem sido aceito, com 96% de adesão.' },
         // { id: 5, name: 'André', role: 'Gestor de RH da Engerform', avatar: '/avatars/user1.jpg', testimonial: 'O VOCA nos ajudou de forma simples a resolver problemas complexos.' },
-        { id: 6, name: 'Lorryane', role: 'Gestora de RH da Cred110', avatar: '/avatars/credi10-lorrayne.jpg', testimonial: 'O VOCA encaixou como uma luva, o módulo de treinamentos era exatamente o que precisávamos.' },
+        { id: 6, name: 'Lorryane', role: 'Gestora de RH da Credi10', avatar: '/avatars/credi10-lorrayne.jpg', testimonial: 'O VOCA encaixou como uma luva, o módulo de treinamentos era exatamente o que precisávamos.' },
         // { id: 7, name: 'Cristiane', role: 'Gestora de RH da Belas Artes', avatar: '/avatars/user1.jpg', testimonial: 'O VOCA permite avaliar se devemos efetivar ou não um colaborador antes do término do seu período de experiência, evitando custos desnecessários para a empresa.' },
-        { id: 8, name: 'Mauricio', role: 'Gestor de RH na Akaer', avatar: '/avatars/akaer-mauricio.jpg', testimonial: 'Ouvir o colaborador de forma simples no onboarding e offboarding, além da avaliação de desempenho, são diferenças que não encontramos fácil no mercado.' },
+        { id: 8, name: 'Mauricio', role: 'Gestor de RH na Akaer', avatar: '/avatars/akaer-mauricio.jpg', testimonial: 'Ouvir o colaborador de forma simples no onboarding e offboarding, além da avaliação de desempenho, são diferenciais que não encontramos fácil no mercado.' },
     ]
 
     return (
