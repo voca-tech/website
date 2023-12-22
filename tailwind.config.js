@@ -37,7 +37,8 @@ module.exports = {
         'voca-blue': { 200: '#99C9CD'}
       },
       backgroundImage: {
-        'zig-zag': "url('/illustrations/zigzag.png')"
+        'zig-zag': "url('/illustrations/patterns/zigzag.png')",
+        'gamification': "url('/illustrations/patterns/gamification.png')"
       }
     },
   },
