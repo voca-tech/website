@@ -6,7 +6,7 @@ export default function DashboardPreviewSection() {
             <div className="py-16 px-6 max-w-7xl m-auto flex gap-8 justify-center">
                 <div className="text-slate-200">
                     <h1 className="text-3xl font-semibold">Relatórios online e customizados </h1>
-                    <h3 className="text-xl mt-2">Somos os "waze" para as lideranças na empresa</h3>
+                    <h3 className="text-xl mt-2">Somos os &quot;waze&quot; para as lideranças na empresa</h3>
 
                     <div className="mt-10 flex flex-col gap-4">
                         <p>- Compile os indicadores em tempo real</p>
