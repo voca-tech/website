@@ -7,6 +7,7 @@ import KPIsSection from './sections/KPIs';
 import Functionalities from './sections/Functionalities';
 import OurClientsSection from './sections/OurClients';
 import TestimonialsSection from './sections/Testimonials';
+import Gamification from './sections/Gamification';
 
 const lexendFont = Lexend({ weight: ['200', '300', '400', '500', '600', '700'], subsets: ['latin'] })
 
@@ -21,7 +22,9 @@ export default function Home() {
 
       <Functionalities />
 
-      {/* <DashboardPreviewSection /> */}
+      <DashboardPreviewSection />
+
+      <Gamification />
 
       <OurClientsSection />
 
