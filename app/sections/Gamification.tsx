@@ -3,7 +3,7 @@ import Image from "next/image";
 export default function Gamification() {
     return (
         <div id="gamification" className="bg-[#070725] bg-gamification">
-            <div className="py-16 px-6 max-w-7xl m-auto flex flex-col lg:flex-row items-center text-center gap-8 justify-center">
+            <div className="py-16 px-6 max-w-7xl m-auto flex flex-col lg:flex-row items-center text-center lg:text-left gap-8 justify-center">
                 <Image
                     src='/illustrations/gamification.png'
                     alt="dashboards"
