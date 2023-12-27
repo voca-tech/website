@@ -3,7 +3,7 @@ import Image from "next/image";
 export default function DashboardPreviewSection() {
     return (
         <div className="bg-gradient-to-b from-slate-600 to-slate-400">
-            <div className="py-16 px-6 max-w-7xl m-auto flex gap-8 justify-center">
+            <div className="py-16 px-6 max-w-7xl m-auto flex flex-col-reverse text-center items-center lg:flex-row gap-8 justify-center">
                 <div className="text-slate-200">
                     <h1 className="text-3xl font-semibold">Relatórios online e customizados </h1>
                     <h3 className="text-xl mt-2">Somos os &quot;waze&quot; para as lideranças na empresa</h3>
