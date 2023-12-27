@@ -6,9 +6,9 @@ export default function KPIsSection() {
             <div className="max-w-7xl m-auto text-slate-800">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-20">
                     <Section icon={<Users  size={40} />} value='62%' description="dos colaboradores utilizam a plataforma diariamente" />
-                    <Section icon={<Rocket size={40} />} value='96%' description="Taxa de resposta nas pesquisas customizadas" />
-                    <Section icon={<BookOpenCheck size={40} />} value='54%' description="De ganho de produtividade no onboarding de colaboradores" />
-                    <Section icon={<Trophy size={40} />} value='100%' description="Das interações com análise de emoção e sentimento" />
+                    <Section icon={<Rocket size={40} />} value='96%' description="de engajamento nas pesquisas customizadas" />
+                    <Section icon={<BookOpenCheck size={40} />} value='54%' description="de ganho de produtividade no onboarding de colaboradores" />
+                    <Section icon={<Trophy size={40} />} value='100%' description="das interações com análise de emoção e sentimento" />
                 </div>
             </div>
         </div>

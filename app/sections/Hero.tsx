@@ -19,7 +19,7 @@ export default function HeroSection() {
                             </svg>
                             <span className="relative font-semibold">gestão</span>
                         </span>,{' '}
-                        comunicação interna e inteligência de dados
+                        comunicação interna e inteligência de dados.
                     </h1>
 
                     <p className="text-xl sm:text-2xl text-md tracking-tight text-white">
