@@ -6,6 +6,7 @@ import Image from "next/image";
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 import Link from "next/link";
 import { cn } from '@/lib/utils';
+import { Button } from './ui/button';
 
 export function NavBar() {
     return (
@@ -19,15 +20,17 @@ export function NavBar() {
                         height={80}
                     />
                 </Link>
-                <div className="hidden md:visible md:flex gap-6 text-slate-800">
+                <div className="hidden lg:visible lg:flex justify-center items-center gap-6 text-slate-800">
                     <MenuItem name="Início" reference="#home" />
                     <MenuItem name="Dores que resolvemos" reference="#challenges" />
                     <MenuItem name="Funcionalidades" reference="#functionalities" />
+                    <MenuItem name="Gamificação" reference="#gamification" />
                     <MenuItem name="Depoimentos" reference="#testimonials" />
+                    <LoginButton />
                     {/* <MenuItem name="Fale Conosco" reference="#contact" /> */}
                 </div>
 
-                <div className="md:hidden text-white hover:cursor-pointer">
+                <div className="lg:hidden text-white hover:cursor-pointer">
                     <Popover>
                         <PopoverTrigger className="flex items-center"><Menu /></PopoverTrigger>
                         <PopoverContent>
@@ -35,7 +38,9 @@ export function NavBar() {
                                 <MenuItem name="Início" reference="#home" isMobile />
                                 <MenuItem name="Dores que resolvemos" reference="#challenges" isMobile />
                                 <MenuItem name="Funcionalidades" reference="#functionalities" isMobile />
+                                <MenuItem name="Gamificação" reference="#gamification" isMobile />
                                 <MenuItem name="Depoimentos" reference="#testimonials" isMobile />
+                                <LoginButton isMobile/>
                                 {/* <PopoverMenuItem name="Fale Conosco" reference="#contact" /> */}
                             </div>
                         </PopoverContent>
@@ -62,5 +67,15 @@ function MenuItem({ name, reference, isMobile = false }: MenuItemProps) {
         >
             {name}
         </Link>
+    )
+}
+
+function LoginButton({ isMobile = false}: { isMobile?: boolean }) {
+    return (
+        <a href='https://plataforma.voca.com.br/login'>
+            <Button variant={isMobile ? 'default' : 'outline'} className={cn('text-sm', isMobile && '')}>
+                Entrar
+            </Button>
+        </a>
     )
 }
