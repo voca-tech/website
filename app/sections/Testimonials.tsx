@@ -11,7 +11,7 @@ export default function TestimonialsSection() {
         { id: 5, name: 'André', role: 'Diretor na Engerform', avatar: '/avatars/engeform-andre.png', testimonial: 'O VOCA nos ajudou de forma simples a resolver problemas complexos.' },
         { id: 6, name: 'Erika', role: 'Gestora de RH da Credi10', avatar: '/avatars/credi10-erika.jpg', testimonial: 'O VOCA é mais do que um sistema, é a voz dos nossos colaboradores que nos traz ideias, feedbacks e engajamento entre todos.' },
         // { id: 7, name: 'Cristiane', role: 'Gestora de RH da Belas Artes', avatar: '/avatars/user1.jpg', testimonial: 'O VOCA permite avaliar se devemos efetivar ou não um colaborador antes do término do seu período de experiência, evitando custos desnecessários para a empresa.' },
-        { id: 8, name: 'Mauricio', role: 'Gestor de RH na Akaer', avatar: '/avatars/akaer-mauricio.jpg', testimonial: 'Ouvir o colaborador de forma simples no onboarding e offboarding, além da avaliação de desempenho, são diferenciais que não encontramos fácil no mercado.' },
+        { id: 8, name: 'Mauricio', role: 'Gestor de RH na Akaer', avatar: '/avatars/akaer-mauricio.jpg', testimonial: 'O VOCA se destaca como uma ferramenta que vai além do convencional, promovendo uma cultura de inclusão e participação ativa. Sua contribuição para a melhoria da experiência do colaborador é evidente.' },
     ]
 
     return (
