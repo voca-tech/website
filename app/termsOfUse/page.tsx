@@ -222,7 +222,7 @@ export default function Terms() {
                 <p>
                     <br />1.	DO OBJETIVO DO MÓDULO
                     <br />
-                    <br />1.1	Proporcionar aos colaboradores da empresa cliente do VOCA (denominada apenas "CLIENTE"),  um espaço para compra e venda de produtos ou serviços que não conflitem ou sejam concorrentes com os interesses e negócios da empresa CLIENTE.
+                    <br />1.1	Proporcionar aos colaboradores da empresa cliente do VOCA (denominada apenas “CLIENTE”),  um espaço para compra e venda de produtos ou serviços que não conflitem ou sejam concorrentes com os interesses e negócios da empresa CLIENTE.
                     <br />
                     <br />2.	DO PÚBLICO ALVO
                     <br />
@@ -232,7 +232,7 @@ export default function Terms() {
                     <br />
                     <br />3.	DAS REGRAS GERAIS
                     <br />
-                    <br />3.1	Todas as publicações devem seguir o padrão estabelecido na tela de "Novo anúncio" do módulo Classificados criado exclusivamente para esta finalidade no VOCA, contendo as informações do produto ou serviço ofertado, contato, valor e localização.
+                    <br />3.1	Todas as publicações devem seguir o padrão estabelecido na tela de “Novo anúncio” do módulo Classificados criado exclusivamente para esta finalidade no VOCA, contendo as informações do produto ou serviço ofertado, contato, valor e localização.
                     <br />
                     <br />3.2	Apenas será permitida a comercialização de produtos ou serviços que sigam as regras estabelecidas neste regulamento e que não conflitem ou sejam concorrentes com os interesses e negócios da empresa CLIENTE.
                     <br />
