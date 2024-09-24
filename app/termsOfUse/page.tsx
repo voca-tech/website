@@ -215,6 +215,66 @@ export default function Terms() {
                     <br />
                     VOCA: CRP SOLUÇÕES COMUNICATIVAS LTDA-ME, pessoa jurídica de direito privado, inscrita no CNPJ/MF sob o n°: 28.037.495/0001-42, com sede na Rua Joaquim Lustosa, n° 15, Apto. 302, Anchieta, Belo Horizonte/MG, CEP: 30310-410.<br />
                 </p>
+
+                <div>
+                    <h1 className="font-bold text-2xl mt-8">Regulamento VOCA Classificados</h1>
+                </div>
+                <p>
+                    <br />1.	DO OBJETIVO DO MÓDULO
+                    <br />
+                    <br />1.1	Proporcionar aos colaboradores da empresa cliente do VOCA (denominada apenas "CLIENTE"),  um espaço para compra e venda de produtos ou serviços que não conflitem ou sejam concorrentes com os interesses e negócios da empresa CLIENTE.
+                    <br />
+                    <br />2.	DO PÚBLICO ALVO
+                    <br />
+                    <br />2.1	Estão elegíveis a participar do módulo VOCA Classificados no ambiente do CLIENTE, todos os colaboradores do CLIENTE que possuam usuário e senha de rede e, consequentemente, acesso ao VOCA.
+                    <br />
+                    <br />2.2	Não são elegíveis os empregados terceirizados, temporários e afastados.
+                    <br />
+                    <br />3.	DAS REGRAS GERAIS
+                    <br />
+                    <br />3.1	Todas as publicações devem seguir o padrão estabelecido na tela de "Novo anúncio" do módulo Classificados criado exclusivamente para esta finalidade no VOCA, contendo as informações do produto ou serviço ofertado, contato, valor e localização.
+                    <br />
+                    <br />3.2	Apenas será permitida a comercialização de produtos ou serviços que sigam as regras estabelecidas neste regulamento e que não conflitem ou sejam concorrentes com os interesses e negócios da empresa CLIENTE.
+                    <br />
+                    <br />3.3	É proibida a comercialização de animais de quaisquer portes, brindes recebidos por meio de sorteio interno, armas de fogo, quaisquer produtos que façam apologia a sexo ou drogas, produtos provenientes de pirataria, como réplicas de outras marcas, quaisquer outros produtos ou serviços cuja comercialização seja vedada por lei ou que não esteja de acordo com as diretrizes da empresa CLIENTE, ou quaisquer produtos ou serviços que conflitem ou sejam concorrentes com os interesses da empresa CLIENTE e demais empresas do grupo.
+                    <br />
+                    <br />3.4	Não será permitida a divulgação de anúncios de sites externos, como OLX, Mercado Livre, dentre outros. As publicações devem ocorrer somente no módulo criado para esta finalidade, e de acordo com os critérios estabelecidos neste regulamento e na plataforma, sendo vedado utilizar nome, endereço ou quaisquer outros dados da empresa CLIENTE em eventuais propagandas ou quaisquer meios de comunicação.
+                    <br />
+                    <br />3.5	A comercialização e/ou entrega dos produtos ou serviços ofertados deve ser feita exclusivamente em horários e locais previamente autorizados, conforme diretrizes da empresa CLIENTE, não sendo permitido utilizar outros canais de comunicação da empresa CLIENTE para as negociações além do VOCA, tampouco executar no ambiente e horário de trabalho qualquer atividade profissional que não seja relacionada às atividades da empresa CLIENTE.
+                    <br />
+                    <br />
+                    <br />3.6	Toda a venda e negociação dos produtos ou serviços deve ser feita unicamente entre comprador e vendedor, sem nenhum envolvimento de quaisquer áreas do VOCA e da empresa CLIENTE.
+                    <br />
+                    <br />3.7	Não serão permitidos anúncios para terceiros (familiares, amigos e outros), caso anuncie algum item, o colaborador anunciante se responsabilizará pessoalmente pela divulgação do produto ou serviço e deverá ser a única referência de contato para as negociações.
+                    <br />
+                    <br />4.	DAS RESPONSABILIDADES
+                    <br />
+                    <br />4.1	São de exclusiva responsabilidade do colaborador anunciante todas as informações prestadas no ato da divulgação de produtos ou serviços, bem como todos os trâmites envolvendo a negociação, inclusive no que tange ao pagamento/recebimento de valores.
+                    <br />
+                    <br />4.2	O colaborador que adquirir produto ou serviço divulgado no grupo se responsabiliza, exclusivamente, pela compra e pelo seu pagamento, conforme ajustado com o vendedor.
+                    <br />
+                    <br />4.3	Em hipótese alguma o VOCA e a empresa CLIENTE, poderão ser responsabilizados pelos anúncios realizados, tampouco por eventuais problemas com as negociações. A empresa CLIENTE apenas disponibiliza o espaço criado na plataforma do VOCA para facilitar a divulgação de produtos ou serviços, sem qualquer ingerência sobre sua comercialização.
+                    <br />
+                    <br />4.4	Os colaboradores devem observar todas as diretrizes previstas neste regulamento, nas orientações apresentadas na plataforma do VOCA, bem como no Código de Conduta da empresa CLIENTE, sendo que o descumprimento de qualquer uma delas poderá ensejar a aplicação das penalidades cabíveis.
+                    <br />
+                    <br />5.	DA PROTEÇÃO DE DADOS E DO SIGILO
+                    <br />
+                    <br />5.1	Todas as partes, sempre que aplicável, se comprometem a, no uso do produto, atuar em conformidade com a legisção aplicável sobre informações relacionadas a pessoas naturais identificadas ou identificáveis (“dados pessoais”), especialmente a Lei nº 13.709/2018 (“Lei Geral de Proteção de Dados” ou “LGPD”).
+                    <br />
+                    <br />5.2	Todas as partes, incluindo seus funcionários e representantes se comprometem a tratar todos os dados pessoais a que eventualmente tiverem acesso por força do uso ou administração do produto como confidenciais, ainda que o produto ou seu uso pelo colaborador venha a ser encerrado e independentemente dos motivos que derem causa, seja ao cancelamento do uso do produto, seja ao encerramento do produto.
+                    <br />
+                    <br />5.3	Cada uma das partes deverá monitorar, por meios adequados, sua própria conformidade, a de seus funcionários e representantes, com os controles de segurança da informação e com as respectivas obrigações de proteção de dados pessoais que, porventura, sejam tratados no âmbito do uso ou administração do produto.
+                    <br />
+                    <br />5.4	O colaborador que adquirir o produto se obriga a manter o mais completo e absoluto sigilo sobre quaisquer dados, documentos e informações que vier a ter acesso por meio das negociações de produtos disponibilizados na plataforma, não podendo sob qualquer pretexto repassar tais dados, documentos e informações a terceiros, ou mesmo divulgar, revelar, comercializar, reproduzir, utilizar ou deles dar conhecimento a terceiros estranhos à contratação, mesmo após finalizada a transação.
+                    <br />
+                    <br />6.	DAS CONSIDERAÇÕES FINAIS
+                    <br />
+                    <br />6.1	 A empresa CLIENTE poderá a qualquer tempo, e a seu exclusivo critério, modificar as regras até então estabelecidas para comercialização de produtos ou serviços pelos colaboradores.
+                    <br />
+                    <br />6.2	 O módulo Classificados, será disponibilizado na plataforma VOCA por tempo indeterminado e poderá ser encerrado a qualquer tempo, a exclusivo critério da empresa CLIENTE.
+                    <br />
+                    <br />6.3	 A empresa CLIENTE poderá, a seu exclusivo critério, excluir publicações que não estejam de acordo com as regras aqui descritas.
+                </p>
             </div>
         </div>
     )
