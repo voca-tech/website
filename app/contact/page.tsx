@@ -18,7 +18,7 @@ export default function Contact() {
 
                 <ContactForm 
                     title="Falar com um especialista"
-                    description="Descubra como o VOCA encaixa no dia a dia da sua empresa!"
+                    description="Descubra como o VOCA se encaixa no dia a dia da sua empresa!"
                     buttonText="Enviar"
                 />
             </div>
