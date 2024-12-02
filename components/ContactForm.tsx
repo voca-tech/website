@@ -33,13 +33,19 @@ export interface FormDataProps {
     email: string;
 };
 
+interface ContactFormProps {
+    title?: string;
+    description?: string;
+    buttonText?: string
+}
+
 const formSchema = z.object({
     leadName: z.string().min(3, 'Por favor insira o seu nome'),
     phone: z.string().optional(),
     email: z.string().email('Por favor insira um Email válido')
 })
 
-export function ContactForm() {
+export function ContactForm({ title, description, buttonText }: ContactFormProps) {
     const { toast } = useToast()
     const [isFormSubmitted, setIsFormSubmitted] = useState(false)
 
@@ -71,11 +77,15 @@ export function ContactForm() {
         }
     }
 
+    const formTitle = title || 'Agendar Demonstração'
+    const formDescription = description || 'Entraremos em contato para marcar uma reunião sobre como o nosso produto se encaixa na sua empresa'
+    const formButtonText = buttonText || 'Agendar'
+
     return (
         <Card className='shadow-xl'>
             <CardHeader>
-                <CardTitle>Agendar Demonstração</CardTitle>
-                <CardDescription>Entraremos em contato para marcar uma reunião sobre como o nosso produto se encaixa na sua empresa</CardDescription>
+                <CardTitle>{formTitle}</CardTitle>
+                <CardDescription>{formDescription}</CardDescription>
             </CardHeader>
             {/* <Button type="button" onClick={() => {
                 toast({
@@ -131,7 +141,7 @@ export function ContactForm() {
                         {/* <div className="flex flex-col justify-between md:flex-row-reverse gap-2"> */}
                         {isFormSubmitted ? (
                             <p className="flex gap-2 items-center justify-center text-center text-sm text-teal-900">
-                                <CheckCheck size={16}/>
+                                <CheckCheck size={16} />
                                 Informações enviadas com sucesso!
                             </p>
                         ) : (
@@ -139,7 +149,7 @@ export function ContactForm() {
                                 {isSubmitting ? (
                                     <LoadingSpinner />
                                 ) : (
-                                    <span>Agendar</span>
+                                    <span>{formButtonText}</span>
                                 )}
                             </Button>
                         )}
