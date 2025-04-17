@@ -28,12 +28,10 @@ export default function Redirect() {
     };
 
     const os = getMobileOS();
-    let destinationUrl = `http://192.168.3.20:3000/`;
+    let destinationUrl = "https://www.voca.com.br/app";
 
     // URLs para cada plataforma
     if (os === 'web') {
-      // destinationUrl = `https://voca.app/`;
-      // destinationUrl = `http://192.168.3.20:3000/`;
       setIsMobile(false)
     } else if (os === 'Android') {
       // Tenta abrir o app com scheme primeiro
