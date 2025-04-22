@@ -3,9 +3,10 @@
 // import { useEffect, useState } from 'react';
 // import { useParams } from 'next/navigation';
 // import Image from 'next/image';
+import { redirect } from 'next/navigation';
 
 export default function AppPage() {
-  return null;
+  redirect('voca://');
 
 
   // const params = useParams();
