@@ -38,22 +38,22 @@ export default function Redirect() {
       destinationUrl = `voca://`;
 
       // Após um timeout, redireciona para Google Play se o app não abrir
-      setTimeout(() => {
-        window.location.href = playStoreUrl;
-      }, 1000);
+      // setTimeout(() => {
+      //   window.location.href = playStoreUrl;
+      // }, 1000);
     } else if (os === 'iOS') {
       // Tenta abrir o app com scheme primeiro
       destinationUrl = `voca://`;
 
       // Após um timeout, redireciona para App Store se o app não abrir
-      setTimeout(() => {
-        // URL para produção
-        window.location.href = appStoreUrl;
-      }, 1000);
+      // setTimeout(() => {
+      //   // URL para produção
+      //   window.location.href = appStoreUrl;
+      // }, 1000);
     }
 
     if (os !== 'web') {
-      window.location.href = destinationUrl;
+      // window.location.href = destinationUrl;
     }
   }, [playStoreUrl, appStoreUrl]);
 
