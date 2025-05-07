@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import Image from 'next/image';
+import { Separator } from '@/components/ui/separator';
 
 export default function Redirect() {
   const params = useParams();
@@ -44,54 +45,58 @@ export default function Redirect() {
   }, []);
 
   return (
-    <div className="flex flex-col items-center justify-center  p-4 text-center">
+    <div className="flex flex-col items-center justify-center gap-8 my-4 p-4 text-center text-slate-700">
 
       {!isMobile && (
         <h1 className="text-2xl font-bold mb-4">Este link é exclusivo para uso em celulares</h1>
       )}
 
-      <h1 className='text-xl font-bold'>Ainda não baixou o App?</h1>
-      <p className="mb-4">Faça o download do nosso App de acordo com o sistema do seu celular</p>
-      <div className="flex flex-row items-center space-x-4 justify-center">
-        <a
-          href={appStoreUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="transition-transform hover:scale-105"
-        >
-          <Image
-            src="/images/app-store-badge.png"
-            alt="Disponível na App Store"
-            width={120}
-            height={50}
-          />
-        </a>
-        <a
-          href={playStoreUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="transition-transform hover:scale-105"
-        >
-          <Image
-            src="/images/google-play-badge.png"
-            alt="Disponível no Google Play"
-            width={120}
-            height={50}
-          />
-        </a>
+      <div className='flex flex-col items-center justify-center gap-2'>
+        <h1 className='text-xl font-bold'>Ainda não baixou o App?</h1>
+        <p className="text-sm text-slate-500">Faça o download do nosso App de acordo com o sistema do seu celular</p>
+        <div className="flex flex-row items-center space-x-4 justify-center">
+          <a
+            href={appStoreUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="transition-transform hover:scale-105"
+          >
+            <Image
+              src="/images/app-store-badge.png"
+              alt="Disponível na App Store"
+              width={144}
+              height={60}
+            />
+          </a>
+          <a
+            href={playStoreUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="transition-transform hover:scale-105"
+          >
+            <Image
+              src="/images/google-play-badge.png"
+              alt="Disponível no Google Play"
+              width={144}
+              height={60}
+            />
+          </a>
+        </div>
       </div>
 
+      <Separator className='bg-slate-200'/>
+
       {isMobile && (
-        <div className='flex flex-col items-center justify-center mt-8 mb-4'>
+        <div className='flex flex-col items-center justify-center gap-2'>
           <h1 className='text-xl font-bold'>Já possui o App do VOCA?</h1>
-          <p className="mb-4">Você será redirecionado em instantes. Se preferir, clique no botão abaixo para abrir imediatamente.</p>
+          <p className="text-sm text-slate-500">Você será redirecionado em instantes. Se preferir, clique no botão abaixo para abrir imediatamente.</p>
           <button
             onClick={() => { window.location.href = destinationUrl }}
-            className="mb-4 text-voca-green border border-voca-green font-bold py-3 px-6 rounded-lg transition-all shadow-md hover:shadow-lg"
+            className="text-sm text-slate-500 border border-slate-400 font-bold py-2 px-10 rounded-md transition-all shadow-md hover:shadow-lg"
           >
-            Abrir VOCA
+            Abrir App VOCA
           </button>
-          <p className="mb-4 text-xs text-gray-500 italic">*Essa opção só funciona caso o aplicativo já esteja instalado no seu dispositivo</p>
+          <p className="text-xs text-slate-400 italic">*Essa opção só funciona caso o aplicativo já esteja instalado no seu dispositivo</p>
         </div>
       )}
     </div>
