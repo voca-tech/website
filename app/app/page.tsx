@@ -45,25 +45,13 @@ export default function Redirect() {
 
   return (
     <div className="flex flex-col items-center justify-center  p-4 text-center">
-      {isMobile ? (
-        <div className='flex flex-col items-center justify-center mb-8'>
-          <h1 className="text-2xl font-bold mb-4">Redirecionando...</h1>
-          <p className="mb-1">Você será redirecionado para o aplicativo VOCA em instantes.</p>
-          <p className="text-sm mb-1">Caso não for redirecionado, clique no botão abaixo para abrir o aplicativo</p>
-          <button
-            onClick={() => { window.location.href = destinationUrl }}
-            className=" bg-voca-green hover:bg-teal-600 text-white font-bold py-3 px-6 rounded-lg transition-all shadow-md hover:shadow-lg"
-          >
-            Abrir VOCA
-          </button>
-        </div>
-      )
-        : (
-          <h1 className="text-2xl font-bold mb-4">Este link é exclusivo para uso em celulares</h1>
-        )
-      }
 
-      <p className="mb-8">Baixe o aplicativo VOCA em seu dispositivo móvel:</p>
+      {!isMobile && (
+        <h1 className="text-2xl font-bold mb-4">Este link é exclusivo para uso em celulares</h1>
+      )}
+
+      <h1 className='text-xl font-bold'>Ainda não baixou o App?</h1>
+      <p className="mb-4">Faça o download do nosso App de acordo com o sistema do seu celular</p>
       <div className="flex flex-row items-center space-x-4 justify-center">
         <a
           href={appStoreUrl}
@@ -92,6 +80,20 @@ export default function Redirect() {
           />
         </a>
       </div>
+
+      {isMobile && (
+        <div className='flex flex-col items-center justify-center mt-8 mb-4'>
+          <h1 className='text-xl font-bold'>Já possui o App do VOCA?</h1>
+          <p className="mb-4">Você será redirecionado em instantes. Se preferir, clique no botão abaixo para abrir imediatamente.</p>
+          <button
+            onClick={() => { window.location.href = destinationUrl }}
+            className="mb-4 text-voca-green border border-voca-green font-bold py-3 px-6 rounded-lg transition-all shadow-md hover:shadow-lg"
+          >
+            Abrir VOCA
+          </button>
+          <p className="mb-4 text-xs text-gray-500 italic">*Essa opção só funciona caso o aplicativo já esteja instalado no seu dispositivo</p>
+        </div>
+      )}
     </div>
   );
 } 
