@@ -1,4 +1,5 @@
 import { NavBar } from '@/components/NavigationBar'
+import { AnnouncementBar } from '@/components/AnnouncementBar'
 import './globals.css'
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
@@ -23,7 +24,8 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className='scroll-smooth'>
-      <body className={`${inter.className}`}>
+      <body className={`${inter.className} overflow-x-hidden`}>
+        <AnnouncementBar />
         <NavBar />
 
         <div className=''>

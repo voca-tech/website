@@ -20,6 +20,7 @@ import {
     CardTitle,
 } from "@/components/ui/card"
 import { Input } from "./ui/input"
+import { Textarea } from "./ui/textarea"
 import { Button } from "./ui/button"
 import { CheckCheck } from "lucide-react"
 import { sendEmail } from "@/lib/utils"
@@ -31,21 +32,24 @@ export interface FormDataProps {
     leadName: string;
     phone: string;
     email: string;
+    message?: string;
 };
 
 interface ContactFormProps {
     title?: string;
     description?: string;
-    buttonText?: string
+    buttonText?: string;
+    defaultMessage?: string;
 }
 
 const formSchema = z.object({
     leadName: z.string().min(3, 'Por favor insira o seu nome'),
     phone: z.string().optional(),
-    email: z.string().email('Por favor insira um Email válido')
+    email: z.string().email('Por favor insira um Email válido'),
+    message: z.string().optional()
 })
 
-export function ContactForm({ title, description, buttonText }: ContactFormProps) {
+export function ContactForm({ title, description, buttonText, defaultMessage }: ContactFormProps) {
     const { toast } = useToast()
     const [isFormSubmitted, setIsFormSubmitted] = useState(false)
 
@@ -54,7 +58,8 @@ export function ContactForm({ title, description, buttonText }: ContactFormProps
         defaultValues: {
             leadName: "",
             phone: "",
-            email: ""
+            email: "",
+            message: defaultMessage || ""
         },
     })
     const { isSubmitting } = contactForm.formState
@@ -87,15 +92,6 @@ export function ContactForm({ title, description, buttonText }: ContactFormProps
                 <CardTitle>{formTitle}</CardTitle>
                 <CardDescription>{formDescription}</CardDescription>
             </CardHeader>
-            {/* <Button type="button" onClick={() => {
-                toast({
-                    title: "Sucesso!",
-                    description: "Em breve nosso time irá entrar em contato 😉",
-                    variant: "success"
-                })
-            }}>
-                Toast
-            </Button> */}
             <CardContent className="pt-0 pb-4">
                 <Form {...contactForm}>
                     <form onSubmit={contactForm.handleSubmit(onSubmit)} className="space-y-4">
@@ -138,7 +134,19 @@ export function ContactForm({ title, description, buttonText }: ContactFormProps
                                 </FormItem>
                             )}
                         />
-                        {/* <div className="flex flex-col justify-between md:flex-row-reverse gap-2"> */}
+                        <FormField
+                            control={contactForm.control}
+                            name="message"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Conte um pouco sobre o seu desafio</FormLabel>
+                                    <FormControl>
+                                        <Textarea placeholder="Descreva em poucas palavras" className="bg-white/80" {...field} />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
                         {isFormSubmitted ? (
                             <p className="flex gap-2 items-center justify-center text-center text-sm text-teal-900">
                                 <CheckCheck size={16} />
@@ -153,11 +161,6 @@ export function ContactForm({ title, description, buttonText }: ContactFormProps
                                 )}
                             </Button>
                         )}
-                        {/* <Button type="button" variant='link' className='p-0 text-xs'>
-                                <CalendarSearch size={18} className='text-zinc-600 mr-2' />
-                                Prefiro selecionar um horário disponível
-                            </Button> */}
-                        {/* </div> */}
                     </form>
                 </Form>
             </CardContent>

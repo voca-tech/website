@@ -1,54 +1,139 @@
-import { Heart, MessageCircle, Repeat2, Upload } from "lucide-react";
-import { WhatsappLink } from "@/components/WhatsappLink";
+'use client'
+
+import { useEffect, useRef, useState } from "react";
+import Image from "next/image";
+import Link from "next/link";
+import { ArrowRight } from "lucide-react";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
+import { WhatsappLink } from "@/components/WhatsappLink";
+import { cn } from "@/lib/utils";
+
+type Testimonial = {
+    id: number;
+    name: string;
+    role: string;
+    avatar: string;
+    logo?: string;
+    testimonial: string;
+};
+
+const testimonials: Testimonial[] = [
+    { id: 3, name: 'Cristiano', role: 'Gestor de RH da Belas Artes', avatar: '/avatars/ba-cristiano.jpg', logo: '/clients/belasartes.png', testimonial: 'O VOCA é uma ferramenta muito importante para fortalecer a comunicação no ambiente corporativo. Não há dúvidas que tem ajudado muito o RH.' },
+    { id: 5, name: 'André', role: 'CEO na Engeform', avatar: '/avatars/engeform-andre.png', testimonial: 'O VOCA nos ajudou de forma simples a resolver problemas complexos.' },
+    { id: 6, name: 'Erika', role: 'Coordenadora de RH da Credi10', avatar: '/avatars/credi10-erika.jpg', logo: '/clients/credi10.png', testimonial: 'O VOCA é mais do que um sistema, é a voz dos nossos colaboradores que nos traz ideias, feedbacks e engajamento entre todos.' },
+    { id: 8, name: 'Mauricio', role: 'Head de Pessoas e Cultura na Akaer', avatar: '/avatars/akaer-mauricio.jpg', logo: '/clients/akaer.png', testimonial: 'O VOCA se destaca como uma ferramenta que vai além do convencional, promovendo uma cultura de inclusão e participação ativa. Sua contribuição para a melhoria da experiência do colaborador é evidente.' },
+];
 
 export default function TestimonialsSection() {
-    const users = [
-        // { id: 1, name: 'Priscila', role: 'Gestora de RH na Woodbridge', avatar: '/avatars/wb-priscila.jpg', testimonial: 'O time aceitou muito bem o novo processo de feedbacks, chegando a mais de 2.000 registros em um único mês' },
-        // { id: 2, name: 'Luciene', role: 'Gestora de RH na Engeform', avatar: '/avatars/akaer-mauricio.jpg', testimonial: 'Fiquei muito feliz de ser reconhecida como a mais elogiada do mês. Isso tem um poder enorme na minha motivação' },
-        { id: 3, name: 'Cristiano', role: 'Gestor de RH da Belas Artes', avatar: '/avatars/ba-cristiano.jpg', testimonial: 'O VOCA é uma ferramenta muito importante para fortalecer a comunicação no ambiente corporativo. Não há dúvidas que tem ajudado muito o RH.' },
-        // { id: 4, name: 'Jucimara', role: 'Gestore de RH na Woodbridge', avatar: '/avatars/akaer-mauricio.jpg', testimonial: 'Aplicamos a pesquisa em nossa planta e o resultado tem sido aceito, com 96% de adesão.' },
-        { id: 5, name: 'André', role: 'Diretor na Engerform', avatar: '/avatars/engeform-andre.png', testimonial: 'O VOCA nos ajudou de forma simples a resolver problemas complexos.' },
-        { id: 6, name: 'Erika', role: 'Gestora de RH da Credi10', avatar: '/avatars/credi10-erika.jpg', testimonial: 'O VOCA é mais do que um sistema, é a voz dos nossos colaboradores que nos traz ideias, feedbacks e engajamento entre todos.' },
-        // { id: 7, name: 'Cristiane', role: 'Gestora de RH da Belas Artes', avatar: '/avatars/user1.jpg', testimonial: 'O VOCA permite avaliar se devemos efetivar ou não um colaborador antes do término do seu período de experiência, evitando custos desnecessários para a empresa.' },
-        { id: 8, name: 'Mauricio', role: 'Gestor de RH na Akaer', avatar: '/avatars/akaer-mauricio.jpg', testimonial: 'O VOCA se destaca como uma ferramenta que vai além do convencional, promovendo uma cultura de inclusão e participação ativa. Sua contribuição para a melhoria da experiência do colaborador é evidente.' },
-    ]
+    const sectionRef = useRef<HTMLDivElement>(null);
+    const [visible, setVisible] = useState(false);
+
+    useEffect(() => {
+        const el = sectionRef.current;
+        if (!el) return;
+
+        const observer = new IntersectionObserver(
+            ([entry]) => {
+                if (entry.isIntersecting) {
+                    setVisible(true);
+                    observer.disconnect();
+                }
+            },
+            { threshold: 0.15 }
+        );
+        observer.observe(el);
+
+        return () => observer.disconnect();
+    }, []);
 
     return (
-        <div id="testimonials" className="bg-gradient-to-tl from-sky-50 to-sky-200 py-16 px-6">
-            <div className="flex flex-col gap-10 justify-center items-center max-w-7xl m-auto">
-                <div className="flex flex-col gap-1 items-center">
-                    {/* <Sparkles /> */}
-                    <h2 className="text-2xl text-cyan-900 font-bold text-center">
-                        ELES TÊM VOZ NA VEIA
+        <div id="testimonials" ref={sectionRef} className="relative bg-gradient-to-b from-[#012e31] to-[#016b72] py-16 sm:py-24 px-6 overflow-hidden">
+            <div className="absolute inset-0 pointer-events-none">
+                <div
+                    className="absolute inset-0 opacity-[0.15]"
+                    style={{
+                        backgroundImage: "radial-gradient(circle, rgba(255,255,255,0.5) 1px, transparent 1px)",
+                        backgroundSize: "28px 28px",
+                    }}
+                />
+                <Image
+                    src="/voca-symbol.png"
+                    alt=""
+                    width={260}
+                    height={320}
+                    className="absolute left-1/2 top-0 -translate-x-1/2 -translate-y-8 opacity-[0.08] brightness-0 invert select-none"
+                />
+            </div>
+
+            <div className="relative max-w-6xl mx-auto">
+                <div className="text-center max-w-2xl mx-auto">
+                    <span className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-1.5 text-xs font-bold tracking-widest text-white uppercase backdrop-blur-sm">
+                        Depoimentos
+                    </span>
+                    <h2 className="text-3xl sm:text-4xl font-extrabold text-white mt-4">
+                        Quem usa, recomenda
                     </h2>
-                    <h4 className="text-lg text-cyan-900 text-center">
-                        Clientes que fazem do VOCA uma extensão <br /> de suas empresas
-                    </h4>
+                    <p className="text-lg text-white/70 mt-4">
+                        Clientes que fazem do VOCA uma extensão de suas empresas
+                    </p>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 w-full">
-                    {users.map(user => (
-                        <div key={user.id} className="px-8 pb-4 mt-8 bg-white rounded-lg shadow-lg flex flex-col gap-4 items-center text-center">
-                            <Avatar className="-mt-10">
-                                <AvatarImage src={user.avatar} />
-                            </Avatar>
-                            <div className="text-slate-400 text-sm">
-                                <p>{user.name}</p>
-                                <p>{user.role}</p>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-12">
+                    {testimonials.map((user, i) => (
+                        <div
+                            key={user.id}
+                            className={cn(
+                                "group testimonial-card rounded-2xl bg-white p-6 shadow-2xl shadow-black/20 flex flex-col gap-4 text-left transition-all duration-300 hover:-translate-y-2",
+                                visible ? "animate-in fade-in slide-in-from-bottom-6" : "opacity-0"
+                            )}
+                            style={visible ? { animationDelay: `${i * 100}ms`, animationDuration: "600ms", animationFillMode: "both" } : undefined}
+                        >
+                            <div className="flex items-center justify-between">
+                                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-voca-green/10 transition-colors duration-300 group-hover:bg-voca-green">
+                                    <Image
+                                        src="/voca-symbol.png"
+                                        alt=""
+                                        width={16}
+                                        height={20}
+                                        className="transition-all duration-300 group-hover:brightness-0 group-hover:invert"
+                                    />
+                                </div>
+                                {user.logo && (
+                                    <Image
+                                        src={user.logo}
+                                        alt={user.role}
+                                        width={32}
+                                        height={32}
+                                        className="object-contain grayscale opacity-70 transition-all duration-300 group-hover:grayscale-0 group-hover:opacity-100"
+                                    />
+                                )}
                             </div>
-                            <p className="text-slate-600">{user.testimonial}</p>
-                            <div className="flex justify-between w-full text-slate-300 mt-auto">
-                                <Heart size={20} className="hover:scale-110 hover:text-red-600 transition-all" />
-                                <MessageCircle size={20} className="hover:scale-110 hover:text-cyan-600 transition-all" />
-                                <Repeat2 size={20} className="hover:scale-110 hover:text-lime-600 transition-all" />
-                                <Upload size={20} className="hover:scale-110 hover:text-indigo-600 transition-all" />
+
+                            <p className="text-slate-600 text-sm leading-relaxed flex-1">{user.testimonial}</p>
+
+                            <div className="flex items-center gap-3 pt-4 border-t border-slate-100">
+                                <Avatar className="h-12 w-12 ring-2 ring-white shadow-sm">
+                                    <AvatarImage src={user.avatar} />
+                                </Avatar>
+                                <div>
+                                    <p className="font-bold text-slate-900 text-sm">{user.name}</p>
+                                    <p className="text-slate-500 text-xs">{user.role}</p>
+                                </div>
                             </div>
                         </div>
                     ))}
                 </div>
 
-                <WhatsappLink />
+                <div className="flex flex-wrap justify-center items-center gap-x-6 gap-y-4 mt-14">
+                    <Link href="/casos-de-sucesso">
+                        <Button className="bg-white text-voca-green hover:bg-white/90 rounded-md px-6 h-12 text-base font-semibold">
+                            Ver todos os cases
+                            <ArrowRight className="ml-2" size={16} />
+                        </Button>
+                    </Link>
+                    <WhatsappLink />
+                </div>
             </div>
         </div>
     )

@@ -1,3 +1,52 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@keyframes drift-a {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    50% { transform: translate(40px, -30px) scale(1.08); }
+}
+
+@keyframes drift-b {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    50% { transform: translate(-35px, 25px) scale(1.05); }
+}
+
+@keyframes drift-c {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    50% { transform: translate(20px, 30px) scale(1.1); }
+}
+
+@keyframes pulse-glow {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(34, 211, 238, 0.5); }
+    50% { box-shadow: 0 0 0 18px rgba(34, 211, 238, 0); }
+}
+
+@keyframes pulse-glow-gold {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(232, 178, 61, 0.45); }
+    50% { box-shadow: 0 0 0 10px rgba(232, 178, 61, 0); }
+}
+
+@keyframes pulse-glow-voca {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(0, 121, 128, 0.4); }
+    50% { box-shadow: 0 0 0 14px rgba(0, 121, 128, 0); }
+}
+
+@keyframes logo-breathe {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+}
+
+@keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+}
+
+@keyframes marquee-right {
+    from { transform: translateX(-50%); }
+    to { transform: translateX(0%); }
+}
+
+.marquee-track:hover {
+    animation-play-state: paused;
+}

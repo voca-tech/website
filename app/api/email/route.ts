@@ -2,9 +2,18 @@ import { type NextRequest, NextResponse } from 'next/server';
 import nodemailer from 'nodemailer';
 import Mail from 'nodemailer/lib/mailer';
 
+function escapeHtml(value: string) {
+    return value
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+}
+
 export async function POST(request: NextRequest) {
-    const { email, leadName, phone } = await request.json();
-    const parsedPhone = phone === "" ? 'Não Informado' : phone
+    const { email, leadName, phone, message } = await request.json();
+    const parsedPhone = phone === "" ? 'Não Informado' : escapeHtml(phone)
 
     const transport = nodemailer.createTransport({
         service: 'gmail',
@@ -14,13 +23,17 @@ export async function POST(request: NextRequest) {
         },
     });
 
+    const messageBlock = message
+        ? `<br /><b>Mensagem:</b><br /> ${escapeHtml(message).replace(/\n/g, '<br />')} <br />`
+        : '';
+
     const mailOptions: Mail.Options = {
         from: process.env.MY_EMAIL,
         // to: process.env.MY_EMAIL,
         to: ['ronaldo@voca.com.br', 'cristiano@voca.com.br'],
         cc: process.env.MY_EMAIL,
         subject: `[Site VOCA] Novo LEAD: ${leadName}`,
-        html: `<h2>Dados do LEAD</h2> <b>Nome:</b> ${leadName} <br /> <b>Telefone:</b> ${parsedPhone} <br /> <b>Email Corporativo:</b> ${email} <br /><br /> <span>*Enviado através do formulário de contato do site em ${new Date()}</span>`,
+        html: `<h2>Dados do LEAD</h2> <b>Nome:</b> ${escapeHtml(leadName)} <br /> <b>Telefone:</b> ${parsedPhone} <br /> <b>Email Corporativo:</b> ${escapeHtml(email)} <br /> ${messageBlock}<br /> <span>*Enviado através do formulário de contato do site em ${new Date()}</span>`,
     };
 
     const sendMailPromise = () =>

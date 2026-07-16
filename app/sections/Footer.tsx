@@ -36,6 +36,7 @@ export default function Footer() {
 
                     <div className="flex flex-col gap-4">
                         <MenuItem name="Início" reference={pathname === '/' ? '#home' : '/'} />
+                        <MenuItem name='Sobre a VOCA' reference='/sobre' />
                         <MenuItem name='Termos de Uso' reference='/termsOfUse' />
                         <MenuItem name='Política de Privacidade' reference='/privacyPolicy' />
                     </div>

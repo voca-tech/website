@@ -54,7 +54,7 @@ export default function Redirect() {
       <div className='flex flex-col items-center justify-center gap-2'>
         <h1 className='text-xl font-bold'>Ainda não baixou o App?</h1>
         <p className="text-sm text-slate-500">Faça o download do nosso App de acordo com o sistema do seu celular</p>
-        <div className="flex flex-row items-center space-x-4 justify-center">
+        <div className="flex flex-row flex-wrap items-center justify-center gap-4">
           <a
             href={appStoreUrl}
             target="_blank"
@@ -66,6 +66,7 @@ export default function Redirect() {
               alt="Disponível na App Store"
               width={144}
               height={60}
+              className="w-32 h-auto sm:w-36"
             />
           </a>
           <a
@@ -79,6 +80,7 @@ export default function Redirect() {
               alt="Disponível no Google Play"
               width={144}
               height={60}
+              className="w-32 h-auto sm:w-36"
             />
           </a>
         </div>

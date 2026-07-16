@@ -3,11 +3,30 @@ import Image from "next/image";
 import logo from '@/public/whatsapp.svg'
 import { Button } from "./ui/button";
 
-export function WhatsappLink() {
+interface WhatsappLinkProps {
+    variant?: 'button' | 'text';
+}
+
+export function WhatsappLink({ variant = 'button' }: WhatsappLinkProps) {
+    const href = "https://wa.me//553175303000?text=Olá!%20Gostaria%20de%20entender%20mais%20sobre%20o%20VOCA"
+
+    if (variant === 'text') {
+        return (
+            <a
+                aria-label="Conversar no Whatsapp"
+                href={href}
+                target="_blank"
+                className="font-semibold text-voca-green hover:underline underline-offset-4"
+            >
+                Falar com especialista →
+            </a>
+        )
+    }
+
     return (
         <a
             aria-label="Conversar no Whatsapp"
-            href="https://wa.me//553175303000?text=Olá!%20Gostaria%20de%20entender%20mais%20sobre%20o%20VOCA"
+            href={href}
             target="_blank"
             className="w-72"
         >

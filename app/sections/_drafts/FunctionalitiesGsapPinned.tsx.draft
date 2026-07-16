@@ -1,0 +1,261 @@
+// Reference draft — the GSAP ScrollTrigger "pinned stage + synced sidebar" version
+// of the Functionalities section. Not wired into any page; kept here in case we
+// want to reuse this interaction pattern elsewhere later.
+//
+// Rename to .tsx and move into app/sections/ to bring it back into use.
+
+'use client'
+
+import { useEffect, useRef, useState } from "react";
+import Image from "next/image";
+import Link from "next/link";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { WhatsappLink } from "@/components/WhatsappLink";
+
+interface Feature {
+    id: string;
+    name: string;
+    color: string;
+    image: string;
+    points: string[];
+}
+
+const features: Feature[] = [
+    {
+        id: "termometro",
+        name: "Termômetro de Humor",
+        color: "#47ad7f",
+        image: "/illustrations/functionalities/termometro.png",
+        points: [
+            "Captura ativa do sentimento diário da empresa",
+            "Captura passiva do sentimento do colaborador",
+            "Alertas para RH e Lideranças",
+            "Relatórios segmentados em tempo real",
+        ],
+    },
+    {
+        id: "voz",
+        name: "Voz para os colaboradores",
+        color: "#007980",
+        image: "/illustrations/functionalities/opiniao.png",
+        points: [
+            "5 canais customizados para transformar pessoas e a empresa",
+            "Incentive a cultura de feedback contínuo",
+            "Reconheça as pessoas do seu time",
+            "Tenha voz com a garantia do anonimato",
+            "Potencialize ideias inovadoras da equipe",
+        ],
+    },
+    {
+        id: "pesquisas",
+        name: "Pesquisas em tempo real",
+        color: "#c77924",
+        image: "/illustrations/functionalities/pulso.png",
+        points: [
+            "Saiba como está a satisfação do time em tempo real",
+            "Crie pesquisas customizadas em poucos cliques",
+            "Tenha insights da empresa toda ou segmentado por área",
+            "Dispare pesquisas automáticas nos processos da empresa",
+        ],
+    },
+    {
+        id: "rede-social",
+        name: "Rede Social Corporativa",
+        color: "#798f4f",
+        image: "/illustrations/functionalities/integra.png",
+        points: [
+            "Integre ideias e potencialize a comunicação interna",
+            "Facilite o engajamento dos colaboradores com a empresa",
+            "Dissemine a cultura corporativa pela gamificação",
+            "Garanta a eficácia da comunicação interna",
+        ],
+    },
+    {
+        id: "treinamentos",
+        name: "Treinamentos e Gamificação",
+        color: "#85568a",
+        image: "/illustrations/functionalities/conhecimento.png",
+        points: [
+            "Permita um onboarding mais escalável dos times",
+            "Crie trilhas de desenvolvimento individuais ou por equipes",
+            "Potencialize o aprendizado através da gamificação",
+            "Centralize a gestão de documentos entre os times",
+        ],
+    },
+    {
+        id: "avaliacao",
+        name: "Avaliação de Desempenho",
+        color: "#5f7480",
+        image: "/illustrations/functionalities/desempenho.png",
+        points: [
+            "Avalie o colaborador em poucos cliques dentro da jornada na empresa",
+            "Flexibilize avaliações por equipes ao longo do ano",
+            "Avalie gaps de habilidades e direcione trilhas de aprendizado",
+            "Entenda os motivos pelos quais sua empresa perde talentos",
+        ],
+    },
+];
+
+export default function Functionalities() {
+    const containerRef = useRef<HTMLDivElement>(null);
+    const stageRef = useRef<HTMLDivElement>(null);
+    const [activeIndex, setActiveIndex] = useState(0);
+
+    useEffect(() => {
+        gsap.registerPlugin(ScrollTrigger);
+
+        const mm = gsap.matchMedia();
+
+        mm.add("(min-width: 1024px)", () => {
+            const ctx = gsap.context(() => {
+                const panels = gsap.utils.toArray<HTMLElement>(".feature-trigger");
+
+                ScrollTrigger.create({
+                    trigger: containerRef.current,
+                    start: "top top",
+                    end: "bottom bottom",
+                    pin: stageRef.current,
+                    pinSpacing: false,
+                });
+
+                panels.forEach((panel, index) => {
+                    ScrollTrigger.create({
+                        trigger: panel,
+                        start: "top center",
+                        end: "bottom center",
+                        onEnter: () => setActiveIndex(index),
+                        onEnterBack: () => setActiveIndex(index),
+                    });
+                });
+            }, containerRef);
+
+            return () => ctx.revert();
+        });
+
+        return () => mm.revert();
+    }, []);
+
+    const active = features[activeIndex];
+
+    return (
+        <>
+            {/* Desktop: pinned stage synced to scroll position */}
+            <div
+                id="functionalities"
+                ref={containerRef}
+                className="hidden lg:block relative bg-white"
+                style={{ height: `${features.length * 100}vh` }}
+            >
+                {features.map((feature) => (
+                    <div key={feature.id} className="feature-trigger h-screen" />
+                ))}
+
+                <div ref={stageRef} className="absolute top-0 left-0 w-full h-screen overflow-hidden flex items-center">
+                    <div className="absolute inset-0 pointer-events-none">
+                        <div
+                            className="absolute inset-0 opacity-[0.3]"
+                            style={{
+                                backgroundImage: "radial-gradient(circle, rgba(0,121,128,0.18) 1px, transparent 1px)",
+                                backgroundSize: "28px 28px",
+                            }}
+                        />
+                        <div
+                            className="absolute -top-24 -right-24 w-[30rem] h-[30rem] rounded-full blur-3xl transition-colors duration-700"
+                            style={{ backgroundColor: `${active.color}1A`, animation: "drift-a 24s ease-in-out infinite" }}
+                        />
+                    </div>
+
+                    <div className="relative max-w-7xl mx-auto w-full px-6 grid grid-cols-[240px_1fr] gap-16 items-center">
+                        <div className="flex flex-col gap-1">
+                            {features.map((feature, index) => {
+                                const isActive = index === activeIndex;
+                                return (
+                                    <div key={feature.id} className="flex items-center gap-3 py-2.5">
+                                        <span
+                                            className="h-2 w-2 rounded-full shrink-0 transition-transform duration-300"
+                                            style={{
+                                                backgroundColor: isActive ? feature.color : "#cbd5e1",
+                                                transform: isActive ? "scale(1.5)" : "scale(1)",
+                                            }}
+                                        />
+                                        <span
+                                            className={cn("text-sm transition-colors duration-300", isActive ? "font-bold" : "font-medium text-slate-400")}
+                                            style={isActive ? { color: feature.color } : undefined}
+                                        >
+                                            {feature.name}
+                                        </span>
+                                    </div>
+                                );
+                            })}
+                        </div>
+
+                        <div key={active.id} className="grid grid-cols-2 gap-12 items-center animate-in fade-in duration-500">
+                            <Image
+                                src={active.image}
+                                width={420}
+                                height={420}
+                                alt={active.name}
+                                className="mx-auto"
+                            />
+
+                            <div>
+                                <h2 className="text-3xl font-extrabold" style={{ color: active.color }}>
+                                    {active.name}
+                                </h2>
+                                <ul className="mt-8 flex flex-col gap-3">
+                                    {active.points.map((point) => (
+                                        <li key={point} className="text-slate-600">
+                                            ✓ {point}
+                                        </li>
+                                    ))}
+                                </ul>
+
+                                <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-4">
+                                    <Link href="/contact">
+                                        <Button className="rounded-md px-6 h-12 text-base font-semibold text-white" style={{ backgroundColor: active.color }}>
+                                            Agendar demonstração
+                                        </Button>
+                                    </Link>
+                                    <WhatsappLink variant="text" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {/* Mobile: simple stacked list, no pinning */}
+            <div className="lg:hidden bg-white py-16 px-6">
+                <div className="flex flex-col gap-16">
+                    {features.map((feature) => (
+                        <div key={feature.id} className="text-center">
+                            <Image
+                                src={feature.image}
+                                width={320}
+                                height={320}
+                                alt={feature.name}
+                                className="mx-auto"
+                            />
+                            <h2 className="text-2xl font-extrabold mt-6" style={{ color: feature.color }}>
+                                {feature.name}
+                            </h2>
+                            <ul className="mt-4 flex flex-col gap-2 items-center">
+                                {feature.points.map((point) => (
+                                    <li key={point} className="text-slate-600">
+                                        ✓ {point}
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    ))}
+                    <div className="flex justify-center">
+                        <WhatsappLink />
+                    </div>
+                </div>
+            </div>
+        </>
+    );
+}
