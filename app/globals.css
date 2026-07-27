@@ -27,14 +27,14 @@
     50% { box-shadow: 0 0 0 10px rgba(232, 178, 61, 0); }
 }
 
-@keyframes pulse-glow-voca {
-    0%, 100% { box-shadow: 0 0 0 0 rgba(0, 121, 128, 0.4); }
-    50% { box-shadow: 0 0 0 14px rgba(0, 121, 128, 0); }
-}
-
 @keyframes logo-breathe {
     0%, 100% { transform: scale(1); }
     50% { transform: scale(1.1); }
+}
+
+@keyframes float-gentle {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
 }
 
 @keyframes blink {
@@ -47,6 +47,30 @@
     to { transform: translateX(0%); }
 }
 
+@keyframes marquee-left {
+    from { transform: translateX(0%); }
+    to { transform: translateX(-50%); }
+}
+
 .marquee-track:hover {
-    animation-play-state: paused;
+    animation-play-state: paused !important;
+}
+
+@keyframes stamp-in {
+    0% { transform: scale(2.4) rotate(-18deg); opacity: 0; }
+    55% { transform: scale(0.88) rotate(3deg); opacity: 1; }
+    75% { transform: scale(1.05) rotate(-10deg); }
+    100% { transform: scale(1) rotate(-8deg); opacity: 1; }
+}
+
+@keyframes tooltip-pop {
+    0% { transform: scale(0.35) translateY(10px) rotate(-6deg); opacity: 0; }
+    55% { transform: scale(1.12) translateY(-4px) rotate(2deg); opacity: 1; }
+    80% { transform: scale(0.96) translateY(0) rotate(-1deg); }
+    100% { transform: scale(1) translateY(0) rotate(0deg); opacity: 1; }
+}
+
+@keyframes hue-drift {
+    0% { background-position: 0% 50%; }
+    100% { background-position: 200% 50%; }
 }

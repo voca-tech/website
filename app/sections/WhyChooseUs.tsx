@@ -34,7 +34,7 @@ const reasons = [
     {
         icon: EarthIcon,
         title: "Pronto para crescer com você",
-        description: "Da operação local à expansão internacional — a plataforma evolui junto com a sua empresa.",
+        description: "Da operação local à expansão internacional, a plataforma evolui junto com a sua empresa.",
     },
 ];
 
@@ -75,7 +75,7 @@ export default function WhyChooseUs() {
 
             <div className="relative max-w-6xl mx-auto text-center">
                 <p className="text-sm font-bold tracking-widest text-voca-green uppercase">
-                    Por que a VOCA
+                    Por que o VOCA
                 </p>
                 <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 mt-3">
                     Por que escolher a gente?

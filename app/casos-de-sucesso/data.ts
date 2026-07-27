@@ -21,6 +21,8 @@ export interface Case {
     company: string;
     avatar?: string;
     logo?: string;
+    photo?: string;
+    heroMetricIndex?: number;
     quote: string;
     objective?: string;
     solution?: string[];
@@ -37,6 +39,7 @@ export const cases: Case[] = [
         company: "Belas Artes",
         avatar: "/avatars/ba-cristiano.jpg",
         logo: "/clients/belasartes.png",
+        photo: "https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=900&q=80",
         quote: "O VOCA é uma ferramenta muito importante para fortalecer a comunicação no ambiente corporativo. Não há dúvidas que tem ajudado muito o RH.",
         metrics: [],
     },
@@ -49,6 +52,7 @@ export const cases: Case[] = [
         company: "Akaer",
         avatar: "/avatars/akaer-mauricio.jpg",
         logo: "/clients/akaer.png",
+        photo: "https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&w=900&q=80",
         quote: "O VOCA se destaca como uma ferramenta que vai além do convencional, promovendo uma cultura de inclusão e participação ativa. Sua contribuição para a melhoria da experiência do colaborador é evidente.",
         metrics: [],
     },
@@ -60,6 +64,7 @@ export const cases: Case[] = [
         role: "CEO",
         company: "Engeform",
         avatar: "/avatars/engeform-andre.png",
+        photo: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=900&q=80",
         quote: "O VOCA nos ajudou de forma simples a resolver problemas complexos.",
         objective: "Fortalecer a cultura da empresa entre as diferentes equipes espalhadas, refletindo o propósito e valores nas atitudes do dia a dia.",
         solution: [
@@ -84,6 +89,7 @@ export const cases: Case[] = [
         company: "Credi10",
         avatar: "/avatars/credi10-erika.jpg",
         logo: "/clients/credi10.png",
+        photo: "https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?auto=format&fit=crop&w=900&q=80",
         quote: "O Voca é um canal de ouvidoria seguro e confiável. Hoje, nossos colaboradores se sentem ouvidos e protegidos, e a ferramenta é parte essencial da cultura da Credi10.",
         objective: "Implementar um canal de ouvidoria seguro, anônimo e confiável para fortalecer a escuta ativa na organização, garantir transparência e impulsionar a cultura de confiança e ética entre os colaboradores.",
         solution: [
@@ -107,6 +113,7 @@ export const cases: Case[] = [
         company: "Credi10",
         avatar: "/avatars/credi10-erika.jpg",
         logo: "/clients/credi10.png",
+        photo: "https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?auto=format&fit=crop&w=900&q=80",
         quote: "O novo módulo de treinamentos trouxe mais clareza e alinhamento no onboarding. Ver o engajamento dos novos talentos logo nos primeiros dias tem sido muito positivo.",
         objective: "Garantir um onboarding mais eficiente e padronizado para novos colaboradores e jovens aprendizes, fortalecendo a cultura desde o primeiro dia.",
         solution: [
@@ -129,6 +136,7 @@ export const cases: Case[] = [
         role: "Gerente de RH",
         company: "Woodbridge",
         logo: "/clients/woodbridge.png",
+        photo: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=900&q=80",
         quote: "VOCA foi muito bem aceito pelo time, o que facilitou o engajamento e resultados.",
         objective: "Facilitar as pesquisas de clima e customizadas nas diferentes plantas da empresa, aumentando a frequência de feedbacks entre as equipes.",
         solution: [
@@ -151,6 +159,7 @@ export const cases: Case[] = [
         role: "Gerente de RH",
         company: "Woodbridge",
         logo: "/clients/woodbridge.png",
+        photo: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=900&q=80",
         quote: "Transformamos um processo manual em uma solução moderna e eficiente. O crachá digital trouxe agilidade, segurança e economia ao nosso controle de acesso.",
         objective: "Implementar uma solução digital para facilitar o controle de acesso de funcionários, otimizando a operação e reduzindo custos com impressão.",
         solution: [
@@ -172,6 +181,8 @@ export const cases: Case[] = [
         name: "Janaina Collela",
         role: "Coordenadora de RH",
         company: "SP Engenharia",
+        photo: "https://images.unsplash.com/photo-1607746882042-944635dfe10e?auto=format&fit=crop&w=900&q=80",
+        heroMetricIndex: 1,
         quote: "Deixamos a AVD mais estratégica e ágil, com feedbacks claros e maior participação da liderança no desenvolvimento do time.",
         objective: "Implantar avaliação de desempenho estruturada e digital, promovendo alinhamento entre equipes e liderança, com foco em desenvolvimento e performance.",
         solution: [
@@ -193,6 +204,8 @@ export const cases: Case[] = [
         name: "Water Rodrigues",
         role: "Diretor de RH",
         company: "Grant Thornton",
+        photo: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=900&q=80",
+        heroMetricIndex: 1,
         quote: "Facilita trabalhar na mesma plataforma as ferramentas de RH e o engajamento contínuo.",
         objective: "Campanha de 60 dias unindo cultura e performance para os 1.900 colaboradores da Grant Thornton Brasil.",
         solution: [
@@ -214,6 +227,7 @@ export const cases: Case[] = [
         name: "Rogerio Martinelli",
         role: "Gerente de RH",
         company: "Hwaseung",
+        photo: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=900&q=80",
         quote: "O Voca resolveu nosso maior desafio: a comunicação com todos os colaboradores. Hoje, é essencial para manter todos informados, engajados e alinhados aos objetivos da empresa.",
         objective: "Ter um canal oficial, moderno e acessível para fortalecer a comunicação interna e aumentar o engajamento dos colaboradores.",
         solution: [
@@ -232,7 +246,8 @@ export const cases: Case[] = [
         pillar: "cultura",
         theme: "Operação de pessoas",
         company: "Grupo Wine",
-        quote: "A operação de pessoas deixa de ser pontual — passa a ser contínua e integrada em diferentes perspectivas e interações que a plataforma proporciona.",
+        photo: "https://images.unsplash.com/photo-1560493676-04071c5f467b?auto=format&fit=crop&w=900&q=80",
+        quote: "A operação de pessoas deixa de ser pontual, passa a ser contínua e integrada em diferentes perspectivas e interações que a plataforma proporciona.",
         objective: "560 colaboradores do Grupo Wine, 50 dias após o lançamento do VOCA na empresa.",
         metrics: [
             { value: "94%", label: "dos colaboradores usando o sistema" },
@@ -248,6 +263,7 @@ export const cases: Case[] = [
         name: "Diego Bortolucci",
         role: "Partner & COO",
         company: "SPS Group",
+        photo: "https://images.unsplash.com/photo-1521791136064-7986c2920216?auto=format&fit=crop&w=900&q=80",
         quote: "Espetacular suite de soluções para atender clima corporativo, gestão de mudanças organizacionais e projetos complexos, garantindo o clima do projeto, engajamento e visão de risco com as pessoas. Recomendo fortemente!",
         metrics: [],
     },

@@ -8,7 +8,7 @@ export default function Terms() {
                 <p>O Presente Termos de Uso e Serviços (“Termos de Uso”) regula o uso deste e de outros sites, aplicativos e programas disponibilizados pelo VOCA, proprietário e titular exclusivo dos direitos dos sites sob o domínio voca.com.br.
                     <br />
                     <br />
-                    Ao acessar os sites, programas, aplicativos e os serviços prestados pela VOCA, você atesta seu conhecimento e concordância com os Termos de Uso. <br />
+                    Ao acessar os sites, programas, aplicativos e os serviços prestados pelo VOCA, você atesta seu conhecimento e concordância com os Termos de Uso. <br />
                     <br />
                     Este documento poderá ser alterado a qualquer tempo, sem aviso prévio. Razão pela qual, a utilização dos sites, programas, aplicativos e serviços prestados pelo VOCA após eventual alteração dos Termos de Uso entrarem em vigor, constitui sua total aceitação nas mudanças.<br />
                     <br />

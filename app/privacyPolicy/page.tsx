@@ -69,10 +69,10 @@ export default function PrivacyPolicy() {
                 3.1 - Todos os dados e informações coletados dos Usuários serão incorporados ao banco de dados do Site VOCA.
                 <br />
                 <br />
-                3.2 - Os dados e informações coletados estarão armazenados em ambiente seguro, observando o estado da técnica disponível, e somente poderão ser acessadas por pessoas qualificadas e autorizadas pela VOCA.
+                3.2 - Os dados e informações coletados estarão armazenados em ambiente seguro, observando o estado da técnica disponível, e somente poderão ser acessadas por pessoas qualificadas e autorizadas pelo VOCA.
                 <br />
                 <br />
-                3.3 - Considerando que nenhum sistema de segurança é absolutamente seguro, a VOCA se obriga a empregar os melhores esforços para evitar quaisquer danos e/ou prejuízos decorrentes de falhas, vírus ou invasões do banco de dados do Site VOCA.
+                3.3 - Considerando que nenhum sistema de segurança é absolutamente seguro, o VOCA se obriga a empregar os melhores esforços para evitar quaisquer danos e/ou prejuízos decorrentes de falhas, vírus ou invasões do banco de dados do Site VOCA.
                 <br />
                 <br />
                 3.4 - As informações pessoais são armazenadas somente pelo tempo que for necessário para cumprir com as finalidades definidas, salvo se houver outra razão para sua manutenção como o cumprimento de obrigações legais, regulatórias, contratuais e preservação de direitos, desde que devidamente fundamentadas por legislação vigente.
@@ -96,16 +96,16 @@ export default function PrivacyPolicy() {
                 C)	Nome da empresa em que trabalha: necessário para o cadastramento no site e interação nos sistemas VOCA;
                 <br />
                 <br />
-                4.2- Caso o Usuário deixe de utilizar os serviços oferecidos pelo Site VOCA, a VOCA poderá, para fins de auditoria e preservação de direitos, permanecer com o registro de dados e informações do Usuário, pelo período de 2 anos, a não ser que seja exigido a mantê-los por período maior por motivo legal, ordem de autoridade administrativa ou judicial, possuindo a faculdade de excluí-los definitivamente segundo sua conveniência, nos termos da lei.
+                4.2- Caso o Usuário deixe de utilizar os serviços oferecidos pelo Site VOCA, o VOCA poderá, para fins de auditoria e preservação de direitos, permanecer com o registro de dados e informações do Usuário, pelo período de 2 anos, a não ser que seja exigido a mantê-los por período maior por motivo legal, ordem de autoridade administrativa ou judicial, possuindo a faculdade de excluí-los definitivamente segundo sua conveniência, nos termos da lei.
                 <br />
                 <br />
-                4.3- O Usuário poderá exigir da VOCA os dados registrados que lhe dizem respeito, da mesma forma que poderá solicitar sua alteração ou exclusão. O Usuário deve entrar em contato através dos meios disponibilizados pelo Site VOCA para solicitar essas providências caso o Site VOCA não ofereça a funcionalidade correspondente. O pedido de exclusão de dados feito pelo Usuário será atendido após vencido o prazo de prescrição legal relacionada a eventuais provas legais que possam estar relacionados.
+                4.3- O Usuário poderá exigir do VOCA os dados registrados que lhe dizem respeito, da mesma forma que poderá solicitar sua alteração ou exclusão. O Usuário deve entrar em contato através dos meios disponibilizados pelo Site VOCA para solicitar essas providências caso o Site VOCA não ofereça a funcionalidade correspondente. O pedido de exclusão de dados feito pelo Usuário será atendido após vencido o prazo de prescrição legal relacionada a eventuais provas legais que possam estar relacionados.
                 <br />
                 <br />
                 5. REGISTRO DE ATIVIDADES
                 <br />
                 <br />
-                5.1 - A VOCA poderá registrar todas as atividades efetuadas pelos Usuários no Site VOCA, por meio de logs, incluindo;
+                5.1 - O VOCA poderá registrar todas as atividades efetuadas pelos Usuários no Site VOCA, por meio de logs, incluindo;
                 <br />
                 <br />
                 A) Endereço IP do usuário;
@@ -132,7 +132,7 @@ export default function PrivacyPolicy() {
                 H) Outras informações necessárias para a sua adequada autenticação.
                 <br />
                 <br />
-                5.2- Os registros mencionados no item 5.1 poderão ser utilizados pela VOCA como meio probatório em casos de atos ilícitos ou contrários aos Termos de Uso ou ainda de alterações indevidas em seus sistemas e cadastros, ou ações que possam colocar em risco a plataforma e/ou o Site VOCA e seus Usuários.
+                5.2- Os registros mencionados no item 5.1 poderão ser utilizados pelo VOCA como meio probatório em casos de atos ilícitos ou contrários aos Termos de Uso ou ainda de alterações indevidas em seus sistemas e cadastros, ou ações que possam colocar em risco a plataforma e/ou o Site VOCA e seus Usuários.
                 <br />
                 <br />
                 6.COOKIES E OUTRAS TECNOLOGIAS DE OBTENÇÃO DE DADOS

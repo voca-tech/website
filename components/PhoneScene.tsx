@@ -7,10 +7,6 @@ import * as THREE from "three";
 
 const SCREEN_MESH_NAME = "baf05346569e3be49c2a";
 
-// The original screen mesh's UVs are unusable for a single decal (they were authored
-// for a tiling pattern, spanning several tiles instead of one 0-1 rectangle). Instead
-// of fighting that mapping, we attach a plain plane sized from the mesh's own local
-// bounding box — giving the screenshot its own clean, correctly proportioned surface.
 const SCREEN_MARGIN = 0.95;
 
 function attachScreenPlane(screenMesh: THREE.Mesh, texture: THREE.Texture) {
@@ -52,9 +48,11 @@ const TILT_END = THREE.MathUtils.degToRad(14);
 
 function PhoneModel({ progressRef, travelEnd }: PhoneModelProps) {
     const { scene } = useGLTF("/models/phone/scene.gltf");
-    const screenTexture = useTexture("/screens/hero.png");
+    const [screenTextureFront, screenTextureBack] = useTexture(["/screens/hero.png", "/screens/hero-dashboard-example.jpg"]);
     const group = useRef<THREE.Group>(null!);
+    const planeRef = useRef<THREE.Mesh | null>(null);
     const displayed = useRef(0);
+    const showingBack = useRef(false);
 
     const clonedScene = useMemo(() => scene.clone(true), [scene]);
 
@@ -72,18 +70,23 @@ function PhoneModel({ progressRef, travelEnd }: PhoneModelProps) {
         const screenMesh = clonedScene.getObjectByName(SCREEN_MESH_NAME) as THREE.Mesh | undefined;
         if (!screenMesh) return;
 
-        screenTexture.colorSpace = THREE.SRGBColorSpace;
-        screenTexture.needsUpdate = true;
+        screenTextureFront.colorSpace = THREE.SRGBColorSpace;
+        screenTextureFront.needsUpdate = true;
+        screenTextureBack.colorSpace = THREE.SRGBColorSpace;
+        screenTextureBack.needsUpdate = true;
 
         screenMesh.material = new THREE.MeshBasicMaterial({ color: 0x000000 });
-        const plane = attachScreenPlane(screenMesh, screenTexture);
+        const plane = attachScreenPlane(screenMesh, screenTextureFront);
+        planeRef.current = plane;
+        showingBack.current = false;
 
         return () => {
             screenMesh.remove(plane);
             plane.geometry.dispose();
             (plane.material as THREE.Material).dispose();
+            planeRef.current = null;
         };
-    }, [clonedScene, screenTexture]);
+    }, [clonedScene, screenTextureFront, screenTextureBack]);
 
     useFrame((state, delta) => {
         if (!group.current) return;
@@ -92,15 +95,21 @@ function PhoneModel({ progressRef, travelEnd }: PhoneModelProps) {
         displayed.current = THREE.MathUtils.damp(displayed.current, target, 6, delta);
         const p = displayed.current;
 
+        const wantsBack = p >= 0.5;
+        if (wantsBack !== showingBack.current && planeRef.current) {
+            const material = planeRef.current.material as THREE.MeshBasicMaterial;
+            material.map = wantsBack ? screenTextureBack : screenTextureFront;
+            material.needsUpdate = true;
+            showingBack.current = wantsBack;
+        }
+
         const { width, height } = state.viewport;
 
         const startX = width * 0.26;
         const endX = -width * 0.26;
         const startY = height * 0.08;
-        const endY = -height * 0.11;
+        const endY = -height * 0.03;
 
-        // Idle float: present while resting at either end (p near 0 or 1),
-        // fades out during the active travel so the crossing reads as deliberate.
         const restFactor = 1 - 4 * p * (1 - p);
         const bob = Math.sin(state.clock.elapsedTime * 1.1) * height * 0.012 * restFactor;
 

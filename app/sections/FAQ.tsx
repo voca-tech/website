@@ -19,11 +19,11 @@ export const faqs = [
     },
     {
         question: "Preciso de uma equipe técnica para usar a plataforma?",
-        answer: "Não. O VOCA foi pensado para ser simples no dia a dia de RH e liderança, e além disso você conta com atendimento humano — sem robôs e sem tickets perdidos — acompanhando sua implementação e uso contínuo.",
+        answer: "Não. O VOCA foi pensado para ser simples no dia a dia de RH e liderança, e além disso você conta com atendimento humano (sem robôs e sem tickets perdidos) acompanhando sua implementação e uso contínuo.",
     },
     {
         question: "O VOCA serve para empresas de qualquer tamanho?",
-        answer: "Sim, a plataforma evolui junto com a sua empresa — da operação local até a expansão para novas unidades ou países.",
+        answer: "Sim, a plataforma evolui junto com a sua empresa, da operação local até a expansão para novas unidades ou países.",
     },
     {
         question: "Como funciona a gamificação dentro do VOCA?",
@@ -31,7 +31,7 @@ export const faqs = [
     },
     {
         question: "Como faço para conhecer o VOCA na prática?",
-        answer: "Você pode agendar uma demonstração gratuita com nosso time ou falar direto com um especialista pelo WhatsApp — os dois botões estão espalhados pelo site.",
+        answer: "Você pode agendar uma demonstração gratuita com nosso time ou falar direto com um especialista pelo WhatsApp. Os dois botões estão espalhados pelo site.",
     },
 ];
 

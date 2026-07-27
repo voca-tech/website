@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { WhatsappLink } from "@/components/WhatsappLink";
 import { PhoneScene } from "@/components/PhoneScene";
 import { useScrollProgress } from "@/components/useScrollProgress";
+import { useIsDesktop } from "@/components/useIsDesktop";
 
 const FADE_START = 0.25;
 const FADE_END = 0.5;
@@ -16,6 +17,7 @@ export default function HeroSection() {
     const rigRef = useRef<HTMLDivElement>(null);
     const progress = useScrollProgress(rigRef as RefObject<HTMLElement>);
     const [heroOpacity, setHeroOpacity] = useState(1);
+    const isDesktop = useIsDesktop();
 
     useEffect(() => {
         let raf: number;
@@ -53,6 +55,29 @@ export default function HeroSection() {
                     <div
                         className="absolute top-1/3 left-1/2 w-[24rem] h-[24rem] bg-voca-yellow/20 rounded-full blur-3xl"
                         style={{ animation: "drift-c 30s ease-in-out infinite" }}
+                    />
+                </div>
+
+                <div
+                    className="absolute inset-0 pointer-events-none overflow-hidden"
+                    style={{
+                        opacity: turnoverOpacity,
+                        background: "linear-gradient(135deg, #012e31 0%, #016b72 100%)",
+                    }}
+                >
+                    <div
+                        className="absolute inset-0 opacity-[0.08]"
+                        style={{
+                            backgroundImage: "radial-gradient(circle, rgba(255,255,255,0.6) 1px, transparent 1px)",
+                            backgroundSize: "24px 24px",
+                        }}
+                    />
+                    <Image
+                        src="/illustrations/dashboardsPreview.png"
+                        alt=""
+                        width={658}
+                        height={640}
+                        className="absolute -right-24 top-1/2 -translate-y-1/2 w-[42rem] h-auto opacity-[0.14]"
                     />
                 </div>
 
@@ -100,30 +125,67 @@ export default function HeroSection() {
                 >
                     <div className="hidden lg:block" />
 
-                    <div className="flex flex-col gap-6 items-center text-center lg:items-start lg:text-start">
-                        <p className="text-sm font-bold tracking-widest text-voca-green uppercase">
+                    <div className="flex flex-col gap-4 items-center text-center lg:items-start lg:text-start max-w-md">
+                        <p className="text-sm font-bold tracking-widest text-teal-200 uppercase">
                             Inteligência preditiva
                         </p>
 
                         <h2 className="text-3xl sm:text-4xl font-extrabold leading-tight">
-                            <span className="text-slate-900">Turnover não avisa.</span>
+                            <span className="text-white">Turnover não avisa.</span>
                             <br />
-                            <span className="text-voca-green">Seus dados, sim.</span>
+                            <span className="text-teal-300">Seus dados, sim.</span>
                         </h2>
 
-                        <p className="text-lg text-slate-500 max-w-lg">
-                            Acompanhe o clima da sua empresa em tempo real e aja antes que o talento vá embora.
+                        <p className="text-base text-white/70">
+                            Gráficos, indicadores e inteligência de dados sobre o clima da sua empresa, em tempo real.
                         </p>
 
-                        <ul className="flex flex-col gap-2 text-slate-600 text-base">
-                            <li>✓ Alertas de risco de saída por colaborador</li>
-                            <li>✓ Histórico de clima por equipe e liderança</li>
-                            <li>✓ Recomendações automáticas de ação</li>
-                        </ul>
+                        <div className="w-full grid grid-cols-2 gap-3 mt-1">
+                            <div className="rounded-2xl bg-white shadow-lg p-4 text-left">
+                                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wide">Engajamento</p>
+                                <div className="flex items-baseline gap-1.5 mt-1">
+                                    <span className="text-2xl font-extrabold text-slate-900">96%</span>
+                                    <span className="text-[11px] font-bold text-voca-green">▲ 8%</span>
+                                </div>
+                                <div className="relative h-9 w-full mt-2 rounded-md overflow-hidden">
+                                    <Image src="/illustrations/chart-trend.png" alt="" fill className="object-cover" />
+                                </div>
+                            </div>
 
-                        <div className="flex flex-wrap items-center justify-center lg:justify-start gap-x-6 gap-y-4 mt-2">
+                            <div className="rounded-2xl bg-white shadow-lg p-4 text-left">
+                                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wide mb-2.5">Humor · hoje</p>
+                                <div className="flex flex-col gap-1.5">
+                                    {[
+                                        { label: "58%", w: 58, color: "#007980" },
+                                        { label: "31%", w: 31, color: "#5f7480" },
+                                        { label: "11%", w: 11, color: "#c77924" },
+                                    ].map((row) => (
+                                        <div key={row.label} className="flex items-center gap-1.5">
+                                            <div className="h-1.5 flex-1 rounded-full bg-slate-100 overflow-hidden">
+                                                <div className="h-full rounded-full" style={{ width: `${row.w}%`, backgroundColor: row.color }} />
+                                            </div>
+                                            <span className="text-[10px] font-bold text-slate-500 w-7 text-right">{row.label}</span>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="w-full rounded-2xl bg-white/10 border border-white/15 backdrop-blur-sm p-4 flex items-center justify-between gap-4 text-left">
+                            <div>
+                                <p className="text-[10px] font-bold text-white/50 uppercase tracking-wide">Performance · engajamento</p>
+                                <p className="text-sm text-white mt-1 leading-snug">
+                                    Uso diário da plataforma chega a <span className="font-extrabold">62%</span> dos colaboradores
+                                </p>
+                            </div>
+                            <div className="relative h-10 w-20 shrink-0 rounded-md overflow-hidden bg-white">
+                                <Image src="/illustrations/chart-dots.png" alt="" fill className="object-cover" />
+                            </div>
+                        </div>
+
+                        <div className="flex flex-wrap items-center justify-center lg:justify-start gap-x-6 gap-y-4 mt-1">
                             <Link href="/contact">
-                                <Button className="bg-voca-green hover:bg-voca-green/90 rounded-md px-6 h-12 text-base">
+                                <Button className="bg-white text-voca-green hover:bg-white/90 rounded-md px-6 h-12 text-base font-semibold">
                                     Ver como funciona
                                 </Button>
                             </Link>
@@ -131,8 +193,8 @@ export default function HeroSection() {
                     </div>
                 </div>
 
-                <div className="absolute inset-0 pointer-events-none hidden lg:block">
-                    <PhoneScene progressRef={progress} travelEnd={TRAVEL_END} />
+                <div className="absolute inset-0 pointer-events-none hidden lg:block z-10">
+                    {isDesktop && <PhoneScene progressRef={progress} travelEnd={TRAVEL_END} />}
                 </div>
             </div>
 

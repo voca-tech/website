@@ -27,7 +27,7 @@ export default function Contact() {
             ? {
                 eyebrow: "Recebemos sua mensagem",
                 title: "Conte pra gente o seu desafio!",
-                description: "Recebemos o que você descreveu — preencha seus dados abaixo que nosso time entra em contato.",
+                description: "Recebemos o que você descreveu. Preencha seus dados abaixo que nosso time entra em contato.",
             }
             : {
                 eyebrow: "Fale com a gente",

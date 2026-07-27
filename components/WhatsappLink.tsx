@@ -5,9 +5,10 @@ import { Button } from "./ui/button";
 
 interface WhatsappLinkProps {
     variant?: 'button' | 'text';
+    className?: string;
 }
 
-export function WhatsappLink({ variant = 'button' }: WhatsappLinkProps) {
+export function WhatsappLink({ variant = 'button', className }: WhatsappLinkProps) {
     const href = "https://wa.me//553175303000?text=Olá!%20Gostaria%20de%20entender%20mais%20sobre%20o%20VOCA"
 
     if (variant === 'text') {
@@ -16,7 +17,7 @@ export function WhatsappLink({ variant = 'button' }: WhatsappLinkProps) {
                 aria-label="Conversar no Whatsapp"
                 href={href}
                 target="_blank"
-                className="font-semibold text-voca-green hover:underline underline-offset-4"
+                className={className ?? "font-semibold text-voca-green hover:underline underline-offset-4"}
             >
                 Falar com especialista →
             </a>
@@ -28,11 +29,11 @@ export function WhatsappLink({ variant = 'button' }: WhatsappLinkProps) {
             aria-label="Conversar no Whatsapp"
             href={href}
             target="_blank"
-            className="w-72"
+            className="w-full max-w-72"
         >
             <Button
                 variant={"outline"}
-                className="w-72 flex gap-2 shadow-xl hover:bg-green-50"
+                className="w-full flex gap-2 shadow-xl hover:bg-green-50"
             >
                 <p className='text-green-700 font-bold'>Falar com um Especialista</p>
                 <Image

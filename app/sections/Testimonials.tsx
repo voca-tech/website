@@ -1,13 +1,14 @@
 'use client'
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { WhatsappLink } from "@/components/WhatsappLink";
-import { cn } from "@/lib/utils";
 
 type Testimonial = {
     id: number;
@@ -27,24 +28,28 @@ const testimonials: Testimonial[] = [
 
 export default function TestimonialsSection() {
     const sectionRef = useRef<HTMLDivElement>(null);
-    const [visible, setVisible] = useState(false);
 
     useEffect(() => {
-        const el = sectionRef.current;
-        if (!el) return;
-
-        const observer = new IntersectionObserver(
-            ([entry]) => {
-                if (entry.isIntersecting) {
-                    setVisible(true);
-                    observer.disconnect();
+        gsap.registerPlugin(ScrollTrigger);
+        const ctx = gsap.context(() => {
+            gsap.fromTo(
+                ".testimonial-card",
+                { opacity: 0, y: 40 },
+                {
+                    opacity: 1,
+                    y: 0,
+                    stagger: 0.15,
+                    ease: "none",
+                    scrollTrigger: {
+                        trigger: sectionRef.current,
+                        start: "top 75%",
+                        end: "top 30%",
+                        scrub: 0.8,
+                    },
                 }
-            },
-            { threshold: 0.15 }
-        );
-        observer.observe(el);
-
-        return () => observer.disconnect();
+            );
+        }, sectionRef);
+        return () => ctx.revert();
     }, []);
 
     return (
@@ -80,14 +85,10 @@ export default function TestimonialsSection() {
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-12">
-                    {testimonials.map((user, i) => (
+                    {testimonials.map((user) => (
                         <div
                             key={user.id}
-                            className={cn(
-                                "group testimonial-card rounded-2xl bg-white p-6 shadow-2xl shadow-black/20 flex flex-col gap-4 text-left transition-all duration-300 hover:-translate-y-2",
-                                visible ? "animate-in fade-in slide-in-from-bottom-6" : "opacity-0"
-                            )}
-                            style={visible ? { animationDelay: `${i * 100}ms`, animationDuration: "600ms", animationFillMode: "both" } : undefined}
+                            className="group testimonial-card rounded-2xl bg-white p-6 shadow-2xl shadow-black/20 flex flex-col gap-4 text-left transition-transform duration-300 hover:-translate-y-2"
                         >
                             <div className="flex items-center justify-between">
                                 <div className="flex h-10 w-10 items-center justify-center rounded-full bg-voca-green/10 transition-colors duration-300 group-hover:bg-voca-green">

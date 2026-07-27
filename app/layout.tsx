@@ -1,10 +1,11 @@
 import { NavBar } from '@/components/NavigationBar'
-import { AnnouncementBar } from '@/components/AnnouncementBar'
 import './globals.css'
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
+import Script from 'next/script'
 import Footer from './sections/Footer'
 import { Toaster } from '@/components/ui/toaster'
+import SmoothScrollProvider from '@/components/SmoothScrollProvider'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -23,19 +24,30 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" className='scroll-smooth'>
+    <html lang="en">
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              if ('scrollRestoration' in history) { history.scrollRestoration = 'manual'; }
+              if (location.hash) { history.replaceState(null, '', location.pathname + location.search); }
+            `,
+          }}
+        />
+      </head>
       <body className={`${inter.className} overflow-x-hidden`}>
-        <AnnouncementBar />
-        <NavBar />
+        <SmoothScrollProvider>
+          <NavBar />
 
-        <div className=''>
-          <Toaster />
-          <div className='m-auto'>
-            {children}
+          <div className=''>
+            <Toaster />
+            <div className='m-auto'>
+              {children}
+            </div>
           </div>
-        </div>
 
-        <Footer />
+          <Footer />
+        </SmoothScrollProvider>
       </body>
     </html>
   )

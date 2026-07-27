@@ -64,7 +64,7 @@ export default function Functionalities() {
                     18 funcionalidades, 1 sistema só
                 </h2>
                 <p className="text-lg text-slate-500 mt-4 max-w-2xl mx-auto">
-                    Da comunicação do dia a dia até os dados que orientam suas decisões — tudo em uma plataforma.
+                    Da comunicação do dia a dia até os dados que orientam suas decisões, tudo em uma plataforma.
                 </p>
 
                 <div className="flex flex-wrap justify-center gap-3 mt-10">

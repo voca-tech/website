@@ -140,6 +140,13 @@ const problems: Problem[] = [
     { id: "cultura", label: "Desalinhamento da cultura corporativa", stat: "94% dos executivos veem cultura como fundamental. (Deloitte)", solutionId: "rede-social" },
 ];
 
+const problemGroups: { label: string; ids: string[] }[] = [
+    { label: "Clima & bem-estar", ids: ["saude-emocional", "clima", "escuta", "experiencia"] },
+    { label: "Comunicação & cultura", ids: ["distancia", "cultura"] },
+    { label: "Dados & performance", ids: ["feedback", "dados", "turnover"] },
+    { label: "Desenvolvimento & governança", ids: ["gamificacao", "compliance"] },
+];
+
 export default function ProblemSolutionSelector() {
     const router = useRouter();
     const [selectedIds, setSelectedIds] = useState<string[]>([]);
@@ -197,71 +204,85 @@ export default function ProblemSolutionSelector() {
                     </p>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 mt-10">
-                    {problems.map((problem, index) => {
-                        const isSelected = selectedIds.includes(problem.id);
-                        const solution = solutionsById.get(problem.solutionId)!;
-                        const Icon = solution.icon;
-                        return (
-                            <button
-                                key={problem.id}
-                                onClick={() => toggleProblem(problem.id)}
-                                style={{
-                                    animationDelay: `${index * 40}ms`,
-                                    borderColor: isSelected ? solution.color : undefined,
-                                    backgroundColor: isSelected ? `${solution.color}0D` : undefined,
-                                }}
-                                className={cn(
-                                    "min-h-[132px] flex flex-col justify-center text-left rounded-xl border-2 px-4 py-3 transition-all duration-150 animate-in fade-in slide-in-from-bottom-2 fill-mode-both",
-                                    isSelected ? "shadow-sm" : "border-slate-200 bg-white hover:border-slate-300"
-                                )}
-                            >
-                                <div className="flex items-start gap-3">
-                                    <span
-                                        className="relative flex h-8 w-8 shrink-0 items-center justify-center rounded-full transition-transform duration-150"
-                                        style={{
-                                            backgroundColor: `${solution.color}1A`,
-                                            color: solution.color,
-                                            transform: isSelected ? "scale(1.08)" : "scale(1)",
-                                        }}
-                                    >
-                                        <Icon size={16} />
-                                        {isSelected && (
-                                            <span
-                                                className="absolute -bottom-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full border-2 border-white text-white"
-                                                style={{ backgroundColor: solution.color }}
+                <div className="flex flex-col gap-7 mt-10">
+                    {(() => {
+                        let cardIndex = 0;
+                        return problemGroups.map((group) => (
+                            <div key={group.label}>
+                                <p className="text-xs font-bold tracking-widest text-slate-400 uppercase mb-3 pl-1">
+                                    {group.label}
+                                </p>
+                                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                                    {group.ids.map((id) => {
+                                        const problem = problems.find((p) => p.id === id)!;
+                                        const isSelected = selectedIds.includes(problem.id);
+                                        const solution = solutionsById.get(problem.solutionId)!;
+                                        const Icon = solution.icon;
+                                        const delayMs = cardIndex * 40;
+                                        cardIndex += 1;
+                                        return (
+                                            <button
+                                                key={problem.id}
+                                                onClick={() => toggleProblem(problem.id)}
+                                                style={{
+                                                    animationDelay: `${delayMs}ms`,
+                                                    borderColor: isSelected ? solution.color : undefined,
+                                                    backgroundColor: isSelected ? `${solution.color}0D` : undefined,
+                                                }}
+                                                className={cn(
+                                                    "min-h-[132px] flex flex-col justify-center text-left rounded-xl border-2 px-4 py-3 transition-all duration-150 animate-in fade-in slide-in-from-bottom-2 fill-mode-both",
+                                                    isSelected ? "shadow-sm" : "border-slate-200 bg-white hover:border-slate-300"
+                                                )}
                                             >
-                                                <Check size={9} strokeWidth={3} />
-                                            </span>
-                                        )}
-                                    </span>
-                                    <span
-                                        className="text-sm font-medium pt-1.5"
-                                        style={{ color: isSelected ? solution.color : "#334155" }}
-                                    >
-                                        {problem.label}
-                                    </span>
-                                </div>
+                                                <div className="flex items-start gap-3">
+                                                    <span
+                                                        className="relative flex h-8 w-8 shrink-0 items-center justify-center rounded-full transition-transform duration-150"
+                                                        style={{
+                                                            backgroundColor: `${solution.color}1A`,
+                                                            color: solution.color,
+                                                            transform: isSelected ? "scale(1.08)" : "scale(1)",
+                                                        }}
+                                                    >
+                                                        <Icon size={16} />
+                                                        {isSelected && (
+                                                            <span
+                                                                className="absolute -bottom-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full border-2 border-white text-white"
+                                                                style={{ backgroundColor: solution.color }}
+                                                            >
+                                                                <Check size={9} strokeWidth={3} />
+                                                            </span>
+                                                        )}
+                                                    </span>
+                                                    <span
+                                                        className="text-sm font-medium pt-1.5"
+                                                        style={{ color: isSelected ? solution.color : "#334155" }}
+                                                    >
+                                                        {problem.label}
+                                                    </span>
+                                                </div>
 
-                                <div
-                                    className="grid transition-[grid-template-rows] duration-300 ease-out"
-                                    style={{ gridTemplateRows: isSelected ? "1fr" : "0fr" }}
-                                >
-                                    <div className="overflow-hidden">
-                                        <p className="text-xs text-slate-400 pt-2 pl-11">
-                                            {problem.stat}
-                                        </p>
-                                    </div>
+                                                <div
+                                                    className="grid transition-[grid-template-rows] duration-300 ease-out"
+                                                    style={{ gridTemplateRows: isSelected ? "1fr" : "0fr" }}
+                                                >
+                                                    <div className="overflow-hidden">
+                                                        <p className="text-xs text-slate-400 pt-2 pl-11">
+                                                            {problem.stat}
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </button>
+                                        );
+                                    })}
                                 </div>
-                            </button>
-                        );
-                    })}
+                            </div>
+                        ));
+                    })()}
 
                     <button
                         onClick={() => setIsOtherOpen((current) => !current)}
-                        style={{ animationDelay: `${problems.length * 40}ms` }}
                         className={cn(
-                            "flex items-center gap-3 text-left rounded-xl border-2 border-dashed px-4 py-3 transition-all duration-150 animate-in fade-in slide-in-from-bottom-2 fill-mode-both",
+                            "self-start flex items-center gap-3 text-left rounded-xl border-2 border-dashed px-4 py-3 transition-all duration-150",
                             isOtherOpen
                                 ? "border-voca-green bg-voca-green/5"
                                 : "border-slate-300 bg-white hover:border-voca-green/40"

@@ -1,60 +1,25 @@
 'use client'
 
-import { useEffect, useRef, useState, type ForwardRefExoticComponent, type RefAttributes } from "react";
+import { useEffect, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { Playfair_Display } from "next/font/google";
 import gsap from "gsap";
-import { Check, X } from "lucide-react";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { Check, X, ArrowRight, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { WhatsappLink } from "@/components/WhatsappLink";
-import { HeartHandshakeIcon } from "@/components/ui/heart-handshake";
-import { RocketIcon } from "@/components/ui/rocket";
 import { ShieldCheckIcon } from "@/components/ui/shield-check";
-import { EarthIcon } from "@/components/ui/earth";
+import { ClientLogoMarquee } from "@/components/ClientLogoMarquee";
+import { Avatar, AvatarImage } from "@/components/ui/avatar";
+import { quotes } from "@/lib/testimonials";
+import { PERCENT_SAVINGS } from "@/app/roi/constants";
+import { reasons, whyVocaStats as stats, type Reason, type AnimatedIconHandle } from "./data";
 import { cn } from "@/lib/utils";
 
-type AnimatedIconHandle = { startAnimation: () => void; stopAnimation: () => void };
-type AnimatedIcon = ForwardRefExoticComponent<{ size?: number } & RefAttributes<AnimatedIconHandle>>;
+const playfair = Playfair_Display({ subsets: ["latin"], weight: ["400", "500"], style: ["normal", "italic"], display: "swap" });
 
-interface Reason {
-    icon: AnimatedIcon;
-    title: string;
-    description: string;
-    color: string;
-}
-
-const reasons: Reason[] = [
-    {
-        icon: HeartHandshakeIcon,
-        title: "Atendimento humano",
-        description: "Sem robôs, sem tickets perdidos. Um time de verdade acompanha sua implementação e o seu dia a dia.",
-        color: "#007980",
-    },
-    {
-        icon: RocketIcon,
-        title: "Implementação assistida",
-        description: "Onboarding guiado pela nossa equipe, sem meses de configuração até ver resultado.",
-        color: "#5f7480",
-    },
-    {
-        icon: ShieldCheckIcon,
-        title: "Segurança e LGPD",
-        description: "Dados protegidos e em conformidade com a legislação brasileira desde o primeiro dia.",
-        color: "#2f6690",
-    },
-    {
-        icon: EarthIcon,
-        title: "Pronto para crescer com você",
-        description: "Da operação local à expansão internacional, a plataforma evolui junto com a sua empresa.",
-        color: "#85568a",
-    },
-];
-
-const stats = [
-    { value: "72", suffix: "%", label: "dos funcionários estão insatisfeitos no trabalho. As 3 principais causas se relacionam à comunicação.", source: "ISMA Brasil / About.com" },
-    { value: "20", suffix: "%", label: "a mais produz um funcionário engajado, com 87% menos chance de sair da empresa.", source: "Trampos.com" },
-    { value: "47", suffix: "%", label: "de incremento financeiro médio em empresas com comunicação eficiente e propositiva.", source: "Towers Watson" },
-];
+const featuredQuote = quotes.find((q) => q.name === "Cristiano")!;
 
 const comparison = [
     { label: "Atendimento durante a implementação", voca: "Time humano dedicado", others: "Tickets e filas de suporte" },
@@ -64,15 +29,13 @@ const comparison = [
     { label: "Evolução com a empresa", voca: "Acompanha do local ao internacional", others: "Geralmente pensada pra um único porte" },
 ];
 
-// Illustrative UI mockups (fake data) for the feature showcase below — not real product
-// screenshots. Dashed circles mark exactly where a real photo should go later.
-function PlaceholderAvatar({ size = 32, label = "foto real" }: { size?: number; label?: string }) {
+function PersonAvatar({ size = 32, color }: { size?: number; color: string }) {
     return (
         <div
-            className="shrink-0 rounded-full border border-dashed border-slate-300 bg-slate-50 flex items-center justify-center text-slate-400 text-center leading-none"
-            style={{ width: size, height: size, fontSize: size / 3.4 }}
+            className="shrink-0 rounded-full flex items-center justify-center"
+            style={{ width: size, height: size, backgroundColor: `${color}1A`, color }}
         >
-            {label}
+            <User size={size * 0.55} />
         </div>
     );
 }
@@ -91,7 +54,7 @@ function HumanChatMockup({ color }: { color: string }) {
                     Consigo falar com alguém de verdade?
                 </div>
                 <div className="flex items-start gap-2 max-w-[85%]">
-                    <PlaceholderAvatar size={32} />
+                    <PersonAvatar size={32} color={color} />
                     <div className="rounded-2xl rounded-bl-sm px-3 py-2 text-sm text-slate-700" style={{ backgroundColor: `${color}14` }}>
                         Claro! Sou eu mesma :) Como posso ajudar?
                         <span className="block mt-1.5 text-[10px] font-bold uppercase tracking-wide" style={{ color }}>
@@ -134,7 +97,7 @@ function OnboardingMockup({ color }: { color: string }) {
                 ))}
             </div>
             <div className="flex items-center gap-2.5 mt-4 pt-4 border-t border-slate-100">
-                <PlaceholderAvatar size={28} />
+                <PersonAvatar size={28} color={color} />
                 <p className="text-xs text-slate-500">Especialista dedicado te acompanha nessa etapa</p>
             </div>
         </div>
@@ -193,26 +156,43 @@ const mockups = [HumanChatMockup, OnboardingMockup, SecurityMockup, GrowthMockup
 
 function FeatureRow({ reason, mockup: Mockup, reversed, index }: { reason: Reason; mockup: (props: { color: string }) => JSX.Element; reversed: boolean; index: number }) {
     const rowRef = useRef<HTMLDivElement>(null);
+    const textRef = useRef<HTMLDivElement>(null);
+    const mockupRef = useRef<HTMLDivElement>(null);
     const iconRef = useRef<AnimatedIconHandle | null>(null);
-    const [visible, setVisible] = useState(false);
     const Icon = reason.icon;
 
     useEffect(() => {
-        const el = rowRef.current;
-        if (!el) return;
-        const observer = new IntersectionObserver(
-            ([entry]) => {
-                if (entry.isIntersecting) {
-                    setVisible(true);
-                    iconRef.current?.startAnimation();
-                    observer.disconnect();
+        gsap.registerPlugin(ScrollTrigger);
+        const ctx = gsap.context(() => {
+            gsap.fromTo(
+                textRef.current,
+                { opacity: 0, x: reversed ? 24 : -24 },
+                {
+                    opacity: 1,
+                    x: 0,
+                    ease: "none",
+                    scrollTrigger: { trigger: rowRef.current, start: "top 80%", end: "top 40%", scrub: 0.8 },
                 }
-            },
-            { threshold: 0.3 }
-        );
-        observer.observe(el);
-        return () => observer.disconnect();
-    }, []);
+            );
+            gsap.fromTo(
+                mockupRef.current,
+                { opacity: 0, y: 24 },
+                {
+                    opacity: 1,
+                    y: 0,
+                    ease: "none",
+                    scrollTrigger: { trigger: rowRef.current, start: "top 75%", end: "top 35%", scrub: 0.8 },
+                }
+            );
+            ScrollTrigger.create({
+                trigger: rowRef.current,
+                start: "top 70%",
+                onEnter: () => iconRef.current?.startAnimation(),
+                onLeaveBack: () => iconRef.current?.stopAnimation(),
+            });
+        }, rowRef);
+        return () => ctx.revert();
+    }, [reversed]);
 
     return (
         <div
@@ -222,12 +202,7 @@ function FeatureRow({ reason, mockup: Mockup, reversed, index }: { reason: Reaso
                 reversed ? "lg:flex-row-reverse" : "lg:flex-row"
             )}
         >
-            <div
-                className={cn(
-                    "flex-1 transition-all duration-700",
-                    visible ? "opacity-100 translate-x-0" : cn("opacity-0", reversed ? "lg:translate-x-6" : "lg:-translate-x-6")
-                )}
-            >
+            <div ref={textRef} className="flex-1">
                 <span
                     className="inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-bold uppercase tracking-widest"
                     style={{ backgroundColor: `${reason.color}14`, color: reason.color }}
@@ -237,14 +212,19 @@ function FeatureRow({ reason, mockup: Mockup, reversed, index }: { reason: Reaso
                 </span>
                 <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-4">{reason.title}</h2>
                 <p className="text-slate-500 mt-4 max-w-md">{reason.description}</p>
+                {reason.href && (
+                    <Link
+                        href={reason.href}
+                        className="inline-flex items-center gap-1.5 text-sm font-bold mt-4 group"
+                        style={{ color: reason.color }}
+                    >
+                        {reason.linkLabel ?? "Saiba mais"}
+                        <ArrowRight size={14} className="transition-transform group-hover:translate-x-0.5" />
+                    </Link>
+                )}
             </div>
 
-            <div
-                className={cn(
-                    "relative flex-1 flex justify-center transition-all duration-700 delay-150",
-                    visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
-                )}
-            >
+            <div ref={mockupRef} className="relative flex-1 flex justify-center">
                 <div
                     className="absolute w-56 h-56 rounded-full blur-3xl opacity-[0.18] pointer-events-none"
                     style={{ backgroundColor: reason.color }}
@@ -255,38 +235,112 @@ function FeatureRow({ reason, mockup: Mockup, reversed, index }: { reason: Reaso
     );
 }
 
-function CountUpStat({ target, suffix }: { target: number; suffix: string }) {
+function RadialStat({ percent, color, size = 56 }: { percent: number; color: string; size?: number }) {
+    const stroke = 6;
+    const radius = (size - stroke) / 2;
+    const circumference = 2 * Math.PI * radius;
+    return (
+        <div className="relative shrink-0" style={{ width: size, height: size }}>
+            <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} className="-rotate-90">
+                <circle cx={size / 2} cy={size / 2} r={radius} fill="none" stroke="#e2e8f0" strokeWidth={stroke} />
+                <circle
+                    cx={size / 2}
+                    cy={size / 2}
+                    r={radius}
+                    fill="none"
+                    stroke={color}
+                    strokeWidth={stroke}
+                    strokeLinecap="round"
+                    strokeDasharray={circumference}
+                    strokeDashoffset={circumference * (1 - percent / 100)}
+                />
+            </svg>
+            <span className="absolute inset-0 flex items-center justify-center text-sm font-extrabold text-slate-900">
+                {percent}%
+            </span>
+        </div>
+    );
+}
+
+function CountUpStat({ target, suffix, className = "text-4xl sm:text-5xl font-extrabold text-white" }: { target: number; suffix: string; className?: string }) {
     const ref = useRef<HTMLParagraphElement>(null);
     const wrapperRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
+        gsap.registerPlugin(ScrollTrigger);
         const el = ref.current;
         const wrapper = wrapperRef.current;
         if (!el || !wrapper) return;
 
-        const observer = new IntersectionObserver(
-            ([entry]) => {
-                if (!entry.isIntersecting) return;
-                const counter = { val: 0 };
-                gsap.to(counter, {
-                    val: target,
-                    duration: 1.4,
-                    ease: "power2.out",
-                    onUpdate: () => {
-                        el.textContent = Math.round(counter.val) + suffix;
-                    },
-                });
-                observer.disconnect();
+        const st = ScrollTrigger.create({
+            trigger: wrapper,
+            start: "top 85%",
+            end: "top 45%",
+            scrub: 0.8,
+            onUpdate: (self) => {
+                el.textContent = Math.round(self.progress * target) + suffix;
             },
-            { threshold: 0.4 }
-        );
-        observer.observe(wrapper);
-        return () => observer.disconnect();
+        });
+        return () => st.kill();
     }, [target, suffix]);
 
     return (
         <div ref={wrapperRef}>
-            <p ref={ref} className="text-4xl sm:text-5xl font-extrabold text-white">0{suffix}</p>
+            <p ref={ref} className={className}>0{suffix}</p>
+        </div>
+    );
+}
+
+const noPromiseLines: { before: string; value: string; after: string; align: string }[] = [
+    { before: "Hoje, ", value: "62%", after: " dos colaboradores usam a plataforma todos os dias.", align: "text-left" },
+    { before: "", value: "96%", after: " de engajamento nas pesquisas internas.", align: "text-right" },
+    { before: "Onboardings ", value: "54%", after: " mais produtivos.", align: "text-left" },
+    { before: "", value: "100%", after: " das interações já passam por leitura de sentimento com IA.", align: "text-right" },
+];
+
+function NoPromiseSection() {
+    const sectionRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        gsap.registerPlugin(ScrollTrigger);
+        const ctx = gsap.context(() => {
+            gsap.fromTo(
+                ".no-promise-line",
+                { opacity: 0, y: 36 },
+                {
+                    opacity: 1,
+                    y: 0,
+                    stagger: 0.3,
+                    ease: "none",
+                    scrollTrigger: { trigger: sectionRef.current, start: "top 75%", end: "bottom 55%", scrub: 0.8 },
+                }
+            );
+        }, sectionRef);
+        return () => ctx.revert();
+    }, []);
+
+    return (
+        <div ref={sectionRef} className="py-24 sm:py-32 px-6 bg-white">
+            <p className="text-2xl sm:text-4xl font-extrabold tracking-wide text-voca-green uppercase text-center mb-14 sm:mb-20">
+                Não é promessa
+            </p>
+
+            <div className="max-w-3xl mx-auto flex flex-col gap-10 sm:gap-12">
+                {noPromiseLines.map((line, i) => (
+                    <p
+                        key={i}
+                        className={cn(
+                            playfair.className,
+                            "no-promise-line italic text-2xl sm:text-4xl text-slate-800 leading-snug",
+                            line.align
+                        )}
+                    >
+                        {line.before}
+                        <span className="font-sans not-italic font-extrabold text-voca-green">{line.value}</span>
+                        {line.after}
+                    </p>
+                ))}
+            </div>
         </div>
     );
 }
@@ -305,21 +359,89 @@ export default function PorQueVocaPage() {
                     />
                 </div>
 
-                <div className="relative max-w-2xl mx-auto text-center">
-                    <p className="text-sm font-bold tracking-widest text-voca-green uppercase">Por que a VOCA</p>
-                    <h1 className="text-3xl sm:text-5xl font-extrabold text-slate-900 leading-tight mt-3">
-                        Tecnologia forte. Time de verdade.
-                    </h1>
-                    <p className="text-lg text-slate-500 mt-5">
-                        A tecnologia é só metade da equação. A outra metade é um time que se importa de verdade com o que acontece depois da implementação, todos os dias, não só no lançamento.
-                    </p>
+                <div className="relative max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-12 items-center">
+                    <div className="text-center lg:text-left">
+                        <p className="text-sm font-bold tracking-widest text-voca-green uppercase">Por que o VOCA</p>
+                        <h1 className="text-3xl sm:text-5xl font-extrabold text-slate-900 leading-tight mt-3">
+                            Tecnologia forte. Time de verdade.
+                        </h1>
+                        <p className="text-lg text-slate-500 mt-5">
+                            A tecnologia é só metade da equação. A outra metade é um time que se importa de verdade com o que acontece depois da implementação, todos os dias, não só no lançamento.
+                        </p>
+                    </div>
+
+                    <div className="relative mt-6 lg:mt-0 max-w-sm mx-auto w-full">
+                        <div className="relative rounded-3xl overflow-hidden shadow-xl aspect-[4/5]">
+                            <Image
+                                src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=900&q=80"
+                                alt=""
+                                fill
+                                sizes="(max-width: 1024px) 100vw, 400px"
+                                className="object-cover"
+                            />
+                        </div>
+
+                        <div className="absolute -bottom-7 -left-6 sm:-left-10 rounded-2xl border border-slate-200 bg-white shadow-xl p-4 flex items-center gap-3">
+                            <RadialStat percent={72} color="#007980" />
+                            <div>
+                                <p className="text-xs text-slate-500 leading-snug max-w-[8.5rem]">
+                                    dos funcionários estão insatisfeitos no trabalho
+                                </p>
+                                <p className="text-[10px] text-slate-400 mt-1">Fonte: ISMA Brasil</p>
+                            </div>
+                        </div>
+
+                        <div className="absolute -top-5 -right-3 sm:-right-8 rounded-2xl border border-slate-200 bg-white shadow-lg px-4 py-3">
+                            <p className="text-[10px] font-bold uppercase tracking-wide text-slate-400 mb-2">
+                                Empresas que confiam
+                            </p>
+                            <div className="flex items-center gap-2.5">
+                                <Image src="/clients/akaer.png" alt="Akaer" width={36} height={36} className="object-contain grayscale opacity-70" />
+                                <Image src="/clients/credi10.png" alt="Credi10" width={36} height={36} className="object-contain grayscale opacity-70" />
+                                <Image src="/clients/belasartes.png" alt="Belas Artes" width={36} height={36} className="object-contain grayscale opacity-70" />
+                            </div>
+                        </div>
+                    </div>
                 </div>
+            </div>
+
+            <div className="relative max-w-6xl mx-auto px-6">
+                <p className="text-center text-xs font-bold tracking-widest text-slate-400 uppercase mb-6">
+                    Times que já confiam no VOCA
+                </p>
+                <ClientLogoMarquee />
             </div>
 
             <div className="relative max-w-5xl mx-auto px-6 py-16 sm:py-20 flex flex-col gap-20 sm:gap-28">
                 {reasons.map((reason, i) => (
                     <FeatureRow key={reason.title} reason={reason} mockup={mockups[i]} reversed={i % 2 === 1} index={i} />
                 ))}
+            </div>
+
+            <div className="max-w-2xl mx-auto px-6 pb-16 sm:pb-20">
+                <div className="relative rounded-[2rem] border border-slate-200 bg-slate-50 p-8 sm:p-10 text-center">
+                    <p className="text-xl sm:text-2xl font-medium text-slate-700 leading-relaxed">
+                        &ldquo;{featuredQuote.text}&rdquo;
+                    </p>
+                    <div className="flex items-center justify-center gap-3 mt-6">
+                        <Avatar className="h-11 w-11 ring-2 ring-white shadow-sm">
+                            <AvatarImage src={featuredQuote.avatar} />
+                        </Avatar>
+                        <div className="text-left">
+                            <p className="font-bold text-slate-900 text-sm">{featuredQuote.name}</p>
+                            <p className="text-slate-500 text-xs">{featuredQuote.role}</p>
+                        </div>
+                        {featuredQuote.logo && (
+                            <Image
+                                src={featuredQuote.logo}
+                                alt=""
+                                width={28}
+                                height={28}
+                                className="object-contain grayscale opacity-70 ml-2"
+                            />
+                        )}
+                    </div>
+                </div>
             </div>
 
             <div className="relative py-16 sm:py-20 px-6 overflow-hidden" style={{ background: "linear-gradient(135deg, #012e31 0%, #016b72 100%)" }}>
@@ -357,6 +479,8 @@ export default function PorQueVocaPage() {
                 </div>
             </div>
 
+            <NoPromiseSection />
+
             <div className="py-16 sm:py-24 px-6">
                 <div className="max-w-4xl mx-auto">
                     <div className="text-center max-w-2xl mx-auto">
@@ -386,46 +510,120 @@ export default function PorQueVocaPage() {
                         />
 
                         <div className="relative p-6 sm:p-10">
-                            <div className="hidden sm:grid grid-cols-[1.1fr_1fr_1fr] gap-6 pb-4 border-b border-slate-200">
+                            <div className="hidden sm:grid grid-cols-[1.1fr_1fr_1fr] gap-6 pb-5">
                                 <p className="text-xs font-bold uppercase tracking-widest text-slate-400">Critério</p>
-                                <p className="text-xs font-bold uppercase tracking-widest text-voca-green">Com a VOCA</p>
+                                <div className="flex items-center gap-2">
+                                    <span className="flex h-5 w-5 items-center justify-center rounded-full bg-voca-green text-white">
+                                        <Check size={11} />
+                                    </span>
+                                    <p className="text-xs font-bold uppercase tracking-widest text-voca-green">Com o VOCA</p>
+                                </div>
                                 <p className="text-xs font-bold uppercase tracking-widest text-slate-400">Ferramentas tradicionais</p>
                             </div>
 
-                            {comparison.map((row) => (
-                                <div
-                                    key={row.label}
-                                    className="grid grid-cols-1 sm:grid-cols-[1.1fr_1fr_1fr] gap-2 sm:gap-6 py-4 border-b border-slate-100 last:border-b-0 sm:items-center"
-                                >
-                                    <p className="text-sm font-bold text-slate-900">{row.label}</p>
-                                    <p className="flex items-start gap-2 text-sm text-slate-600">
-                                        <Check size={15} className="shrink-0 mt-0.5 text-voca-green" />
-                                        {row.voca}
-                                    </p>
-                                    <p className="flex items-start gap-2 text-sm text-slate-400">
-                                        <X size={15} className="shrink-0 mt-0.5 text-slate-300" />
-                                        {row.others}
-                                    </p>
-                                </div>
-                            ))}
+                            <div className="flex flex-col gap-3">
+                                {comparison.map((row) => (
+                                    <div
+                                        key={row.label}
+                                        className="grid grid-cols-1 sm:grid-cols-[1.1fr_1fr_1fr] gap-2 sm:gap-6 sm:items-center"
+                                    >
+                                        <p className="text-sm font-bold text-slate-900">{row.label}</p>
+                                        <div className="flex items-center gap-2.5 rounded-xl bg-voca-green/[0.06] border border-voca-green/10 px-3.5 py-2.5">
+                                            <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-voca-green text-white">
+                                                <Check size={11} />
+                                            </span>
+                                            <p className="text-sm font-semibold text-slate-800">{row.voca}</p>
+                                        </div>
+                                        <p className="flex items-start gap-2 text-sm text-slate-400 px-3.5">
+                                            <X size={15} className="shrink-0 mt-0.5 text-slate-300" />
+                                            {row.others}
+                                        </p>
+                                    </div>
+                                ))}
+                            </div>
                         </div>
+                    </div>
+
+                    <div className="relative flex justify-center pt-8">
+                        <Link
+                            href="/casos-de-sucesso"
+                            className="inline-flex items-center gap-1.5 text-sm font-bold text-voca-green group"
+                        >
+                            Veja isso em resultados reais nos cases de sucesso
+                            <ArrowRight size={14} className="transition-transform group-hover:translate-x-0.5" />
+                        </Link>
+                    </div>
+                </div>
+            </div>
+
+            <div className="py-16 sm:py-24 px-6 bg-white overflow-hidden">
+                <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-[0.9fr_1.1fr] gap-12 lg:gap-20 items-center">
+                    <div className="relative order-2 lg:order-1 max-w-sm mx-auto lg:max-w-none w-full">
+                        <div className="relative rounded-[2rem] overflow-hidden shadow-2xl aspect-[4/5] lg:-rotate-2">
+                            <Image
+                                src="https://images.unsplash.com/photo-1521737711867-e3b97375f902?auto=format&fit=crop&w=900&q=80"
+                                alt=""
+                                fill
+                                sizes="(max-width: 1024px) 100vw, 500px"
+                                className="object-cover"
+                            />
+                        </div>
+                    </div>
+
+                    <div className="order-1 lg:order-2 text-center lg:text-left">
+                        <p className={cn(playfair.className, "italic text-3xl sm:text-4xl lg:text-5xl text-slate-900 leading-snug")}>
+                            &ldquo;Tecnologia sem gente é só mais uma ferramenta parada na prateleira.&rdquo;
+                        </p>
+                        <p className="text-slate-500 mt-6 max-w-md mx-auto lg:mx-0">
+                            Por isso, cada implementação do VOCA tem um time de verdade do outro lado da tela, do primeiro dia em diante e em cada decisão que a sua empresa toma depois.
+                        </p>
                     </div>
                 </div>
             </div>
 
             <div className="px-6 pb-16">
-                <div className="max-w-4xl mx-auto rounded-2xl bg-voca-green px-6 py-10 sm:px-10 flex flex-col sm:flex-row items-center justify-between gap-6 text-center sm:text-left">
-                    <div>
-                        <p className="text-sm font-bold tracking-widest text-white/70 uppercase">Calculadora de ROI</p>
-                        <h2 className="text-2xl font-extrabold text-white mt-2">
-                            Quanto sua empresa pode economizar com o VOCA?
-                        </h2>
+                <div className="max-w-4xl mx-auto relative rounded-[2.5rem] border border-white/60 bg-gradient-to-br from-teal-50 via-white to-emerald-50/60 shadow-xl overflow-hidden">
+                    <div className="absolute -top-16 -right-16 w-64 h-64 rounded-full bg-voca-green/10 blur-3xl pointer-events-none" />
+                    <div className="absolute -bottom-20 -left-10 w-56 h-56 rounded-full bg-teal-300/20 blur-3xl pointer-events-none" />
+
+                    <div className="relative flex flex-col lg:flex-row items-center gap-10 p-8 sm:p-12">
+                        <div className="flex-1 text-center lg:text-left">
+                            <p className="text-sm font-bold tracking-widest text-voca-green uppercase">Calculadora de ROI</p>
+                            <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-3 max-w-md mx-auto lg:mx-0">
+                                Veja o retorno em números, não em promessas
+                            </h2>
+                            <p className="text-slate-500 mt-3 max-w-md mx-auto lg:mx-0">
+                                Em menos de um minuto, simule a economia da sua empresa com base em clientes reais que migraram pra VOCA.
+                            </p>
+                            <Link href="/roi" className="inline-flex mt-6">
+                                <span className="group inline-flex items-center gap-3 rounded-full bg-voca-green text-white pl-6 pr-2 py-2 text-base font-semibold shadow-lg shadow-voca-green/25 transition-shadow hover:shadow-xl">
+                                    Simular agora
+                                    <span className="flex h-8 w-8 items-center justify-center rounded-full bg-white text-voca-green transition-transform group-hover:translate-x-1">
+                                        <ArrowRight size={16} />
+                                    </span>
+                                </span>
+                            </Link>
+                        </div>
+
+                        <div className="shrink-0 rounded-2xl border border-white bg-white/80 shadow-lg p-5 w-full max-w-[15rem]">
+                            <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3">Economia acumulada</p>
+                            <div className="flex items-end gap-2 h-20">
+                                {[35, 55, 75, 100].map((height, i) => (
+                                    <div
+                                        key={height}
+                                        className="flex-1 rounded-t-lg bg-voca-green"
+                                        style={{ height: `${height}%`, opacity: 0.4 + i * 0.2 }}
+                                    />
+                                ))}
+                            </div>
+                            <div className="flex justify-between text-[10px] text-slate-400 mt-2">
+                                <span>6m</span>
+                                <span>24m</span>
+                            </div>
+                            <p className="text-2xl font-extrabold text-voca-green mt-3">Até {PERCENT_SAVINGS}%</p>
+                            <p className="text-xs text-slate-400">mais barato que o mercado</p>
+                        </div>
                     </div>
-                    <Link href="/roi" className="shrink-0">
-                        <Button className="bg-white text-voca-green hover:bg-white/90 rounded-md px-6 h-12 text-base font-semibold">
-                            Calcular agora
-                        </Button>
-                    </Link>
                 </div>
             </div>
 
