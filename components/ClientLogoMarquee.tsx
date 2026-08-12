@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import type { ReactNode } from "react";
+import { Fragment, type ReactNode } from "react";
 import { cn } from "@/lib/utils";
 
 interface Logo {
@@ -18,13 +18,21 @@ const clientLogos: Logo[] = [
     { name: 'Akaer', src: '/clients/akaer.png', width: 140, height: 140, caseSlug: 'akaer' },
     { name: 'Credi10', src: '/clients/credi10.png', width: 140, height: 140, caseSlug: 'credi10-compliance' },
     { name: 'Belas Artes', src: '/clients/belasartes.png', width: 140, height: 140, caseSlug: 'belas-artes' },
+    { name: 'Grant Thornton', src: '/clients/grantthornton.png', width: 500, height: 93, caseSlug: 'grant-thornton' },
     { name: 'NovoNordisk', src: '/clients/novoNordisk.png', width: 110, height: 82 },
     { name: 'Woodbridge', src: '/clients/woodbridge.png', width: 260, height: 130, caseSlug: 'woodbridge-pesquisa' },
+    { name: 'Hering', src: '/clients/hering.png', width: 500, height: 101 },
     { name: 'HomeroCosta', src: '/clients/homeroCosta.png', width: 140, height: 140, boxClassName: 'h-20 w-20' },
+    { name: 'Guess', src: '/clients/guess.png', width: 500, height: 89 },
     { name: 'DHS', src: '/clients/DHS.png', width: 140, height: 140 },
 ];
 
 const partnerLogos: Logo[] = [
+    { name: 'AWS', src: '/partners/aws.png', width: 500, height: 334 },
+    { name: 'Google', src: '/partners/google.png', width: 500, height: 170 },
+    { name: 'Microsoft', src: '/partners/microsoft.png', width: 500, height: 107 },
+    { name: 'SAP', src: '/partners/sap.png', width: 500, height: 248 },
+    { name: 'Senior', src: '/partners/senior.png', width: 393, height: 128 },
     { name: 'Watson', src: '/partners/watson.png', width: 90, height: 90 },
     { name: 'UFMG', src: '/partners/ufmg.png', width: 130, height: 100 },
     { name: 'FiemgLab', src: '/partners/fiemgLab.png', width: 100, height: 100 },
@@ -75,44 +83,50 @@ function LogoItem({ logo }: { logo: Logo }) {
     return <div className={className}>{inner}</div>;
 }
 
+type LogoGroup = "all" | "clients" | "partners";
+
+const GROUP_ROWS: Record<LogoGroup, Logo[][]> = {
+    all: [logosRowTop, logosRowBottom],
+    clients: [clientLogos],
+    partners: [partnerLogos],
+};
+
 interface ClientLogoMarqueeProps {
     caption?: ReactNode;
+    group?: LogoGroup;
 }
 
-export function ClientLogoMarquee({ caption }: ClientLogoMarqueeProps) {
+export function ClientLogoMarquee({ caption, group = "all" }: ClientLogoMarqueeProps) {
+    const rows = GROUP_ROWS[group];
+
     return (
         <div>
-            <div className="w-full overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_8%,black_92%,transparent)]">
-                <div
-                    className="marquee-track flex items-center w-max"
-                    style={{ animation: "marquee-right 26s linear infinite" }}
-                >
-                    {[...logosRowTop, ...logosRowTop].map((logo, index) => (
-                        <LogoItem key={`${logo.name}-top-${index}`} logo={logo} />
-                    ))}
-                </div>
-            </div>
+            {rows.map((row, rowIndex) => (
+                <Fragment key={rowIndex}>
+                    <div className="w-full overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_8%,black_92%,transparent)]">
+                        <div
+                            className="marquee-track flex items-center w-max"
+                            style={{
+                                animation: `${rowIndex % 2 === 0 ? "marquee-right" : "marquee-left"} 26s linear infinite`,
+                            }}
+                        >
+                            {[...row, ...row].map((logo, index) => (
+                                <LogoItem key={`${logo.name}-${rowIndex}-${index}`} logo={logo} />
+                            ))}
+                        </div>
+                    </div>
 
-            {caption && (
-                <div
-                    style={{
-                        background: "linear-gradient(to right, transparent, #f1f5f9 15%, #f1f5f9 85%, transparent)",
-                    }}
-                >
-                    <p className="text-center text-base sm:text-lg py-4 sm:py-5">{caption}</p>
-                </div>
-            )}
-
-            <div className="w-full overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_8%,black_92%,transparent)]">
-                <div
-                    className="marquee-track flex items-center w-max"
-                    style={{ animation: "marquee-left 26s linear infinite" }}
-                >
-                    {[...logosRowBottom, ...logosRowBottom].map((logo, index) => (
-                        <LogoItem key={`${logo.name}-bottom-${index}`} logo={logo} />
-                    ))}
-                </div>
-            </div>
+                    {caption && rowIndex === 0 && (
+                        <div
+                            style={{
+                                background: "linear-gradient(to right, transparent, #f1f5f9 15%, #f1f5f9 85%, transparent)",
+                            }}
+                        >
+                            <p className="text-center text-base sm:text-lg py-4 sm:py-5">{caption}</p>
+                        </div>
+                    )}
+                </Fragment>
+            ))}
         </div>
     );
 }

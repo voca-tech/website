@@ -225,19 +225,35 @@ function CountUpStat({ value, className, trigger }: { value: string; className?:
     const ref = useRef<HTMLParagraphElement>(null);
 
     useEffect(() => {
+        gsap.registerPlugin(ScrollTrigger);
         const el = ref.current;
         if (!el) return;
         const { target, suffix } = parseStatValue(value);
 
         const counter = { val: 0 };
-        gsap.to(counter, {
-            val: target,
-            duration: 0.9,
-            ease: "power2.out",
-            onUpdate: () => {
-                el.textContent = Math.round(counter.val).toLocaleString("pt-BR") + suffix;
-            },
+        const render = () => {
+            el.textContent = Math.round(counter.val).toLocaleString("pt-BR") + suffix;
+        };
+
+        const ctx = gsap.context(() => {
+            gsap.to(counter, {
+                val: target,
+                ease: "none",
+                onUpdate: render,
+                scrollTrigger: {
+                    trigger: el,
+                    start: "top 92%",
+                    end: "top 55%",
+                    scrub: 0.6,
+                    onRefresh: (self) => {
+                        counter.val = self.progress * target;
+                        render();
+                    },
+                },
+            });
         });
+
+        return () => ctx.revert();
     }, [value, trigger]);
 
     return <p ref={ref} className={className ?? "text-3xl sm:text-4xl font-extrabold text-white"}>0</p>;

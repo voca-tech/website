@@ -23,6 +23,7 @@ export interface Case {
     logo?: string;
     photo?: string;
     heroMetricIndex?: number;
+    homeMetricIndex?: number;
     quote: string;
     objective?: string;
     solution?: string[];
@@ -73,6 +74,7 @@ export const cases: Case[] = [
             "Gamificação das interações em cada desafio.",
             "Reconhecimento mensal dos mais engajados na plataforma.",
         ],
+        heroMetricIndex: 3,
         metrics: [
             { value: "20", label: "vídeos criados" },
             { value: "943", label: "visualizações" },
@@ -100,7 +102,7 @@ export const cases: Case[] = [
         ],
         metrics: [
             { value: "100%", label: "conformidade para auditoria" },
-            { value: "+50", label: "interações anônimas" },
+            { value: "+50", label: "manifestações tratadas" },
             { value: "92%", label: "confiança nos canais de voz" },
         ],
     },
@@ -183,6 +185,7 @@ export const cases: Case[] = [
         company: "SP Engenharia",
         photo: "https://images.unsplash.com/photo-1607746882042-944635dfe10e?auto=format&fit=crop&w=900&q=80",
         heroMetricIndex: 1,
+        homeMetricIndex: 3,
         quote: "Deixamos a AVD mais estratégica e ágil, com feedbacks claros e maior participação da liderança no desenvolvimento do time.",
         objective: "Implantar avaliação de desempenho estruturada e digital, promovendo alinhamento entre equipes e liderança, com foco em desenvolvimento e performance.",
         solution: [
@@ -192,8 +195,9 @@ export const cases: Case[] = [
             "Interface amigável, com etapas bem definidas para todos os envolvidos.",
         ],
         metrics: [
-            { value: "85%", label: "redução no tempo gasto" },
+            { value: "100%", label: "avaliações centralizadas" },
             { value: "96%", label: "engajamento de líderes" },
+            { value: "85%", label: "redução no tempo gasto" },
             { value: "-40h", label: "economia mensal do RH" },
         ],
     },
@@ -201,11 +205,11 @@ export const cases: Case[] = [
         slug: "grant-thornton",
         pillar: "cultura",
         theme: "Engajamento em escala",
-        name: "Water Rodrigues",
+        name: "Walter Rodrigues",
         role: "Diretor de RH",
         company: "Grant Thornton",
         photo: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=900&q=80",
-        heroMetricIndex: 1,
+        heroMetricIndex: 2,
         quote: "Facilita trabalhar na mesma plataforma as ferramentas de RH e o engajamento contínuo.",
         objective: "Campanha de 60 dias unindo cultura e performance para os 1.900 colaboradores da Grant Thornton Brasil.",
         solution: [
@@ -215,9 +219,11 @@ export const cases: Case[] = [
             "Treinamentos disponibilizados na universidade corporativa.",
         ],
         metrics: [
-            { value: "19.7k", label: "publicações na rede social" },
-            { value: "261k", label: "visualizações" },
+            { value: "19.720", label: "publicações na rede social" },
+            { value: "103.620", label: "interações" },
+            { value: "261.560", label: "visualizações" },
             { value: "1.670", label: "avaliações de desempenho" },
+            { value: "1.256", label: "PDIs criados" },
         ],
     },
     {

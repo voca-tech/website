@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { AnimatePresence, motion } from "motion/react";
 import {
     Check,
@@ -21,25 +22,29 @@ const challenges = [
         id: "turnover",
         icon: TrendingDown,
         label: "Rotatividade alta",
-        solution: "O VOCA sinaliza risco de saída por colaborador com antecedência, cruzando clima e desempenho pra mostrar o motivo real por trás.",
+        solution: "Termômetro de Humor e Análise de Turnover identificam os sinais antes da saída. O PDI vinculado à avaliação mostra que a empresa investe no desenvolvimento.",
+        proof: { text: "Woodbridge: 95% de participação nas pesquisas de clima", slug: "woodbridge-pesquisa" },
     },
     {
         id: "dados",
         icon: Database,
         label: "Dados dispersos em planilhas",
-        solution: "Todos os indicadores de pessoas reunidos num painel só, atualizado em tempo real, sem consolidar planilha nenhuma na mão.",
+        solution: "Dashboards em tempo real com indicadores de clima, engajamento e performance, sem exportar nem consolidar nada na mão.",
+        proof: { text: "SP Engenharia: 100% das avaliações centralizadas", slug: "sp-engenharia" },
     },
     {
         id: "processo",
         icon: Workflow,
         label: "Processo manual e lento",
-        solution: "Avaliações, integrações e trilhas obrigatórias rodam sozinhas, com relatórios de auditoria gerados automaticamente.",
+        solution: "Implementação assistida pelo time VOCA em semanas, não em meses, com trilhas e relatórios de auditoria rodando sozinhos.",
+        proof: { text: "Credi10: 100% dos aprendizes na trilha nos 5 primeiros dias", slug: "credi10-treinamentos" },
     },
     {
         id: "comunicacao",
         icon: Unplug,
         label: "Comunicação fragmentada",
-        solution: "Um canal só de escuta e reconhecimento pra empresa toda, com anonimato garantido pra quem precisar.",
+        solution: "Rede Social Corporativa, 6 canais de voz e notificações push, reunindo a empresa toda no mesmo lugar.",
+        proof: { text: "Grant Thornton: 261.560 visualizações em 60 dias", slug: "grant-thornton" },
     },
 ];
 
@@ -52,12 +57,12 @@ const beforeAfter = [
     {
         personaId: "gestores",
         before: "Só descobre que alguém do time está infeliz quando a carta de demissão já chegou.",
-        after: "Alertas de risco de saída por colaborador, com antecedência suficiente pra agir.",
+        after: "Alertas de risco de saída por colaborador, com antecedência suficiente pra agir, e PDI direcionado a partir do resultado da avaliação.",
     },
     {
         personaId: "colaboradores",
         before: "Feedback que nunca chega e conquistas que ninguém reconhece de verdade.",
-        after: "Canais de escuta com anonimato garantido e reconhecimento que aparece no dia a dia.",
+        after: "Canais de escuta com anonimato garantido, reconhecimento público, gamificação com conquistas e uma plataforma com a cara da própria empresa.",
     },
     {
         personaId: "time-rh",
@@ -77,7 +82,7 @@ const featureMatrix: { feature: string; views: Record<string, string> }[] = [
         },
     },
     {
-        feature: "Pesquisas Customizadas",
+        feature: "Pesquisas",
         views: {
             decisores: "Indicadores da empresa toda, em tempo real",
             gestores: "Clima do time, segmentado por área",
@@ -110,6 +115,8 @@ export default function PublicoAlvoPage() {
     const [selectedChallenges, setSelectedChallenges] = useState<Set<string>>(new Set());
     const [flippedIds, setFlippedIds] = useState<Set<string>>(new Set());
     const beforeAfterRef = useRef<HTMLDivElement>(null);
+    const matrixRef = useRef<HTMLDivElement>(null);
+    const [focusedPersona, setFocusedPersona] = useState<string | null>(null);
 
     const active = personas.find((p) => p.id === activeId)!;
     const displayed = personas.find((p) => p.id === displayedId)!;
@@ -175,6 +182,29 @@ export default function PublicoAlvoPage() {
             { opacity: 1, y: 0, duration: 0.4, stagger: 0.05, ease: "power2.out" }
         );
     }, [displayedId]);
+
+    useEffect(() => {
+        gsap.registerPlugin(ScrollTrigger);
+        const ctx = gsap.context(() => {
+            gsap.fromTo(
+                ".matrix-row",
+                { opacity: 0, y: 24 },
+                {
+                    opacity: 1,
+                    y: 0,
+                    ease: "none",
+                    stagger: 0.3,
+                    scrollTrigger: {
+                        trigger: matrixRef.current,
+                        start: "top 82%",
+                        end: "bottom 75%",
+                        scrub: 0.8,
+                    },
+                }
+            );
+        }, matrixRef);
+        return () => ctx.revert();
+    }, []);
 
     return (
         <div className="relative bg-white py-16 sm:py-24 px-6 overflow-hidden">
@@ -371,7 +401,10 @@ export default function PublicoAlvoPage() {
                     ))}
                 </div>
 
-                <div className="mt-24">
+                <div className="relative mt-24 py-20">
+                    <div className="absolute inset-y-0 left-1/2 -translate-x-1/2 w-screen bg-slate-50" />
+                    <div className="absolute inset-y-0 left-1/2 -translate-x-1/2 w-screen opacity-[0.35] pointer-events-none" style={{ backgroundImage: "radial-gradient(circle, rgba(0,121,128,0.18) 1px, transparent 1px)", backgroundSize: "28px 28px" }} />
+                    <div className="relative">
                     <div className="text-center max-w-2xl mx-auto">
                         <p className="text-sm font-bold tracking-widest text-voca-green uppercase">Um sistema, vários olhares</p>
                         <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-3">
@@ -380,28 +413,44 @@ export default function PublicoAlvoPage() {
                         <p className="text-slate-500 mt-4">
                             Ninguém usa o VOCA do mesmo jeito. Veja como 3 funcionalidades reais mudam de significado conforme quem está olhando.
                         </p>
+                        <p className="hidden sm:block text-xs text-slate-400 mt-3">
+                            Passe o mouse sobre um perfil para isolar a leitura dele.
+                        </p>
                     </div>
 
-                    <div className="relative mt-10 rounded-[2.5rem] border border-slate-200 bg-white overflow-hidden">
+                    <div ref={matrixRef} className="relative mt-10 rounded-[2.5rem] border border-slate-200 bg-white overflow-hidden">
                         <div className="hidden sm:grid grid-cols-[1.2fr_repeat(4,1fr)] bg-slate-50 border-b border-slate-200">
                             <div className="p-4" />
-                            {personas.map((persona) => (
-                                <div key={persona.id} className="p-4 flex flex-col items-center gap-1.5 text-center">
+                            {personas.map((persona) => {
+                                const isFocused = focusedPersona === persona.id;
+                                return (
                                     <div
-                                        className="flex h-8 w-8 items-center justify-center rounded-full"
-                                        style={{ backgroundColor: `${persona.color}1A`, color: persona.color }}
+                                        key={persona.id}
+                                        onMouseEnter={() => setFocusedPersona(persona.id)}
+                                        onMouseLeave={() => setFocusedPersona(null)}
+                                        style={{ backgroundColor: isFocused ? `${persona.color}14` : undefined }}
+                                        className="p-4 flex flex-col items-center gap-1.5 text-center transition-all duration-300"
                                     >
-                                        <persona.icon size={16} />
+                                        <div
+                                            className="flex h-8 w-8 items-center justify-center rounded-full transition-transform duration-300"
+                                            style={{
+                                                backgroundColor: isFocused ? persona.color : `${persona.color}1A`,
+                                                color: isFocused ? "#ffffff" : persona.color,
+                                                transform: isFocused ? "scale(1.12)" : "scale(1)",
+                                            }}
+                                        >
+                                            <persona.icon size={16} />
+                                        </div>
+                                        <span className="text-xs font-bold" style={{ color: persona.color }}>{persona.title}</span>
                                     </div>
-                                    <span className="text-xs font-bold" style={{ color: persona.color }}>{persona.title}</span>
-                                </div>
-                            ))}
+                                );
+                            })}
                         </div>
 
                         {featureMatrix.map((row) => (
                             <div
                                 key={row.feature}
-                                className="grid grid-cols-1 sm:grid-cols-[1.2fr_repeat(4,1fr)] border-b border-slate-100 last:border-b-0"
+                                className="matrix-row grid grid-cols-1 sm:grid-cols-[1.2fr_repeat(4,1fr)] border-b border-slate-100 last:border-b-0"
                             >
                                 <div className="p-4 sm:p-5 font-bold text-sm text-slate-900 bg-slate-50 sm:bg-transparent flex items-center">
                                     {row.feature}
@@ -409,7 +458,11 @@ export default function PublicoAlvoPage() {
                                 {personas.map((persona) => (
                                     <div
                                         key={persona.id}
-                                        className="p-4 sm:p-5 text-sm text-slate-600 border-t sm:border-t-0 sm:border-l border-slate-100 leading-snug"
+                                        style={{
+                                            backgroundColor: focusedPersona === persona.id ? `${persona.color}0A` : undefined,
+                                            opacity: focusedPersona && focusedPersona !== persona.id ? 0.35 : 1,
+                                        }}
+                                        className="matrix-cell p-4 sm:p-5 text-sm text-slate-600 border-t sm:border-t-0 sm:border-l border-slate-100 leading-snug transition-all duration-300"
                                     >
                                         <span className="sm:hidden text-xs font-bold" style={{ color: persona.color }}>
                                             {persona.title}:{" "}
@@ -419,6 +472,7 @@ export default function PublicoAlvoPage() {
                                 ))}
                             </div>
                         ))}
+                    </div>
                     </div>
                 </div>
 
@@ -462,7 +516,10 @@ export default function PublicoAlvoPage() {
                     </div>
                 </div>
 
-                <div className="mt-24">
+                <div className="relative mt-24 py-20">
+                    <div className="absolute inset-y-0 left-1/2 -translate-x-1/2 w-screen bg-slate-50" />
+                    <div className="absolute inset-y-0 left-1/2 -translate-x-1/2 w-screen opacity-[0.35] pointer-events-none" style={{ backgroundImage: "radial-gradient(circle, rgba(0,121,128,0.18) 1px, transparent 1px)", backgroundSize: "28px 28px" }} />
+                    <div className="relative">
                     <div className="text-center max-w-2xl mx-auto">
                         <p className="text-sm font-bold tracking-widest text-voca-green uppercase">O que mais pesa agora</p>
                         <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-3">
@@ -523,11 +580,19 @@ export default function PublicoAlvoPage() {
                                             <div>
                                                 <p className="text-xs font-bold uppercase tracking-wide text-slate-400">{challenge.label}</p>
                                                 <p className="text-sm text-slate-600 mt-1 leading-relaxed">{challenge.solution}</p>
+                                                <Link
+                                                    href={`/casos-de-sucesso#${challenge.proof.slug}`}
+                                                    className="group/proof inline-flex items-center gap-1.5 text-xs font-bold text-voca-green mt-2.5"
+                                                >
+                                                    {challenge.proof.text}
+                                                    <ArrowRight size={12} className="transition-transform group-hover/proof:translate-x-0.5" />
+                                                </Link>
                                             </div>
                                         </motion.div>
                                     ))
                             )}
                         </AnimatePresence>
+                    </div>
                     </div>
                 </div>
 

@@ -10,11 +10,15 @@ import SmoothScrollProvider from '@/components/SmoothScrollProvider'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'VOCA • Gestão de Pessoas',
-  description: 'Cuidamos de pessoas para que elas possam cuidar das empresas',
+  metadataBase: new URL('https://www.voca.com.br'),
+  title: 'VOCA | Plataforma de DHO completa para gestão, comunicação e inteligência de dados',
+  description: 'A plataforma de DHO que conecta, organiza e ativa as pessoas da sua empresa: 21 funcionalidades integradas, suporte humano e resultados desde o primeiro mês.',
   openGraph: {
-    title: 'VOCA • Gestão de Pessoas',
-    description: 'Cuidamos de pessoas para que elas possam cuidar das empresas',
+    title: 'VOCA | Comunicação, engajamento e inteligência de pessoas em uma única plataforma',
+    description: 'A plataforma de DHO que conecta, organiza e ativa as pessoas da sua empresa: 21 funcionalidades integradas, suporte humano e resultados desde o primeiro mês.',
+    type: 'website',
+    locale: 'pt_BR',
+    siteName: 'VOCA',
   }
 }
 

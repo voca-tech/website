@@ -80,10 +80,10 @@ export default function GetInTouchSection() {
                 >
                     <div className="text-center lg:text-left">
                         <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white leading-tight">
-                            Pronto para transformar a gestão de pessoas da sua empresa?
+                            Pronto para transformar a gestão de pessoas na sua empresa?
                         </h2>
                         <p className="text-lg text-white/70 mt-4 max-w-md mx-auto lg:mx-0">
-                            Preencha o formulário e nosso time entra em contato para te mostrar o VOCA na prática.
+                            Preencha o formulário e entraremos em contato para te mostrar o VOCA na prática.
                         </p>
 
                         <ul className="flex flex-col gap-3.5 mt-8 items-center lg:items-start">

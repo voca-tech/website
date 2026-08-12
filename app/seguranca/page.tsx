@@ -1,9 +1,11 @@
 'use client'
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Check, ShieldCheck, ArrowRight, Cloud } from "lucide-react";
+import { Check, ShieldCheck, ArrowRight } from "lucide-react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Button } from "@/components/ui/button";
 import { WhatsappLink } from "@/components/WhatsappLink";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
@@ -28,24 +30,48 @@ const securityFaqs = [
     },
     {
         question: "Como funciona a conformidade com a LGPD na prática?",
-        answer: "Os dados dos colaboradores são tratados em conformidade com a legislação brasileira de proteção de dados desde o primeiro dia de uso da plataforma.",
+        answer: "Os dados dos colaboradores são coletados apenas com consentimento. A plataforma garante anonimato nos canais de ouvidoria, e os dados pessoais são armazenados e tratados em conformidade com a LGPD, com controle de acesso por perfil e histórico auditável de todas as interações.",
     },
     {
         question: "A ouvidoria é realmente anônima?",
-        answer: "Sim. É um canal de denúncia e escuta com anonimato garantido, com relatórios prontos para auditoria externa. O colaborador decide se quer se identificar ou não.",
+        answer: "Sim, sempre que o colaborador escolhe o anonimato. Nesse caso a manifestação chega sem nenhum dado que permita rastrear quem enviou: nem o RH nem a liderança conseguem identificar o autor. O canal também aceita manifestações identificadas, e essa decisão é sempre do colaborador. Os relatórios do canal já foram usados em auditoria externa por clientes como a Credi10, com 100% de conformidade.",
     },
     {
         question: "Os relatórios servem para auditoria externa e ESG?",
-        answer: "Sim. O histórico de treinamentos, políticas internas e interações fica rastreável e pronto para uso em processos de ESG e por reguladores.",
+        answer: "Sim. Os relatórios do VOCA são rastreáveis e auditáveis, com histórico completo de treinamentos, políticas internas e interações. Já foram utilizados em auditorias externas por clientes como a Credi10, com 100% de conformidade nos resultados.",
     },
     {
         question: "Quem pode acessar os dados dos colaboradores?",
-        answer: "O acesso é organizado por perfil dentro da plataforma (RH, liderança, colaborador), e cada um vê só o que é relevante para a sua função.",
+        answer: "O acesso é controlado por perfil: colaboradores veem apenas as próprias interações, gestores visualizam o time e o RH tem visão da empresa. Dados anônimos de pesquisas e da ouvidoria não são acessíveis de forma identificada por ninguém, nem pelo próprio time do VOCA.",
     },
 ];
 
 export default function SegurancaPage() {
     const [activeFaq, setActiveFaq] = useState(0);
+    const shieldRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        gsap.registerPlugin(ScrollTrigger);
+        const ctx = gsap.context(() => {
+            gsap.fromTo(
+                ".shield-layer",
+                { opacity: 0, x: -40 },
+                {
+                    opacity: 1,
+                    x: 0,
+                    ease: "none",
+                    stagger: 0.35,
+                    scrollTrigger: {
+                        trigger: shieldRef.current,
+                        start: "top 80%",
+                        end: "bottom 70%",
+                        scrub: 0.8,
+                    },
+                }
+            );
+        }, shieldRef);
+        return () => ctx.revert();
+    }, []);
 
     return (
         <div className="relative bg-white">
@@ -70,11 +96,7 @@ export default function SegurancaPage() {
                 />
 
                 <div className="relative max-w-3xl mx-auto text-center">
-                    <span className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-1.5 text-xs font-mono font-bold tracking-widest text-white uppercase backdrop-blur-sm">
-                        <ShieldCheck size={13} />
-                        Segurança & Compliance
-                    </span>
-                    <h1 className="text-4xl sm:text-6xl font-extrabold text-white leading-[1.05] mt-5">
+                    <h1 className="text-4xl sm:text-6xl font-extrabold text-white leading-[1.05]">
                         Dados protegidos, processos rastreáveis
                     </h1>
                     <p className="text-lg text-white/70 mt-5 max-w-xl mx-auto">
@@ -94,8 +116,7 @@ export default function SegurancaPage() {
 
                 <div className="relative max-w-6xl mx-auto px-6 py-20 sm:py-24">
                     <div className="text-center max-w-2xl mx-auto mb-12">
-                        <p className="text-sm font-mono font-bold tracking-widest text-teal-300 uppercase">{"// Segurança em camadas"}</p>
-                        <h2 className="text-3xl sm:text-4xl font-extrabold text-white mt-3">
+                        <h2 className="text-3xl sm:text-4xl font-extrabold text-white">
                             O que já protege seus dados hoje
                         </h2>
                     </div>
@@ -210,10 +231,7 @@ export default function SegurancaPage() {
 
                 <div className="relative max-w-5xl mx-auto grid grid-cols-1 lg:grid-cols-[0.9fr_1.1fr] gap-12 lg:gap-16 items-center">
                     <div>
-                        <span className="inline-flex items-center gap-2 rounded-full border border-blue-300/30 bg-blue-300/10 px-4 py-1.5 text-xs font-mono font-bold tracking-widest text-blue-300 uppercase">
-                            {"// Blindagem digital"}
-                        </span>
-                        <h2 className="text-3xl sm:text-4xl font-extrabold text-white mt-5 leading-tight">
+                        <h2 className="text-3xl sm:text-4xl font-extrabold text-white leading-tight">
                             Camadas de proteção, não só uma trava na porta
                         </h2>
                         <p className="text-white/60 mt-4 leading-relaxed">
@@ -221,13 +239,13 @@ export default function SegurancaPage() {
                         </p>
                     </div>
 
-                    <div className="flex flex-col gap-4">
+                    <div ref={shieldRef} className="flex flex-col gap-4">
                         {digitalShieldLayers.map((layer, index) => {
                             const Icon = layer.icon;
                             return (
                                 <div
                                     key={layer.title}
-                                    className="flex items-start gap-4 rounded-2xl border border-white/10 bg-white/[0.04] p-5"
+                                    className="shield-layer flex items-start gap-4 rounded-2xl border border-white/10 bg-white/[0.04] p-5 transition-colors duration-300 hover:bg-white/[0.08]"
                                     style={{ marginLeft: `${index * 1.25}rem` }}
                                 >
                                     <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-blue-400/15 text-blue-300">
@@ -245,16 +263,36 @@ export default function SegurancaPage() {
             </div>
 
             <div className="relative py-20 sm:py-24 px-6 bg-slate-50 overflow-hidden">
-                <Cloud size={420} strokeWidth={0.5} className="absolute -right-24 -top-24 text-voca-green/[0.05] pointer-events-none" />
+                <Image
+                    src="/partners/aws.png"
+                    alt=""
+                    width={500}
+                    height={334}
+                    aria-hidden="true"
+                    className="absolute -right-16 -top-10 w-[26rem] sm:w-[34rem] h-auto opacity-[0.05] grayscale select-none pointer-events-none"
+                />
 
                 <div className="relative max-w-4xl mx-auto text-center">
-                    <span className="inline-flex items-center rounded-full bg-voca-green/10 px-4 py-1.5 text-xs font-bold tracking-widest text-voca-green uppercase">
-                        Infraestrutura
-                    </span>
-                    <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 mt-5">
-                        Rodando na nuvem AWS
-                    </h2>
-                    <p className="text-slate-500 mt-4 max-w-xl mx-auto leading-relaxed">
+
+                    <div className="flex items-center justify-center gap-4">
+                        <Image
+                            src="/voca-symbol.png"
+                            alt="VOCA"
+                            width={90}
+                            height={111}
+                            className="h-11 w-auto"
+                        />
+                        <span className="text-2xl font-light text-slate-300 select-none">+</span>
+                        <Image
+                            src="/partners/aws.png"
+                            alt="Amazon Web Services"
+                            width={500}
+                            height={334}
+                            className="h-11 w-auto"
+                        />
+                    </div>
+
+                    <p className="text-lg sm:text-xl text-slate-600 mt-7 max-w-2xl mx-auto leading-relaxed">
                         O VOCA roda sobre a infraestrutura da Amazon Web Services, a mesma nuvem usada por empresas do mundo inteiro.
                     </p>
                 </div>
@@ -264,11 +302,11 @@ export default function SegurancaPage() {
                         const Icon = pillar.icon;
                         return (
                             <div key={pillar.title} className="text-center">
-                                <div className="flex h-12 w-12 items-center justify-center rounded-full bg-voca-green/10 text-voca-green mx-auto">
-                                    <Icon size={22} />
+                                <div className="flex h-14 w-14 items-center justify-center rounded-full bg-voca-green/10 text-voca-green mx-auto">
+                                    <Icon size={26} />
                                 </div>
-                                <h3 className="font-bold text-slate-900 mt-4">{pillar.title}</h3>
-                                <p className="text-sm text-slate-500 mt-2 leading-relaxed">{pillar.description}</p>
+                                <h3 className="font-bold text-slate-900 text-lg mt-5">{pillar.title}</h3>
+                                <p className="text-base text-slate-500 mt-2.5 leading-relaxed">{pillar.description}</p>
                             </div>
                         );
                     })}
@@ -307,10 +345,7 @@ export default function SegurancaPage() {
 
                 <div className="relative max-w-5xl mx-auto">
                     <div className="text-center max-w-2xl mx-auto">
-                        <span className="inline-flex items-center gap-2 rounded-full border border-teal-300/30 bg-teal-300/10 px-4 py-1.5 text-xs font-mono font-bold tracking-widest text-teal-300 uppercase">
-                            Atenção especial · NR-1
-                        </span>
-                        <h2 className="text-3xl sm:text-5xl font-extrabold text-white mt-5 leading-tight">
+                        <h2 className="text-3xl sm:text-5xl font-extrabold text-white leading-tight">
                             Apoio para a gestão de riscos psicossociais
                         </h2>
                     </div>
@@ -378,14 +413,20 @@ export default function SegurancaPage() {
                             })}
                         </div>
 
-                        <div className="rounded-xl border-l-4 border-voca-green bg-slate-50 p-8 sm:p-10">
-                            <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-slate-400">
+                        <div key={activeFaq} className="rounded-xl border-l-4 border-voca-green bg-slate-50 p-8 sm:p-10">
+                            <span className="block text-[10px] font-mono font-bold uppercase tracking-wider text-slate-400 animate-in fade-in slide-in-from-bottom-2 fill-mode-both duration-500">
                                 {String(activeFaq + 1).padStart(2, "0")} / {String(securityFaqs.length).padStart(2, "0")}
                             </span>
-                            <p className="text-xl font-bold text-slate-900 mt-2">
+                            <p
+                                style={{ animationDelay: "70ms" }}
+                                className="text-xl font-bold text-slate-900 mt-2 animate-in fade-in slide-in-from-bottom-2 fill-mode-both duration-500"
+                            >
                                 {securityFaqs[activeFaq].question}
                             </p>
-                            <p className="text-slate-500 mt-3 leading-relaxed">
+                            <p
+                                style={{ animationDelay: "140ms" }}
+                                className="text-slate-500 mt-3 leading-relaxed animate-in fade-in slide-in-from-bottom-2 fill-mode-both duration-500"
+                            >
                                 {securityFaqs[activeFaq].answer}
                             </p>
                         </div>

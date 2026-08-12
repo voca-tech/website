@@ -6,15 +6,15 @@ import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Users, Rocket, BookOpenCheck, Trophy, ArrowRight, type LucideIcon } from "lucide-react";
-import { Avatar, AvatarImage } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { ClientLogoMarquee } from "@/components/ClientLogoMarquee";
-import { quotes } from "@/lib/testimonials";
+import { homeQuotes } from "@/lib/testimonials";
 
 const stats: { icon: LucideIcon; value: string; description: string }[] = [
     { icon: Users, value: '62%', description: "dos colaboradores utilizam a plataforma diariamente" },
     { icon: Rocket, value: '96%', description: "de engajamento nas pesquisas customizadas" },
     { icon: BookOpenCheck, value: '54%', description: "de ganho de produtividade no onboarding de colaboradores" },
-    { icon: Trophy, value: '100%', description: "das interações com análise de emoção e sentimento" },
+    { icon: Trophy, value: '100%', description: "das interações por texto com análise de emoção e sentimento" },
 ];
 
 function parseStatValue(raw: string) {
@@ -82,19 +82,20 @@ export default function SocialProofSection() {
                         Empresas e instituições que confiam no VOCA
                     </h2>
                     <p className="text-slate-500 mt-3">
-                        De indústrias a instituições de ensino, times de RH usam o VOCA pra transformar comunicação em dados.
+                        Clientes em diversos segmentos usam o VOCA como um sistema operacional e estratégico de pessoas.
                     </p>
                 </div>
 
                 <div className="mt-10">
-                    <ClientLogoMarquee
-                        caption={
-                            <>
-                                <span className="font-medium text-slate-500">Comunicação, cultura e dados,</span>{" "}
-                                <span className="font-bold text-voca-green">sob a mesma plataforma.</span>
-                            </>
-                        }
-                    />
+                    <ClientLogoMarquee group="clients" />
+                </div>
+
+                <p className="text-center text-slate-500 max-w-2xl mx-auto mt-12">
+                    Parceiros e integrações que validam a consistência do VOCA no mercado.
+                </p>
+
+                <div className="mt-6">
+                    <ClientLogoMarquee group="partners" />
                 </div>
 
                 <div
@@ -111,32 +112,41 @@ export default function SocialProofSection() {
                     />
 
                     <div className="relative grid grid-cols-1 lg:grid-cols-3 gap-6 p-8 sm:p-10">
-                        {quotes.map((q) => (
+                        {homeQuotes.map((q) => (
                             <Link
                                 key={q.name}
                                 href={`/casos-de-sucesso#${q.caseSlug}`}
                                 className="kpi-item group flex flex-col gap-4 rounded-2xl bg-white/60 border border-white/70 p-6 transition-all duration-300 hover:bg-white/90 hover:shadow-lg hover:-translate-y-1"
                             >
-                                <p className="text-slate-600 text-sm leading-relaxed flex-1">&ldquo;{q.text}&rdquo;</p>
-                                <div className="flex items-center justify-between gap-3 pt-4 border-t border-slate-200/70">
-                                    <div className="flex items-center gap-3">
-                                        <Avatar className="h-10 w-10 ring-2 ring-white shadow-sm">
-                                            <AvatarImage src={q.avatar} />
-                                        </Avatar>
-                                        <div>
-                                            <p className="font-bold text-slate-900 text-sm">{q.name}</p>
-                                            <p className="text-slate-500 text-xs">{q.role}</p>
-                                        </div>
-                                    </div>
-                                    {q.logo && (
+                                <div className="flex h-8 items-center">
+                                    {q.logo ? (
                                         <Image
                                             src={q.logo}
-                                            alt=""
-                                            width={28}
-                                            height={28}
-                                            className="object-contain grayscale opacity-70"
+                                            alt={q.company}
+                                            width={200}
+                                            height={60}
+                                            className="h-full w-auto max-w-[10rem] object-contain object-left grayscale opacity-60 transition-all duration-300 group-hover:grayscale-0 group-hover:opacity-100"
                                         />
+                                    ) : (
+                                        <span className="text-base font-extrabold text-slate-400 transition-colors duration-300 group-hover:text-slate-600">
+                                            {q.company}
+                                        </span>
                                     )}
+                                </div>
+
+                                <p className="text-slate-600 text-sm leading-relaxed flex-1">&ldquo;{q.text}&rdquo;</p>
+
+                                <div className="flex items-center gap-3 pt-4 border-t border-slate-200/70">
+                                    <Avatar className="h-10 w-10 shrink-0 ring-2 ring-white shadow-sm">
+                                        <AvatarImage src={q.avatar} />
+                                        <AvatarFallback className="bg-voca-green/10 text-voca-green text-xs font-bold">
+                                            {q.name.split(" ").map((part) => part[0]).slice(0, 2).join("")}
+                                        </AvatarFallback>
+                                    </Avatar>
+                                    <div className="min-w-0">
+                                        <p className="font-bold text-slate-900 text-sm truncate">{q.name}</p>
+                                        <p className="text-slate-500 text-xs truncate">{q.role} · {q.company}</p>
+                                    </div>
                                 </div>
                                 <span className="inline-flex items-center gap-1.5 text-xs font-bold text-voca-green">
                                     Ver case completo

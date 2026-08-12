@@ -27,6 +27,9 @@ const comparison = [
     { label: "Gamificação", voca: "Nativa na plataforma", others: "Raramente incluída, ou como add-on" },
     { label: "Conformidade com a LGPD", voca: "Por padrão", others: "Varia de fornecedor pra fornecedor" },
     { label: "Evolução com a empresa", voca: "Acompanha do local ao internacional", others: "Geralmente pensada pra um único porte" },
+    { label: "White-label", voca: "Plataforma com a cara da empresa", others: "Visual genérico do fornecedor" },
+    { label: "Idiomas", voca: "Português, inglês e espanhol nativos", others: "Normalmente só em inglês" },
+    { label: "IA de sentimento", voca: "Em 100% das interações escritas", others: "Não faz parte do produto" },
 ];
 
 function PersonAvatar({ size = 32, color }: { size?: number; color: string }) {
@@ -272,16 +275,30 @@ function CountUpStat({ target, suffix, className = "text-4xl sm:text-5xl font-ex
         const wrapper = wrapperRef.current;
         if (!el || !wrapper) return;
 
-        const st = ScrollTrigger.create({
-            trigger: wrapper,
-            start: "top 85%",
-            end: "top 45%",
-            scrub: 0.8,
-            onUpdate: (self) => {
-                el.textContent = Math.round(self.progress * target) + suffix;
-            },
-        });
-        return () => st.kill();
+        const counter = { value: 0 };
+        const render = () => {
+            el.textContent = Math.round(counter.value) + suffix;
+        };
+
+        const ctx = gsap.context(() => {
+            gsap.to(counter, {
+                value: target,
+                ease: "none",
+                onUpdate: render,
+                scrollTrigger: {
+                    trigger: wrapper,
+                    start: "top 85%",
+                    end: "top 45%",
+                    scrub: 0.8,
+                    onRefresh: (self) => {
+                        counter.value = self.progress * target;
+                        render();
+                    },
+                },
+            });
+        }, wrapper);
+
+        return () => ctx.revert();
     }, [target, suffix]);
 
     return (
@@ -429,15 +446,15 @@ export default function PorQueVocaPage() {
                         </Avatar>
                         <div className="text-left">
                             <p className="font-bold text-slate-900 text-sm">{featuredQuote.name}</p>
-                            <p className="text-slate-500 text-xs">{featuredQuote.role}</p>
+                            <p className="text-slate-500 text-xs">{featuredQuote.role} · {featuredQuote.company}</p>
                         </div>
                         {featuredQuote.logo && (
                             <Image
                                 src={featuredQuote.logo}
-                                alt=""
-                                width={28}
-                                height={28}
-                                className="object-contain grayscale opacity-70 ml-2"
+                                alt={featuredQuote.company}
+                                width={200}
+                                height={60}
+                                className="h-7 w-auto max-w-[7rem] object-contain grayscale opacity-60 ml-2"
                             />
                         )}
                     </div>

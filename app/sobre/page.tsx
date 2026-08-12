@@ -1,6 +1,6 @@
 'use client'
 
-import { Fragment, useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Playfair_Display } from "next/font/google";
@@ -150,21 +150,113 @@ function AnimatedStat({ value, className }: { value: string; className?: string 
 
         gsap.registerPlugin(ScrollTrigger);
         const obj = { val: 0 };
+        const render = () => {
+            el.textContent = `${isInt ? Math.round(obj.val) : obj.val.toFixed(1)}${suffix}`;
+        };
+
         const ctx = gsap.context(() => {
-            gsap.to(obj, {
+            const tween = gsap.to(obj, {
                 val: target,
                 duration: 1.3,
                 ease: "power2.out",
-                scrollTrigger: { trigger: el, start: "top 88%", once: true },
-                onUpdate: () => {
-                    el.textContent = `${isInt ? Math.round(obj.val) : obj.val.toFixed(1)}${suffix}`;
-                },
+                paused: true,
+                onUpdate: render,
+                onComplete: render,
             });
+
+            ScrollTrigger.create({
+                trigger: el,
+                start: "top 88%",
+                once: true,
+                onEnter: () => tween.play(),
+            });
+
+            if (el.getBoundingClientRect().top < window.innerHeight * 0.95) {
+                tween.play();
+            }
         });
+
         return () => ctx.revert();
     }, [value]);
 
     return <p ref={ref} className={className}>{value.replace(/\d/g, "0")}</p>;
+}
+
+function EvolutionTimeline() {
+    const rootRef = useRef<HTMLDivElement>(null);
+    const lineRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        gsap.registerPlugin(ScrollTrigger);
+        const ctx = gsap.context(() => {
+            const timeline = gsap.timeline({
+                scrollTrigger: {
+                    trigger: rootRef.current,
+                    start: "top 80%",
+                    end: "bottom 70%",
+                    scrub: 0.8,
+                },
+            });
+
+            timeline.fromTo(lineRef.current, { scaleX: 0 }, { scaleX: 1, ease: "none", duration: 3 }, 0);
+            timeline.fromTo(
+                ".evolution-node",
+                { scale: 0, opacity: 0 },
+                { scale: 1, opacity: 1, ease: "none", stagger: 1.15, duration: 0.7 },
+                0.15
+            );
+            timeline.fromTo(
+                ".evolution-card",
+                { opacity: 0, y: 28 },
+                { opacity: 1, y: 0, ease: "none", stagger: 1.15, duration: 0.9 },
+                0.35
+            );
+        }, rootRef);
+
+        return () => ctx.revert();
+    }, []);
+
+    return (
+        <div ref={rootRef} className="relative">
+            <div className="hidden sm:block absolute top-7 left-[16.66%] right-[16.66%] h-0.5 rounded-full bg-white/15">
+                <div ref={lineRef} className="h-full w-full origin-left rounded-full bg-teal-300/80" />
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-10 sm:gap-6">
+                {evolutionSteps.map((step) => (
+                    <div key={step.title} className="relative flex flex-col items-center text-center">
+                        <span
+                            className={cn(
+                                "evolution-node relative z-10 flex h-14 w-14 items-center justify-center rounded-full",
+                                step.highlight
+                                    ? "bg-white text-voca-green shadow-xl"
+                                    : "bg-voca-green text-white ring-2 ring-white/25"
+                            )}
+                            style={step.highlight ? { animation: "pulse-glow 3.5s ease-in-out infinite" } : undefined}
+                        >
+                            <step.icon size={24} />
+                        </span>
+
+                        <div
+                            className={cn(
+                                "evolution-card mt-6 w-full rounded-2xl p-6",
+                                step.highlight
+                                    ? "bg-white shadow-xl"
+                                    : "bg-white/[0.07] border border-white/15"
+                            )}
+                        >
+                            <p className={cn("font-extrabold text-lg", step.highlight ? "text-voca-green" : "text-white")}>
+                                {step.title}
+                            </p>
+                            <p className={cn("text-sm mt-1.5 leading-relaxed", step.highlight ? "text-slate-500" : "text-white/70")}>
+                                {step.description}
+                            </p>
+                        </div>
+                    </div>
+                ))}
+            </div>
+        </div>
+    );
 }
 
 function ValueRow({ value, reversed, index }: { value: Value; reversed: boolean; index: number }) {
@@ -229,7 +321,7 @@ function ValueRow({ value, reversed, index }: { value: Value; reversed: boolean;
 export default function SobrePage() {
     const uniqueClientCount = new Set(cases.map((c) => c.company)).size;
     const totalFeatureCount = pillars.reduce((sum, pillar) => sum + pillar.features.length, 0);
-    const engeformQuote = quotes.find((q) => q.role.includes("Engeform"));
+    const engeformQuote = quotes.find((q) => q.caseSlug === "engeform");
 
     return (
         <div className="relative bg-white">
@@ -301,39 +393,7 @@ export default function SobrePage() {
                         </h2>
                     </div>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-[1fr_auto_1fr_auto_1fr] gap-5 sm:gap-3 items-stretch">
-                        {evolutionSteps.map((step, index) => (
-                            <Fragment key={step.title}>
-                                {index > 0 && (
-                                    <ArrowRight size={22} className="hidden sm:block text-white/40 mx-auto self-center" />
-                                )}
-                                <div
-                                    className={
-                                        step.highlight
-                                            ? "rounded-2xl bg-white p-6 text-center shadow-xl"
-                                            : "rounded-2xl bg-white/10 border border-white/15 p-6 text-center"
-                                    }
-                                    style={step.highlight ? { animation: "pulse-glow 3.5s ease-in-out infinite" } : undefined}
-                                >
-                                    <div
-                                        className={
-                                            step.highlight
-                                                ? "flex h-11 w-11 items-center justify-center rounded-full bg-voca-green/10 text-voca-green mx-auto mb-3"
-                                                : "flex h-11 w-11 items-center justify-center rounded-full bg-white/10 text-white mx-auto mb-3"
-                                        }
-                                    >
-                                        <step.icon size={22} />
-                                    </div>
-                                    <p className={step.highlight ? "font-extrabold text-voca-green text-lg" : "font-extrabold text-white text-lg"}>
-                                        {step.title}
-                                    </p>
-                                    <p className={step.highlight ? "text-sm text-slate-500 mt-1.5" : "text-sm text-white/70 mt-1.5"}>
-                                        {step.description}
-                                    </p>
-                                </div>
-                            </Fragment>
-                        ))}
-                    </div>
+                    <EvolutionTimeline />
                 </div>
             </div>
 
@@ -405,7 +465,7 @@ export default function SobrePage() {
                                             </AvatarFallback>
                                         </Avatar>
                                         <p className="text-xs text-white/70">
-                                            <span className="font-bold text-white">{engeformQuote.name}</span> · {engeformQuote.role}
+                                            <span className="font-bold text-white">{engeformQuote.name}</span> · {engeformQuote.role} · {engeformQuote.company}
                                         </p>
                                     </div>
                                 </div>

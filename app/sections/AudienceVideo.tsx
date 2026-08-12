@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type CSSProperties } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Playfair_Display } from "next/font/google";
@@ -24,9 +24,50 @@ const playfair = Playfair_Display({ subsets: ["latin"], weight: ["400", "500"], 
 function PersonaTeaser() {
     const [activeId, setActiveId] = useState(personas[0].id);
     const active = personas.find((p) => p.id === activeId)!;
+    const sectionRef = useRef<HTMLDivElement>(null);
+    const revealRef = useRef<HTMLDivElement>(null);
+    const parallaxRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        gsap.registerPlugin(ScrollTrigger);
+        const ctx = gsap.context(() => {
+            gsap.fromTo(
+                ".reveal-item",
+                { opacity: 0, y: 44 },
+                {
+                    opacity: 1,
+                    y: 0,
+                    ease: "none",
+                    stagger: 0.18,
+                    scrollTrigger: {
+                        trigger: sectionRef.current,
+                        start: "top 82%",
+                        end: "top 32%",
+                        scrub: 0.8,
+                    },
+                }
+            );
+
+            gsap.fromTo(
+                parallaxRef.current,
+                { yPercent: -6 },
+                {
+                    yPercent: 6,
+                    ease: "none",
+                    scrollTrigger: {
+                        trigger: sectionRef.current,
+                        start: "top bottom",
+                        end: "bottom top",
+                        scrub: true,
+                    },
+                }
+            );
+        }, sectionRef);
+        return () => ctx.revert();
+    }, []);
 
     return (
-        <div className="relative py-16 sm:py-20 px-6 overflow-hidden">
+        <div ref={sectionRef} className="relative py-16 sm:py-20 px-6 overflow-hidden">
             <div className="absolute inset-0 pointer-events-none">
                 <div
                     className="absolute inset-0 opacity-[0.3]"
@@ -41,8 +82,8 @@ function PersonaTeaser() {
                 />
             </div>
 
-            <div className="relative max-w-6xl mx-auto">
-                <div className="text-center max-w-2xl mx-auto">
+            <div ref={revealRef} className="relative max-w-6xl mx-auto">
+                <div className="reveal-item text-center max-w-2xl mx-auto">
                     <p className="text-sm font-bold tracking-widest text-voca-green uppercase">Público-alvo</p>
                     <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 leading-tight mt-3">
                         Um VOCA diferente para cada pessoa na sua empresa
@@ -52,7 +93,7 @@ function PersonaTeaser() {
                     </p>
                 </div>
 
-                <div className="flex flex-wrap justify-center gap-2 mt-10">
+                <div className="reveal-item flex flex-wrap justify-center gap-2 mt-10">
                     {personas.map((persona) => {
                         const isActive = persona.id === activeId;
                         return (
@@ -64,11 +105,16 @@ function PersonaTeaser() {
                                     borderColor: isActive ? persona.color : undefined,
                                 }}
                                 className={cn(
-                                    "flex items-center gap-2.5 rounded-full border px-4 py-2.5 text-sm font-bold transition-colors duration-300",
-                                    isActive ? "text-white shadow-md" : "border-slate-200 text-slate-600 hover:border-slate-300"
+                                    "flex items-center gap-2.5 rounded-full border px-4 py-2.5 text-sm font-bold transition-all duration-300 ease-out",
+                                    isActive
+                                        ? "text-white shadow-lg -translate-y-0.5 scale-105"
+                                        : "border-slate-200 text-slate-600 hover:border-slate-300 hover:-translate-y-0.5"
                                 )}
                             >
-                                <persona.icon size={16} />
+                                <persona.icon
+                                    size={16}
+                                    className={cn("transition-transform duration-500 ease-out", isActive && "scale-110 rotate-[-8deg]")}
+                                />
                                 {persona.title}
                             </button>
                         );
@@ -76,7 +122,7 @@ function PersonaTeaser() {
                 </div>
 
                 <div
-                    className="relative mt-8 rounded-[2.5rem] border border-white/60 bg-white/40 shadow-xl overflow-hidden"
+                    className="reveal-item relative mt-8 rounded-[2.5rem] border border-white/60 bg-white/40 shadow-xl overflow-hidden"
                     style={{ backdropFilter: "blur(28px)", WebkitBackdropFilter: "blur(28px)" }}
                 >
                     <div
@@ -86,39 +132,93 @@ function PersonaTeaser() {
 
                     <div className="relative grid grid-cols-1 lg:grid-cols-[1.1fr_1fr] items-stretch">
                         <div className="grid order-2 lg:order-1">
-                            {personas.map((persona) => (
-                                <div
-                                    key={persona.id}
-                                    className="[grid-area:1/1] p-8 sm:p-10 flex flex-col justify-center transition-opacity duration-300"
-                                    style={{
-                                        opacity: persona.id === activeId ? 1 : 0,
-                                        pointerEvents: persona.id === activeId ? "auto" : "none",
-                                    }}
-                                    aria-hidden={persona.id === activeId ? undefined : true}
-                                >
-                                    <p className="text-sm font-bold uppercase tracking-widest" style={{ color: persona.color }}>
-                                        {persona.title}
-                                    </p>
-                                    <p className="text-slate-600 mt-3 max-w-md">{persona.description}</p>
-                                    <ul className="flex flex-col gap-2 mt-5">
-                                        {persona.points.slice(0, 3).map((point) => (
-                                            <li key={point} className="text-sm text-slate-600 flex gap-2.5">
-                                                <Check size={16} className="shrink-0 mt-0.5" style={{ color: persona.color }} />
-                                                {point}
-                                            </li>
-                                        ))}
-                                    </ul>
+                            {personas.map((persona) => {
+                                const isActive = persona.id === activeId;
+                                const step = (order: number): CSSProperties => ({
+                                    opacity: isActive ? 1 : 0,
+                                    transform: isActive ? "translateY(0)" : "translateY(14px)",
+                                    transition: "opacity 450ms ease-out, transform 450ms ease-out",
+                                    transitionDelay: isActive ? `${100 + order * 70}ms` : "0ms",
+                                });
+                                return (
+                                    <div
+                                        key={persona.id}
+                                        className="[grid-area:1/1] p-8 sm:p-10 flex flex-col justify-center transition-opacity duration-200"
+                                        style={{
+                                            opacity: isActive ? 1 : 0,
+                                            pointerEvents: isActive ? "auto" : "none",
+                                        }}
+                                        aria-hidden={isActive ? undefined : true}
+                                    >
+                                        <p
+                                            className="text-sm font-bold uppercase tracking-widest"
+                                            style={{ color: persona.color, ...step(0) }}
+                                        >
+                                            {persona.title}
+                                        </p>
+                                        <p className="text-lg font-semibold text-slate-900 mt-3 max-w-md leading-snug" style={step(1)}>
+                                            {persona.headline}
+                                        </p>
+                                        <p className="text-slate-500 text-sm mt-2 max-w-md" style={step(2)}>
+                                            {persona.description}
+                                        </p>
+                                        <ul className="flex flex-col gap-2 mt-5">
+                                            {persona.points.slice(0, 3).map((point, index) => (
+                                                <li
+                                                    key={point}
+                                                    className="text-sm text-slate-600 flex gap-2.5"
+                                                    style={step(3 + index)}
+                                                >
+                                                    <Check size={16} className="shrink-0 mt-0.5" style={{ color: persona.color }} />
+                                                    {point}
+                                                </li>
+                                            ))}
+                                        </ul>
 
-                                    <div className="flex items-center gap-3 rounded-2xl p-4 mt-6 w-full sm:w-fit" style={{ backgroundColor: `${persona.color}0D` }}>
-                                        <p className="text-3xl font-extrabold shrink-0" style={{ color: persona.color }}>{persona.stat.value}</p>
-                                        <p className="text-xs text-slate-500 leading-snug">{persona.stat.label}</p>
+                                        <Link
+                                            href={`/casos-de-sucesso#${persona.stat.caseSlug}`}
+                                            className="group/stat flex items-center gap-3 rounded-2xl p-4 mt-6 w-full sm:w-fit hover:shadow-md hover:-translate-y-0.5"
+                                            style={{ backgroundColor: `${persona.color}0D`, ...step(6) }}
+                                        >
+                                            <p className="text-3xl font-extrabold shrink-0" style={{ color: persona.color }}>{persona.stat.value}</p>
+                                            <div>
+                                                <p className="text-xs text-slate-500 leading-snug">{persona.stat.label}</p>
+                                                <p className="flex items-center gap-1 text-[11px] font-bold mt-1" style={{ color: persona.color }}>
+                                                    Caso real · {persona.stat.source}
+                                                    <ArrowRight size={11} className="transition-transform group-hover/stat:translate-x-0.5" />
+                                                </p>
+                                            </div>
+                                        </Link>
                                     </div>
-                                </div>
-                            ))}
+                                );
+                            })}
                         </div>
 
-                        <div className="relative order-1 lg:order-2 h-48 lg:h-auto">
-                            <Image src={active.image} alt={active.title} fill className="object-cover" />
+                        <div className="relative order-1 lg:order-2 h-48 lg:h-auto overflow-hidden">
+                            <div ref={parallaxRef} className="absolute -top-[8%] -bottom-[8%] inset-x-0">
+                                {personas.map((persona) => {
+                                    const isActive = persona.id === activeId;
+                                    return (
+                                        <div
+                                            key={persona.id}
+                                            className="absolute inset-0 transition-opacity duration-700 ease-out"
+                                            style={{ opacity: isActive ? 1 : 0 }}
+                                            aria-hidden={isActive ? undefined : true}
+                                        >
+                                            <Image
+                                                src={persona.image}
+                                                alt={isActive ? persona.title : ""}
+                                                fill
+                                                sizes="(min-width: 1024px) 40vw, 100vw"
+                                                className={cn(
+                                                    "object-cover transition-transform ease-out",
+                                                    isActive ? "scale-105 [transition-duration:4000ms]" : "scale-100 duration-700"
+                                                )}
+                                            />
+                                        </div>
+                                    );
+                                })}
+                            </div>
                             <div
                                 className="absolute inset-0 transition-colors duration-700"
                                 style={{ background: `linear-gradient(0deg, ${active.color}CC 0%, transparent 55%)` }}
@@ -135,10 +235,10 @@ function PersonaTeaser() {
 
                 <Link
                     href="/publico-alvo"
-                    className="group relative mt-6 flex flex-col sm:flex-row items-center justify-between gap-4 rounded-3xl border border-slate-200 bg-white px-6 sm:px-8 py-6 hover:border-voca-green/40 hover:shadow-lg transition-all duration-300"
+                    className="reveal-item group relative mt-6 flex flex-col sm:flex-row items-center justify-between gap-4 rounded-3xl border border-slate-200 bg-white px-6 sm:px-8 py-6 hover:border-voca-green/40 hover:shadow-lg hover:-translate-y-1 transition-all duration-300"
                 >
                     <div className="flex items-center gap-4 text-center sm:text-left">
-                        <div className="hidden sm:flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-voca-green/10 text-voca-green">
+                        <div className="hidden sm:flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-voca-green/10 text-voca-green transition-all duration-500 ease-out group-hover:bg-voca-green group-hover:text-white group-hover:rotate-[-8deg] group-hover:scale-110">
                             <LayoutGrid size={22} />
                         </div>
                         <div>
@@ -148,9 +248,18 @@ function PersonaTeaser() {
                             </p>
                         </div>
                     </div>
-                    <span className="inline-flex items-center gap-1.5 rounded-full bg-voca-green text-white px-5 py-2.5 text-sm font-semibold whitespace-nowrap group-hover:gap-2.5 transition-all">
+                    <span className="relative inline-flex items-center gap-2 overflow-hidden rounded-full bg-voca-green text-white pl-5 pr-4 py-2.5 text-sm font-semibold whitespace-nowrap shadow-md transition-shadow duration-300 group-hover:shadow-lg group-hover:shadow-voca-green/30">
                         Ver página completa
-                        <ArrowRight size={14} />
+                        <span className="relative flex h-4 w-4 items-center justify-center overflow-hidden">
+                            <ArrowRight
+                                size={14}
+                                className="transition-transform duration-500 ease-out group-hover:translate-x-6"
+                            />
+                            <ArrowRight
+                                size={14}
+                                className="absolute -translate-x-6 transition-transform duration-500 ease-out group-hover:translate-x-0"
+                            />
+                        </span>
                     </span>
                 </Link>
             </div>
@@ -163,8 +272,10 @@ function VideoShowcase() {
     const revealRef = useRef<HTMLDivElement>(null);
     const videoRef = useRef<HTMLVideoElement>(null);
     const progressTrackRef = useRef<HTMLDivElement>(null);
+    const frameRef = useRef<HTMLDivElement>(null);
     const [isPlaying, setIsPlaying] = useState(false);
     const [isMuted, setIsMuted] = useState(true);
+    const [soundHintDone, setSoundHintDone] = useState(false);
     const [duration, setDuration] = useState(0);
     const [currentTime, setCurrentTime] = useState(0);
 
@@ -182,6 +293,21 @@ function VideoShowcase() {
                         trigger: sectionRef.current,
                         start: "top 75%",
                         end: "top 30%",
+                        scrub: 0.8,
+                    },
+                }
+            );
+
+            gsap.fromTo(
+                frameRef.current,
+                { scale: 0.92 },
+                {
+                    scale: 1,
+                    ease: "none",
+                    scrollTrigger: {
+                        trigger: frameRef.current,
+                        start: "top 90%",
+                        end: "top 45%",
                         scrub: 0.8,
                     },
                 }
@@ -246,6 +372,7 @@ function VideoShowcase() {
         if (!video) return;
         video.muted = !video.muted;
         setIsMuted(video.muted);
+        setSoundHintDone(true);
     }
 
     function restart() {
@@ -301,7 +428,7 @@ function VideoShowcase() {
                     </p>
                 </div>
 
-                <div className="relative rounded-[2rem] overflow-hidden shadow-2xl bg-black aspect-video">
+                <div ref={frameRef} className="relative rounded-[2rem] overflow-hidden shadow-2xl bg-black aspect-video">
                     <video
                         ref={videoRef}
                         src="/videos/institucional.mp4"
@@ -315,11 +442,27 @@ function VideoShowcase() {
                         <button
                             onClick={togglePlay}
                             aria-label="Reproduzir vídeo"
-                            className="absolute inset-0 flex items-center justify-center bg-black/25 transition-colors hover:bg-black/35"
+                            className="group/play absolute inset-0 flex items-center justify-center bg-black/25 transition-colors hover:bg-black/35"
                         >
-                            <span className="flex h-16 w-16 sm:h-20 sm:w-20 items-center justify-center rounded-full bg-white text-voca-green shadow-xl transition-transform hover:scale-105">
-                                <Play size={30} className="ml-1" fill="currentColor" />
+                            <span className="relative flex h-16 w-16 sm:h-20 sm:w-20 items-center justify-center">
+                                <span className="absolute inset-0 rounded-full bg-white/40 animate-ping" />
+                                <span className="relative flex h-full w-full items-center justify-center rounded-full bg-white text-voca-green shadow-xl transition-transform duration-300 group-hover/play:scale-110">
+                                    <Play size={30} className="ml-1" fill="currentColor" />
+                                </span>
                             </span>
+                        </button>
+                    )}
+
+                    {isPlaying && isMuted && !soundHintDone && (
+                        <button
+                            onClick={toggleMute}
+                            className="absolute top-4 right-4 sm:top-5 sm:right-6 flex items-center gap-2 rounded-full bg-white/95 px-4 py-2.5 text-sm font-bold text-voca-green shadow-lg backdrop-blur-sm transition-transform duration-300 hover:scale-105 animate-in fade-in slide-in-from-top-2 duration-500"
+                        >
+                            <span className="relative flex h-2 w-2">
+                                <span className="absolute inset-0 rounded-full bg-voca-green/60 animate-ping" />
+                                <span className="relative h-2 w-2 rounded-full bg-voca-green" />
+                            </span>
+                            Ativar som
                         </button>
                     )}
 
@@ -356,6 +499,32 @@ function VideoShowcase() {
                         </div>
                     </div>
                 </div>
+
+                <div className="max-w-2xl mx-auto text-center mt-12">
+                    <p className="text-xl sm:text-2xl font-semibold text-white leading-snug">
+                        Cuidamos de pessoas para que elas possam cuidar das empresas.
+                    </p>
+                    <p className="text-white/70 mt-4 leading-relaxed">
+                        Não é só tecnologia. É um time que se importa com o que acontece com sua empresa durante e depois da implementação.
+                    </p>
+
+                    <Link
+                        href="/sobre"
+                        className="group/cta inline-flex items-center gap-2 mt-8 rounded-md bg-white text-voca-green pl-6 pr-5 h-12 text-base font-semibold shadow-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-0.5"
+                    >
+                        Conheça nossa história
+                        <span className="relative flex h-4 w-4 items-center justify-center overflow-hidden">
+                            <ArrowRight
+                                size={16}
+                                className="transition-transform duration-500 ease-out group-hover/cta:translate-x-6"
+                            />
+                            <ArrowRight
+                                size={16}
+                                className="absolute -translate-x-6 transition-transform duration-500 ease-out group-hover/cta:translate-x-0"
+                            />
+                        </span>
+                    </Link>
+                </div>
             </div>
         </div>
     );
@@ -371,6 +540,23 @@ function VideoMobileCard() {
                 </div>
                 <div className="rounded-3xl overflow-hidden shadow-xl bg-black relative aspect-video">
                     <video src="/videos/institucional.mp4" controls playsInline preload="metadata" className="h-full w-full object-cover" />
+                </div>
+
+                <div className="text-center mt-8">
+                    <p className="text-lg font-semibold text-slate-900 leading-snug">
+                        Cuidamos de pessoas para que elas possam cuidar das empresas.
+                    </p>
+                    <p className="text-slate-500 text-sm mt-3 leading-relaxed">
+                        Não é só tecnologia. É um time que se importa com o que acontece com sua empresa durante e depois da implementação.
+                    </p>
+
+                    <Link
+                        href="/sobre"
+                        className="inline-flex items-center gap-2 mt-6 rounded-md bg-voca-green text-white px-6 h-12 text-base font-semibold shadow-md"
+                    >
+                        Conheça nossa história
+                        <ArrowRight size={16} />
+                    </Link>
                 </div>
             </div>
         </div>

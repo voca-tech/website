@@ -10,6 +10,7 @@ import {
     Search, GraduationCap, Rocket, BarChart3, Milestone, Smartphone, Monitor, Wifi, Calculator, ArrowRight, ShieldCheck, Play,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { WhatsappLink } from "@/components/WhatsappLink";
 import { SearchIcon } from "@/components/ui/search";
 import { GraduationCapIcon } from "@/components/ui/graduation-cap";
@@ -18,7 +19,7 @@ import { BarChart3Icon } from "@/components/ui/bar-chart-3";
 import { MilestoneIcon } from "@/components/ui/milestone";
 import { cn } from "@/lib/utils";
 import { PERCENT_SAVINGS } from "@/app/roi/constants";
-import { pillars } from "./data";
+import { pillars, type Feature } from "./data";
 
 type AnimatedIconHandle = { startAnimation: () => void; stopAnimation: () => void };
 
@@ -38,7 +39,7 @@ const journey = [
     {
         icon: GraduationCap,
         title: "Capacitação das lideranças",
-        description: "Treinamento do time de RH e gestores, com suporte do VOCA até o Go Live.",
+        description: "Treinamento do time de RH e gestores, com foco nas prioridades mapeadas no kickoff. O VOCA capacita as lideranças para tirarem o máximo da plataforma desde o Go Live.",
         badge: "Foco nas prioridades",
         stakeholders: ["RH", "Gestores", "Time VOCA"],
         checklist: [
@@ -50,7 +51,7 @@ const journey = [
     {
         icon: Rocket,
         title: "Onboarding (Go Live)",
-        description: "Entrada dos colaboradores, com suporte ativo do VOCA e acompanhamento das lideranças.",
+        description: "Entrada dos colaboradores na plataforma com suporte ativo do time VOCA: comunicação de lançamento, primeiros conteúdos e endomarketing de adoção.",
         badge: "Equipe VOCA presente",
         stakeholders: ["Colaboradores", "Liderança", "Time VOCA"],
         checklist: [
@@ -62,7 +63,7 @@ const journey = [
     {
         icon: BarChart3,
         title: "Primeiros dados gerados",
-        description: "Interações semanais com o time VOCA para acompanhar os primeiros indicadores.",
+        description: "Acompanhamento semanal do uso e dos primeiros indicadores gerados. O time VOCA orienta a liderança sobre o que os dados estão mostrando e o que fazer com isso.",
         badge: "Primeiros resultados visíveis",
         stakeholders: ["RH", "Time VOCA"],
         checklist: [
@@ -74,7 +75,7 @@ const journey = [
     {
         icon: Milestone,
         title: "Revisão e evolução",
-        description: "Reunião trimestral com report estratégico e ajustes com a liderança.",
+        description: "Reunião trimestral com relatório estratégico: o que funcionou, o que pode melhorar e quais novas funcionalidades faz sentido ativar.",
         badge: "Parceria contínua",
         stakeholders: ["Liderança", "Time VOCA"],
         checklist: [
@@ -116,6 +117,8 @@ export default function ProdutoPage() {
     const [selectedFeatureNames, setSelectedFeatureNames] = useState(
         () => pillars[0].features.slice(0, 3).map((f) => f.name)
     );
+
+    const [detailFeature, setDetailFeature] = useState<Feature | null>(null);
 
     const [journeyActive, setJourneyActive] = useState(0);
     const [journeyDisplayed, setJourneyDisplayed] = useState(0);
@@ -309,7 +312,8 @@ export default function ProdutoPage() {
                     </div>
                     <p className="text-sm font-bold tracking-widest text-voca-green uppercase">Produto</p>
                     <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900 leading-tight mt-3">
-                        18 funcionalidades, 1 sistema só
+                        <span className="text-voca-green">21</span> funcionalidades.{" "}
+                        <span className="text-voca-green">1</span> única plataforma
                     </h1>
                 </div>
 
@@ -387,23 +391,63 @@ export default function ProdutoPage() {
                                             .map((name) => displayed.features.find((f) => f.name === name))
                                             .filter((feature): feature is (typeof displayed.features)[number] => !!feature)
                                             .map((feature) => (
-                                            <div key={feature.name} className="group animate-in fade-in duration-300 rounded-2xl overflow-hidden border border-white/70 bg-white shadow-sm transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
+                                            <button
+                                                key={feature.name}
+                                                type="button"
+                                                onClick={() => feature.details && setDetailFeature(feature)}
+                                                disabled={!feature.details}
+                                                className="group flex flex-col animate-in fade-in duration-300 rounded-2xl overflow-hidden border border-white/70 bg-white shadow-sm text-left transition-all duration-300 hover:shadow-lg hover:-translate-y-1 disabled:cursor-default focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-voca-green/50 focus-visible:ring-offset-2"
+                                            >
                                                 <div
-                                                    className="aspect-[4/3] relative flex items-center justify-center"
+                                                    className="aspect-[4/3] relative flex flex-col overflow-hidden"
                                                     style={{ background: `linear-gradient(135deg, ${displayed.color}26, ${displayed.color}08)` }}
                                                 >
-                                                    <div className="absolute top-0 inset-x-0 h-7 flex items-center px-3 gap-1.5" style={{ backgroundColor: displayed.color }}>
+                                                    <div className="h-7 shrink-0 flex items-center px-3 gap-1.5" style={{ backgroundColor: displayed.color }}>
                                                         <span className="h-1.5 w-1.5 rounded-full bg-white/40" />
                                                         <span className="h-1.5 w-1.5 rounded-full bg-white/40" />
                                                         <span className="h-1.5 w-1.5 rounded-full bg-white/40" />
                                                     </div>
-                                                    <feature.icon size={48} strokeWidth={1.25} style={{ color: displayed.color }} className="opacity-70 transition-transform duration-300 group-hover:scale-110" />
+
+                                                    {feature.details ? (
+                                                        <div className="flex-1 min-h-0 flex flex-col justify-center gap-2 px-4 py-3">
+                                                            <feature.icon
+                                                                size={30}
+                                                                strokeWidth={1.4}
+                                                                style={{ color: displayed.color }}
+                                                                className="opacity-80 transition-transform duration-300 group-hover:scale-110 shrink-0"
+                                                            />
+                                                            {feature.details.slice(0, 2).map((item) => (
+                                                                <div key={item} className="flex items-start gap-1.5">
+                                                                    <span
+                                                                        className="mt-[5px] h-1.5 w-1.5 shrink-0 rounded-full"
+                                                                        style={{ backgroundColor: displayed.color }}
+                                                                    />
+                                                                    <span className="text-[10px] leading-snug text-slate-500 line-clamp-2">
+                                                                        {item}
+                                                                    </span>
+                                                                </div>
+                                                            ))}
+                                                        </div>
+                                                    ) : (
+                                                        <div className="flex-1 flex items-center justify-center">
+                                                            <feature.icon size={48} strokeWidth={1.25} style={{ color: displayed.color }} className="opacity-70 transition-transform duration-300 group-hover:scale-110" />
+                                                        </div>
+                                                    )}
                                                 </div>
                                                 <div className="p-4">
                                                     <h3 className="font-bold text-slate-900 text-sm">{feature.name}</h3>
                                                     <p className="text-slate-500 text-sm mt-1">{feature.description}</p>
+                                                    {feature.details && (
+                                                        <span
+                                                            className="inline-flex items-center gap-1 text-xs font-bold mt-3 transition-all group-hover:gap-1.5"
+                                                            style={{ color: displayed.color }}
+                                                        >
+                                                            Ver o que ela faz
+                                                            <ArrowRight size={12} />
+                                                        </span>
+                                                    )}
                                                 </div>
-                                            </div>
+                                            </button>
                                         ))}
                                     </div>
 
@@ -495,7 +539,7 @@ export default function ProdutoPage() {
                                 Você nunca estará sozinho
                             </h2>
                             <p className="text-white/60 mt-3">
-                                Enquanto boa parte do mercado te entrega um manual e um chatbot, a gente manda gente de verdade, a todo instante.
+                                Enquanto boa parte do mercado te entrega um manual e um chatbot, nós somos gente de verdade e próxima, a todo instante.
                             </p>
                         </div>
 
@@ -798,7 +842,7 @@ export default function ProdutoPage() {
                             Assista ao vídeo institucional
                         </h3>
                         <p className="text-slate-500 mt-2 max-w-md mx-auto sm:mx-0">
-                            Veja em poucos minutos como as 18 funcionalidades se conectam no dia a dia de quem usa o VOCA.
+                            Veja em poucos minutos como as 21 funcionalidades se conectam no dia a dia de quem usa o VOCA.
                         </p>
                         <span className="inline-flex items-center gap-1.5 text-sm font-bold text-voca-green mt-4 group-hover:gap-2.5 transition-all">
                             Assistir agora
@@ -867,6 +911,48 @@ export default function ProdutoPage() {
                     <WhatsappLink variant="text" />
                 </div>
             </div>
+
+            <Dialog open={!!detailFeature} onOpenChange={(open) => !open && setDetailFeature(null)}>
+                <DialogContent className="w-[95vw] max-w-lg max-h-[85vh] p-0 rounded-3xl border-none flex flex-col overflow-hidden">
+                    {detailFeature && (
+                        <>
+                            <div
+                                className="shrink-0 px-6 sm:px-8 pt-8 pb-6"
+                                style={{ background: `linear-gradient(135deg, ${displayed.color}1F, ${displayed.color}08)` }}
+                            >
+                                <div
+                                    className="flex h-14 w-14 items-center justify-center rounded-2xl"
+                                    style={{ backgroundColor: displayed.color, color: "#ffffff" }}
+                                >
+                                    <detailFeature.icon size={26} />
+                                </div>
+                                <DialogTitle className="text-2xl font-extrabold text-slate-900 mt-4">
+                                    {detailFeature.name}
+                                </DialogTitle>
+                                <p className="text-slate-500 mt-1.5">{detailFeature.description}</p>
+                            </div>
+
+                            <div className="flex-1 min-h-0 overflow-y-auto px-6 sm:px-8 py-6">
+                                <p className="text-xs font-bold uppercase tracking-widest text-slate-400 mb-4">
+                                    O que ela faz
+                                </p>
+                                <ul className="flex flex-col gap-3">
+                                    {detailFeature.details?.map((item, index) => (
+                                        <li
+                                            key={item}
+                                            style={{ animationDelay: `${index * 45}ms` }}
+                                            className="flex gap-2.5 text-sm text-slate-600 leading-relaxed animate-in fade-in slide-in-from-bottom-2 fill-mode-both duration-500"
+                                        >
+                                            <Check size={16} className="shrink-0 mt-0.5" style={{ color: displayed.color }} />
+                                            {item}
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+                        </>
+                    )}
+                </DialogContent>
+            </Dialog>
         </div>
     )
 }

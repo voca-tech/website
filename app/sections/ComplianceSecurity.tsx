@@ -7,7 +7,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { securityFeatures } from "@/app/seguranca/data";
+import { complianceBadges } from "@/app/seguranca/data";
 
 export default function ComplianceSecurity() {
     const sectionRef = useRef<HTMLDivElement>(null);
@@ -106,9 +106,9 @@ export default function ComplianceSecurity() {
                     </div>
 
                     <div>
-                        {securityFeatures.map((feature, i) => {
+                        {complianceBadges.map((feature, i) => {
                             const Icon = feature.icon;
-                            const isLast = i === securityFeatures.length - 1;
+                            const isLast = i === complianceBadges.length - 1;
                             return (
                                 <div
                                     key={feature.title}

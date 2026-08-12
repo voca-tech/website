@@ -5,13 +5,12 @@ import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { WhatsappLink } from "@/components/WhatsappLink";
-import { PhoneScene } from "@/components/PhoneScene";
+import { DeviceScene } from "@/components/DeviceScene";
 import { useScrollProgress } from "@/components/useScrollProgress";
 import { useIsDesktop } from "@/components/useIsDesktop";
 
 const FADE_START = 0.25;
 const FADE_END = 0.5;
-const TRAVEL_END = 0.45;
 
 export default function HeroSection() {
     const rigRef = useRef<HTMLDivElement>(null);
@@ -86,8 +85,15 @@ export default function HeroSection() {
                     style={{ opacity: heroOpacity, pointerEvents: heroOpacity > 0.5 ? "auto" : "none" }}
                 >
                     <div className="flex flex-col gap-6 items-center text-center lg:items-start lg:text-start animate-in fade-in slide-in-from-bottom-4 duration-700">
+                        <p className="text-base text-slate-500">
+                            <span className="text-xl font-extrabold tracking-tight text-voca-green">DHO</span>
+                            {' '}na palma da mão
+                            <span className="mx-2.5 text-slate-300">·</span>
+                            21 funcionalidades
+                        </p>
+
                         <h1 className="text-4xl sm:text-5xl font-extrabold text-slate-900 leading-tight">
-                            A plataforma de{' '}
+                            Centralize a jornada na{' '}
                             <span className="relative whitespace-nowrap text-voca-green">
                                 <svg
                                     aria-hidden="true"
@@ -97,19 +103,19 @@ export default function HeroSection() {
                                 >
                                     <path d="M1 8c20-7 60-7 98 1" strokeWidth="2.5" strokeLinecap="round" />
                                 </svg>
-                                <span className="relative">DHO</span>
+                                <span className="relative">mesma plataforma</span>
                             </span>
-                            {' '}completa para gestão, comunicação e inteligência de dados
+                            : pessoas mais conectadas, engajadas e produtivas.
                         </h1>
 
                         <p className="text-lg text-slate-500 max-w-lg">
-                            Transforme o engajamento dos colaboradores em insights que direcionam as decisões estratégicas do seu negócio.
+                            Transforme insights de pessoas em resultados do negócio. Inteligência nos dados, atendimento ágil por humanos.
                         </p>
 
                         <div className="flex flex-wrap items-center justify-center lg:justify-start gap-x-6 gap-y-4 mt-2">
                             <Link href="/contact">
                                 <Button className="bg-voca-green hover:bg-voca-green/90 rounded-md px-6 h-12 text-base">
-                                    Agendar demonstração
+                                    VOCA em ação
                                 </Button>
                             </Link>
                             <WhatsappLink variant="text" />
@@ -137,7 +143,7 @@ export default function HeroSection() {
                         </h2>
 
                         <p className="text-base text-white/70">
-                            Gráficos, indicadores e inteligência de dados sobre o clima da sua empresa, em tempo real.
+                            Um &ldquo;Waze&rdquo; para o RH e lideranças: dashboards em tempo real com indicadores de clima, engajamento, comunicação, capacitação e performance.
                         </p>
 
                         <div className="w-full grid grid-cols-2 gap-3 mt-1">
@@ -153,20 +159,15 @@ export default function HeroSection() {
                             </div>
 
                             <div className="rounded-2xl bg-white shadow-lg p-4 text-left">
-                                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wide mb-2.5">Humor · hoje</p>
-                                <div className="flex flex-col gap-1.5">
-                                    {[
-                                        { label: "58%", w: 58, color: "#007980" },
-                                        { label: "31%", w: 31, color: "#5f7480" },
-                                        { label: "11%", w: 11, color: "#c77924" },
-                                    ].map((row) => (
-                                        <div key={row.label} className="flex items-center gap-1.5">
-                                            <div className="h-1.5 flex-1 rounded-full bg-slate-100 overflow-hidden">
-                                                <div className="h-full rounded-full" style={{ width: `${row.w}%`, backgroundColor: row.color }} />
-                                            </div>
-                                            <span className="text-[10px] font-bold text-slate-500 w-7 text-right">{row.label}</span>
-                                        </div>
-                                    ))}
+                                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wide">Nota de clima</p>
+                                <div className="flex items-baseline gap-1 mt-1">
+                                    <span className="text-2xl font-extrabold text-slate-900">8.5</span>
+                                    <span className="text-[11px] font-bold text-slate-400">/10</span>
+                                </div>
+                                <div className="h-9 flex items-center mt-2">
+                                    <div className="h-2 w-full rounded-full bg-slate-100 overflow-hidden">
+                                        <div className="h-full rounded-full bg-voca-green" style={{ width: "85%" }} />
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -194,7 +195,7 @@ export default function HeroSection() {
                 </div>
 
                 <div className="absolute inset-0 pointer-events-none hidden lg:block z-10">
-                    {isDesktop && <PhoneScene progressRef={progress} travelEnd={TRAVEL_END} />}
+                    {isDesktop && <DeviceScene progressRef={progress} />}
                 </div>
             </div>
 
@@ -218,8 +219,15 @@ export default function HeroSection() {
                 </div>
 
                 <div className="relative flex flex-col items-center text-center gap-6 animate-in fade-in slide-in-from-bottom-4 duration-700">
+                    <p className="text-base text-slate-500">
+                        <span className="text-xl font-extrabold tracking-tight text-voca-green">DHO</span>
+                        {' '}na palma da mão
+                        <span className="mx-2.5 text-slate-300">·</span>
+                        21 funcionalidades
+                    </p>
+
                     <h1 className="text-4xl font-extrabold text-slate-900 leading-tight">
-                        A plataforma de{' '}
+                        Centralize a jornada na{' '}
                         <span className="relative whitespace-nowrap text-voca-green">
                             <svg
                                 aria-hidden="true"
@@ -229,19 +237,19 @@ export default function HeroSection() {
                             >
                                 <path d="M1 8c20-7 60-7 98 1" strokeWidth="2.5" strokeLinecap="round" />
                             </svg>
-                            <span className="relative">DHO</span>
+                            <span className="relative">mesma plataforma</span>
                         </span>
-                        {' '}completa para gestão, comunicação e inteligência de dados
+                        : pessoas mais conectadas, engajadas e produtivas.
                     </h1>
 
                     <p className="text-lg text-slate-500 max-w-lg">
-                        Transforme o engajamento dos colaboradores em insights que direcionam as decisões estratégicas do seu negócio.
+                        Transforme insights de pessoas em resultados do negócio. Inteligência nos dados, atendimento ágil por humanos.
                     </p>
 
                     <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-4">
                         <Link href="/contact">
                             <Button className="bg-voca-green hover:bg-voca-green/90 rounded-md px-6 h-12 text-base">
-                                Agendar demonstração
+                                VOCA em ação
                             </Button>
                         </Link>
                         <WhatsappLink variant="text" />

@@ -4,34 +4,88 @@ import { useEffect, useRef, useState } from "react";
 import { ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 
+export const faqCategories = [
+    { id: "produto", label: "Produto" },
+    { id: "seguranca", label: "Segurança" },
+    { id: "implantacao", label: "Implantação" },
+    { id: "comercial", label: "Comercial" },
+];
+
 export const faqs = [
     {
         question: "O que é o VOCA?",
+        category: "produto",
         answer: "O VOCA é uma plataforma de DHO (Departamento Humano e Organizacional) completa, que reúne gestão, comunicação e inteligência de dados para ajudar empresas a cuidar melhor das suas pessoas.",
     },
     {
         question: "Quanto tempo leva para implementar o VOCA na minha empresa?",
+        category: "implantacao",
         answer: "O onboarding é guiado pela nossa equipe, sem meses de configuração até você ver resultado. O tempo exato varia de acordo com o tamanho e a complexidade da empresa, mas o acompanhamento é feito por um time de verdade do início ao fim.",
     },
     {
         question: "Os dados da minha empresa estão seguros?",
+        category: "seguranca",
         answer: "Sim. Os dados são protegidos e o VOCA opera em conformidade com a legislação brasileira de proteção de dados (LGPD).",
     },
     {
         question: "Preciso de uma equipe técnica para usar a plataforma?",
+        category: "implantacao",
         answer: "Não. O VOCA foi pensado para ser simples no dia a dia de RH e liderança, e além disso você conta com atendimento humano (sem robôs e sem tickets perdidos) acompanhando sua implementação e uso contínuo.",
     },
     {
         question: "O VOCA serve para empresas de qualquer tamanho?",
-        answer: "Sim, a plataforma evolui junto com a sua empresa, da operação local até a expansão para novas unidades ou países.",
+        category: "comercial",
+        answer: "Sim. Atendemos desde empresas de médio porte até operações com mais de 1.900 colaboradores, como a Grant Thornton. A plataforma evolui junto com a sua empresa, da operação local até a expansão para novas unidades ou países.",
     },
     {
         question: "Como funciona a gamificação dentro do VOCA?",
+        category: "produto",
         answer: "A plataforma usa conquistas, rankings e desafios para tornar o engajamento dos colaboradores mais divertido e consistente, incentivando participação genuína em vez de uso obrigatório.",
     },
     {
         question: "Como faço para conhecer o VOCA na prática?",
+        category: "comercial",
         answer: "Você pode agendar uma demonstração gratuita com nosso time ou falar direto com um especialista pelo WhatsApp. Os dois botões estão espalhados pelo site.",
+    },
+    {
+        question: "O VOCA funciona em outros idiomas?",
+        category: "produto",
+        answer: "Sim. A plataforma é 100% funcional em português, inglês e espanhol, o que atende empresas com operações internacionais ou times multiculturais.",
+    },
+    {
+        question: "Posso personalizar a plataforma com a identidade visual da minha empresa?",
+        category: "produto",
+        answer: "Sim. O VOCA oferece white-label completo: você configura cores, logo e imagens de fundo. Seus colaboradores veem a plataforma como se fosse da própria empresa.",
+    },
+    {
+        question: "O VOCA tem aplicativo mobile?",
+        category: "produto",
+        answer: "Sim. O app está disponível para iOS e Android, sincronizado em tempo real com a versão web. Os colaboradores costumam usar o app no dia a dia, enquanto RH e liderança usam principalmente a versão web.",
+    },
+    {
+        question: "Quais são os módulos disponíveis e posso contratar apenas alguns?",
+        category: "comercial",
+        answer: "O VOCA é modular: você contrata os pilares que fazem sentido para o momento da sua empresa e adiciona novos conforme ela cresce.",
+    },
+    {
+        question: "O VOCA se integra com outros sistemas?",
+        category: "implantacao",
+        answer: "Sim. O VOCA oferece integração com sistemas de RH e ERP que a empresa já utiliza. Fale com o nosso time para mapear as integrações possíveis para o seu caso.",
+    },
+    {
+        question: "Como funciona a ouvidoria anônima?",
+        category: "seguranca",
+        answer: "Quando o colaborador escolhe o anonimato, a manifestação chega sem nenhum dado que permita identificá-lo: nem o RH nem a liderança conseguem saber quem enviou. O canal também aceita manifestações identificadas, e essa decisão é sempre do colaborador. Os relatórios da ouvidoria já foram usados em auditoria externa por clientes como a Credi10, com 100% de conformidade.",
+    },
+    {
+        question: "O VOCA apoia a adequação à NR-1?",
+        category: "seguranca",
+        answer: "Sim. Oferecemos Termômetro de Humor para monitoramento contínuo do clima emocional, pesquisas de risco psicossocial, ouvidoria anônima e relatórios para embasar o plano de ação do RH. O VOCA não substitui a avaliação técnica exigida pela norma, mas sustenta o processo de gestão contínua.",
+    },
+    {
+        question: "Como é o suporte depois da implementação?",
+        category: "implantacao",
+        answer: "O suporte é 100% humano, sem robôs e sem chatbots automáticos. Você tem um time dedicado que acompanha sua empresa da implementação até as revisões trimestrais.",
     },
 ];
 

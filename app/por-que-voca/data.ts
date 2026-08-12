@@ -26,7 +26,7 @@ export const reasons: Reason[] = [
     {
         icon: RocketIcon,
         title: "Implementação assistida",
-        description: "Onboarding guiado pela nossa equipe, sem meses de configuração até ver resultado.",
+        description: "Onboarding guiado pela nossa equipe, aplicando metodologia própria para o engajamento do time.",
         color: "#5f7480",
     },
     {

@@ -1,4 +1,4 @@
-import { Lock, Ear, FileCheck, GraduationCap, KeyRound, UserCheck, Radar, Layers, RefreshCw, Zap, type LucideIcon } from "lucide-react";
+import { Lock, Ear, FileCheck, GraduationCap, KeyRound, UserCheck, Radar, Layers, RefreshCw, Zap, EyeOff, Brain, TrendingUp, BadgeCheck, Building2, type LucideIcon } from "lucide-react";
 
 export interface SecurityFeature {
     icon: LucideIcon;
@@ -35,6 +35,40 @@ export const securityFeatures: SecurityFeature[] = [
         title: "Relatórios de auditoria",
         description: "Histórico rastreável de treinamentos, políticas internas e interações, pronto para ESG e reguladores.",
         short: "Tudo rastreável, pronto pra ESG e reguladores.",
+        color: "#a5760f",
+    },
+];
+
+export interface ComplianceBadge {
+    icon: LucideIcon;
+    title: string;
+    short: string;
+    color: string;
+}
+
+export const complianceBadges: ComplianceBadge[] = [
+    {
+        icon: Lock,
+        title: "Conformidade com a LGPD",
+        short: "Segurança e compliance desde a implantação.",
+        color: "#007980",
+    },
+    {
+        icon: EyeOff,
+        title: "Privacidade por padrão",
+        short: "Dados protegidos e confidenciais.",
+        color: "#5f7480",
+    },
+    {
+        icon: Brain,
+        title: "Uso responsável de IA",
+        short: "Governança alinhada às diretrizes da LGPD e às recomendações da ANPD.",
+        color: "#2f6690",
+    },
+    {
+        icon: FileCheck,
+        title: "Relatórios de auditoria",
+        short: "Rastreabilidade completa para fiscalização e prestação de contas.",
         color: "#a5760f",
     },
 ];
@@ -80,5 +114,20 @@ export const awsPillars = [
         icon: Zap,
         title: "Alta disponibilidade",
         description: "Plataforma no ar quando sua empresa precisar dela.",
+    },
+    {
+        icon: TrendingUp,
+        title: "Escalabilidade sob demanda",
+        description: "A estrutura acompanha o crescimento da empresa, sem migração nem reconfiguração pelo caminho.",
+    },
+    {
+        icon: BadgeCheck,
+        title: "Certificações internacionais",
+        description: "Os data centers da AWS mantêm as principais certificações de segurança do mercado global.",
+    },
+    {
+        icon: Building2,
+        title: "Segurança física",
+        description: "Controle de acesso, vigilância e redundância elétrica sob responsabilidade da própria AWS.",
     },
 ];

@@ -615,7 +615,7 @@ export default function ROIPage() {
                     Você viu quanto pode economizar. Agora veja tudo que está incluso.
                 </h2>
                 <p className="text-slate-500 mt-4 max-w-xl mx-auto">
-                    18 funcionalidades, organizadas em 4 frentes, numa única plataforma, sem precisar contratar nada à parte.
+                    21 funcionalidades, organizadas em 4 frentes, numa única plataforma, sem precisar contratar nada à parte.
                 </p>
             </div>
 
