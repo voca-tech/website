@@ -26,8 +26,8 @@ type AnimatedIconHandle = { startAnimation: () => void; stopAnimation: () => voi
 const journey = [
     {
         icon: Search,
-        title: "Kickoff estratégico",
-        description: "Alinhamento com RH e liderança: fluxos, desafios e configurações iniciais mapeados.",
+        title: "Alinhamento estratégico",
+        description: "Entendemos sua realidade, desafios e objetivos, com definição de metas e prioridades.",
         badge: "Sem impacto operacional",
         stakeholders: ["RH", "Liderança", "Time VOCA"],
         checklist: [
@@ -38,8 +38,8 @@ const journey = [
     },
     {
         icon: GraduationCap,
-        title: "Capacitação das lideranças",
-        description: "Treinamento do time de RH e gestores, com foco nas prioridades mapeadas no kickoff. O VOCA capacita as lideranças para tirarem o máximo da plataforma desde o Go Live.",
+        title: "Capacitação dos embaixadores",
+        description: "Treinamento do time de RH e gestores, com suporte do VOCA no setup até o Go Live.",
         badge: "Foco nas prioridades",
         stakeholders: ["RH", "Gestores", "Time VOCA"],
         checklist: [
@@ -51,7 +51,7 @@ const journey = [
     {
         icon: Rocket,
         title: "Onboarding (Go Live)",
-        description: "Entrada dos colaboradores na plataforma com suporte ativo do time VOCA: comunicação de lançamento, primeiros conteúdos e endomarketing de adoção.",
+        description: "Lançamento e comunicação na entrada dos colaboradores, com suporte ativo do VOCA na adesão imediata.",
         badge: "Equipe VOCA presente",
         stakeholders: ["Colaboradores", "Liderança", "Time VOCA"],
         checklist: [
@@ -63,7 +63,7 @@ const journey = [
     {
         icon: BarChart3,
         title: "Primeiros dados gerados",
-        description: "Acompanhamento semanal do uso e dos primeiros indicadores gerados. O time VOCA orienta a liderança sobre o que os dados estão mostrando e o que fazer com isso.",
+        description: "Interações semanais com o time VOCA para acompanhar os primeiros indicadores.",
         badge: "Primeiros resultados visíveis",
         stakeholders: ["RH", "Time VOCA"],
         checklist: [
@@ -74,8 +74,8 @@ const journey = [
     },
     {
         icon: Milestone,
-        title: "Revisão e evolução",
-        description: "Reunião trimestral com relatório estratégico: o que funcionou, o que pode melhorar e quais novas funcionalidades faz sentido ativar.",
+        title: "Revisão e evolução contínua",
+        description: "Revisão trimestral com relatório estratégico e alinhamentos com a liderança.",
         badge: "Parceria contínua",
         stakeholders: ["Liderança", "Time VOCA"],
         checklist: [
@@ -87,20 +87,20 @@ const journey = [
 ];
 
 const platformCapabilities: Array<{ label: string; platforms: Array<"app" | "web"> }> = [
-    { label: "Pesquisas, feedback e reconhecimento", platforms: ["app", "web"] },
-    { label: "Notificações em tempo real, sem depender de e-mail", platforms: ["app"] },
-    { label: "Crachá digital de acesso", platforms: ["app"] },
-    { label: "Dashboards completos de people analytics", platforms: ["web"] },
-    { label: "Configuração de fluxos e permissões por área", platforms: ["web"] },
-    { label: "Relatórios exportáveis para Excel", platforms: ["app", "web"] },
+    { label: "Customização na identidade visual do cliente", platforms: ["app", "web"] },
+    { label: "Acesso pela web (computador) e pelo app (Android e iOS)", platforms: ["app", "web"] },
+    { label: "Usabilidade simples e intuitiva, com fácil adoção do time", platforms: ["app", "web"] },
+
+    { label: "Alertas por e-mail", platforms: ["app", "web"] },
+    { label: "Notificações push e engajamento na palma da mão", platforms: ["app"] },
 ];
 
 const versusPoints = [
     { voca: "Atendimento 100% humano", market: "Chatbot e triagem automática" },
     { voca: "Resposta direta, sem fila de ticket", market: "Fila de suporte e tempo de espera" },
-    { voca: "Time te acompanha até a revisão trimestral", market: "Suporte só durante a implementação" },
-    { voca: "Equipe dedicada te ajuda a implementar", market: "Você configura tudo sozinho" },
-    { voca: "Fala com quem já conhece sua empresa", market: "Atendimento genérico, do zero toda vez" },
+    { voca: "Equipe dedicada e suporte contínuo", market: "Suporte apenas na implantação" },
+    { voca: "Flexibilidade em customizações", market: "Roadmap engessado" },
+    { voca: "Experiência integrada e intuitiva", market: "Difícil interação e usabilidade" },
 ];
 
 const journeyAnimatedIcons: Array<ForwardRefExoticComponent<{ size?: number } & RefAttributes<AnimatedIconHandle>>> = [
@@ -310,8 +310,7 @@ export default function ProdutoPage() {
                             <Image src="/voca-symbol.png" alt="VOCA" width={26} height={32} />
                         </div>
                     </div>
-                    <p className="text-sm font-bold tracking-widest text-voca-green uppercase">Produto</p>
-                    <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900 leading-tight mt-3">
+                    <h1 className="voca-title text-3xl sm:text-4xl font-extrabold leading-tight">
                         <span className="text-voca-green">21</span> funcionalidades.{" "}
                         <span className="text-voca-green">1</span> única plataforma
                     </h1>
@@ -539,7 +538,7 @@ export default function ProdutoPage() {
                                 Você nunca estará sozinho
                             </h2>
                             <p className="text-white/60 mt-3">
-                                Enquanto boa parte do mercado te entrega um manual e um chatbot, nós somos gente de verdade e próxima, a todo instante.
+                                Enquanto boa parte do mercado te entrega o manual e um chatbot, nós somos gente de verdade, ao seu lado a todo instante.
                             </p>
                         </div>
 
@@ -597,10 +596,12 @@ export default function ProdutoPage() {
 
                 <div className="relative max-w-6xl mx-auto">
                     <div className="text-center max-w-2xl mx-auto mb-10">
-                        <p className="text-sm font-bold tracking-widest text-voca-green uppercase">Metodologia VOCA</p>
-                        <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-3">
-                            A jornada de implementação
+                        <h2 className="voca-title text-2xl sm:text-3xl font-extrabold">
+                            DNA do Engajamento
                         </h2>
+                        <p className="text-slate-500 mt-4 max-w-xl mx-auto">
+                            Evolução cultural contínua. Pessoas no centro, dados como guia, cultura como resultado.
+                        </p>
                     </div>
 
                     <div className="relative">
@@ -730,12 +731,11 @@ export default function ProdutoPage() {
 
                         <div className="relative p-6 sm:p-10">
                             <div className="text-center max-w-2xl mx-auto mb-10">
-                                <p className="text-sm font-bold tracking-widest text-voca-green uppercase">Web & App</p>
-                                <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-3">
-                                    Um só VOCA, em qualquer tela.
+                                <h2 className="voca-title text-2xl sm:text-3xl font-extrabold">
+                                    Uma plataforma. Experiência integrada
                                 </h2>
                                 <p className="text-slate-500 mt-3 max-w-xl mx-auto">
-                                    App e web sincronizados em tempo real, cada um pensado pra um momento do dia, não pra uma pessoa diferente. RH, liderança e colaboradores usam os dois.
+                                    Deixe a plataforma, na web e no app, com a cara da sua empresa.
                                 </p>
                             </div>
 
@@ -811,7 +811,7 @@ export default function ProdutoPage() {
 
                             <div className="flex items-center justify-center gap-2 mt-6 text-xs font-semibold text-slate-400 uppercase tracking-widest">
                                 <Wifi size={14} />
-                                Dados sincronizados em tempo real entre as duas plataformas
+                                Dados sincronizados em tempo real nos dois ambientes
                             </div>
                         </div>
                     </div>
@@ -837,12 +837,11 @@ export default function ProdutoPage() {
                     </div>
 
                     <div className="flex-1 text-center sm:text-left">
-                        <p className="text-sm font-bold tracking-widest text-voca-green uppercase">Conheça o VOCA</p>
-                        <h3 className="text-xl sm:text-2xl font-extrabold text-slate-900 mt-2">
+                        <h3 className="voca-title text-xl sm:text-2xl font-extrabold">
                             Assista ao vídeo institucional
                         </h3>
                         <p className="text-slate-500 mt-2 max-w-md mx-auto sm:mx-0">
-                            Veja em poucos minutos como as 21 funcionalidades se conectam no dia a dia de quem usa o VOCA.
+                            Entenda como facilitamos a jornada do gestor e do colaborador que utilizam o VOCA.
                         </p>
                         <span className="inline-flex items-center gap-1.5 text-sm font-bold text-voca-green mt-4 group-hover:gap-2.5 transition-all">
                             Assistir agora
@@ -880,7 +879,7 @@ export default function ProdutoPage() {
                                 Quanto sua empresa pode economizar com o VOCA?
                             </h2>
                             <p className="text-white/60 mt-3 max-w-md mx-auto lg:mx-0">
-                                Simule com o número real de colaboradores da sua empresa e veja a economia estimada em segundos.
+                                O lucro mais barato do seu negócio está na economia alcançada com a eficiência na operação de pessoas.
                             </p>
                         </div>
 
@@ -893,7 +892,7 @@ export default function ProdutoPage() {
                             </div>
                             <Link href="/roi">
                                 <Button className="bg-white text-voca-green hover:bg-white/90 rounded-md px-7 h-12 text-base font-semibold">
-                                    Calcular agora
+                                    Simular agora
                                     <ArrowRight className="ml-2" size={16} />
                                 </Button>
                             </Link>
@@ -913,7 +912,7 @@ export default function ProdutoPage() {
             </div>
 
             <Dialog open={!!detailFeature} onOpenChange={(open) => !open && setDetailFeature(null)}>
-                <DialogContent className="w-[95vw] max-w-lg max-h-[85vh] p-0 rounded-3xl border-none flex flex-col overflow-hidden">
+                <DialogContent className="w-[95vw] max-w-lg max-h-[85vh] p-0 rounded-3xl flex flex-col overflow-hidden">
                     {detailFeature && (
                         <>
                             <div
@@ -929,11 +928,11 @@ export default function ProdutoPage() {
                                 <DialogTitle className="text-2xl font-extrabold text-slate-900 mt-4">
                                     {detailFeature.name}
                                 </DialogTitle>
-                                <p className="text-slate-500 mt-1.5">{detailFeature.description}</p>
+                                <p className="text-slate-600 mt-1.5">{detailFeature.description}</p>
                             </div>
 
                             <div className="flex-1 min-h-0 overflow-y-auto px-6 sm:px-8 py-6">
-                                <p className="text-xs font-bold uppercase tracking-widest text-slate-400 mb-4">
+                                <p className="text-xs font-bold uppercase tracking-widest text-slate-500 mb-4">
                                     O que ela faz
                                 </p>
                                 <ul className="flex flex-col gap-3">
@@ -941,7 +940,7 @@ export default function ProdutoPage() {
                                         <li
                                             key={item}
                                             style={{ animationDelay: `${index * 45}ms` }}
-                                            className="flex gap-2.5 text-sm text-slate-600 leading-relaxed animate-in fade-in slide-in-from-bottom-2 fill-mode-both duration-500"
+                                            className="flex gap-2.5 text-sm text-slate-700 leading-relaxed animate-in fade-in slide-in-from-bottom-2 fill-mode-both duration-500"
                                         >
                                             <Check size={16} className="shrink-0 mt-0.5" style={{ color: displayed.color }} />
                                             {item}

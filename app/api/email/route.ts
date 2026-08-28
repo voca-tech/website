@@ -29,7 +29,6 @@ export async function POST(request: NextRequest) {
 
     const mailOptions: Mail.Options = {
         from: process.env.MY_EMAIL,
-        // to: process.env.MY_EMAIL,
         to: ['ronaldo@voca.com.br', 'cristiano@voca.com.br'],
         cc: process.env.MY_EMAIL,
         subject: `[Site VOCA] Novo LEAD: ${leadName}`,

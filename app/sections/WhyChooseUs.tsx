@@ -74,10 +74,7 @@ export default function WhyChooseUs() {
             </div>
 
             <div className="relative max-w-6xl mx-auto text-center">
-                <p className="text-sm font-bold tracking-widest text-voca-green uppercase">
-                    Por que o VOCA
-                </p>
-                <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 mt-3">
+                <h2 className="voca-title text-3xl sm:text-4xl font-extrabold">
                     Por que escolher a gente?
                 </h2>
                 <p className="text-lg text-slate-500 mt-4 max-w-2xl mx-auto">

@@ -1,18 +1,20 @@
 'use client'
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type CSSProperties } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { AnimatePresence, motion } from "motion/react";
 import gsap from "gsap";
 import {
     Users, Check, ArrowLeft, ArrowRight, Minus, Plus, TrendingDown, Building, Building2, Wallet, ListChecks, Trophy, Calculator,
+    type LucideIcon,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { WhatsappLink } from "@/components/WhatsappLink";
 import { ClientLogoMarquee } from "@/components/ClientLogoMarquee";
 import { cn } from "@/lib/utils";
+import { getLenisInstance } from "@/lib/lenis";
 import { calculateCustomSavings } from "@/app/roi/constants";
 import { pillars } from "@/app/produto/data";
 import { cases as caseStudies, PILLARS } from "@/app/casos-de-sucesso/data";
@@ -92,8 +94,96 @@ function useCountUp(target: number, format: (n: number) => string) {
     return display;
 }
 
+const FIELD_CLASS =
+    "mt-3 w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3.5 text-base font-semibold text-slate-900 " +
+    "placeholder:font-medium placeholder:text-slate-400 transition-all duration-200 " +
+    "focus:border-voca-green/50 focus:bg-white focus:outline-none focus:ring-4 focus:ring-voca-green/10";
+
+function FieldLabel({ icon: Icon, text, hint }: { icon: LucideIcon; text: string; hint?: string }) {
+    return (
+        <div className="flex items-center gap-2.5">
+            <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-voca-green/10 text-voca-green">
+                <Icon size={16} />
+            </span>
+            <span className="text-sm font-semibold text-slate-700">
+                {text}
+                {hint && <span className="ml-1.5 font-medium text-slate-400">({hint})</span>}
+            </span>
+        </div>
+    );
+}
+
+function Stepper({ step, onBack }: { step: number; onBack: () => void }) {
+    return (
+        <div className="relative">
+            {step > 0 && (
+                <button
+                    type="button"
+                    onClick={onBack}
+                    aria-label="Etapa anterior"
+                    className="absolute -top-1 left-0 z-10 flex h-8 w-8 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-500 transition-colors hover:border-slate-300 hover:text-slate-700"
+                >
+                    <ArrowLeft size={15} />
+                </button>
+            )}
+
+            <div className="mx-auto flex max-w-lg items-start">
+                {STEP_TITLES.map((title, index) => {
+                    const done = index < step;
+                    const current = index === step;
+
+                    return (
+                        <div key={title} className="flex flex-1 flex-col items-center">
+                            <div className="flex w-full items-center">
+
+                                <span
+                                    className={cn(
+                                        "h-[2px] flex-1 rounded-full transition-colors duration-500",
+                                        index === 0 ? "bg-transparent" : done || current ? "bg-voca-green" : "bg-slate-200"
+                                    )}
+                                />
+
+                                <span
+                                    className={cn(
+                                        "flex h-7 w-7 shrink-0 items-center justify-center rounded-full border-2 text-[11px] font-bold transition-all duration-500",
+                                        done && "border-voca-green bg-voca-green text-white",
+                                        current && "border-voca-green bg-white text-voca-green shadow-[0_0_0_4px_rgba(0,121,128,0.12)]",
+                                        !done && !current && "border-slate-200 bg-white text-slate-300"
+                                    )}
+                                >
+                                    {done ? <Check size={13} strokeWidth={3} /> : index + 1}
+                                </span>
+
+                                <span
+                                    className={cn(
+                                        "h-[2px] flex-1 rounded-full transition-colors duration-500",
+                                        index === STEP_TITLES.length - 1 ? "bg-transparent" : done ? "bg-voca-green" : "bg-slate-200"
+                                    )}
+                                />
+                            </div>
+
+                            <span
+                                className={cn(
+                                    "mt-2 hidden px-1 text-center text-[10px] font-bold leading-tight transition-colors duration-500 sm:block",
+                                    current ? "text-voca-green" : done ? "text-slate-500" : "text-slate-300"
+                                )}
+                            >
+                                {title}
+                            </span>
+                        </div>
+                    );
+                })}
+            </div>
+        </div>
+    );
+}
+
 export default function ROIPage() {
     const [step, setStep] = useState(0);
+
+    const [direction, setDirection] = useState(1);
+    const cardRef = useRef<HTMLDivElement>(null);
+    const hasSteppedRef = useRef(false);
     const [companyName, setCompanyName] = useState("");
     const [employees, setEmployees] = useState(100);
     const [selectedFeatures, setSelectedFeatures] = useState<Set<string>>(new Set());
@@ -110,6 +200,8 @@ export default function ROIPage() {
     const monthlyDisplay = useCountUp(result.monthlySavings, formatCurrency);
     const totalDisplay = useCountUp(result.totalSavings, formatCurrency);
 
+    const noSavings = hasCustomSpend && result.monthlySavings <= 0;
+
     const milestoneMonths = Array.from({ length: 4 }, (_, i) =>
         Math.round(12 + i * ((CONTRACT_LENGTH_MONTHS - 12) / 3))
     );
@@ -124,16 +216,32 @@ export default function ROIPage() {
     }
 
     function handleNext() {
+        setDirection(1);
         setStep((s) => Math.min(s + 1, STEP_COUNT - 1));
     }
 
     function handleBack() {
+        setDirection(-1);
         setStep((s) => Math.max(s - 1, 0));
     }
 
+    useEffect(() => {
+        if (!hasSteppedRef.current) {
+            hasSteppedRef.current = true;
+            return;
+        }
+
+        const element = cardRef.current;
+        if (!element) return;
+
+        const lenis = getLenisInstance();
+        if (lenis) lenis.scrollTo(element, { offset: -100, duration: 0.7 });
+        else element.scrollIntoView({ behavior: "smooth", block: "start" });
+    }, [step]);
+
     return (
         <>
-        <div
+        <div data-nav-dark
             className="relative py-16 sm:py-24 px-6 overflow-hidden"
             style={{ background: "linear-gradient(135deg, #012e31 0%, #016b72 100%)" }}
         >
@@ -156,8 +264,7 @@ export default function ROIPage() {
             </div>
 
             <div className="relative max-w-2xl mx-auto text-center">
-                <p className="text-sm font-bold tracking-widest text-white/60 uppercase">Calculadora de ROI</p>
-                <h1 className="text-3xl sm:text-4xl font-extrabold text-white mt-3">
+                <h1 className="voca-title-invert text-3xl sm:text-4xl font-extrabold">
                     Quanto sua empresa pode economizar com o VOCA?
                 </h1>
                 <p className="text-lg text-white/70 mt-4">
@@ -166,7 +273,8 @@ export default function ROIPage() {
             </div>
 
             <Card
-                className="relative max-w-5xl mx-auto mt-10 rounded-[1.75rem] border-none shadow-2xl overflow-hidden"
+                ref={cardRef}
+                className="relative max-w-5xl mx-auto mt-10 rounded-[1.75rem] border-none shadow-2xl overflow-hidden scroll-mt-28"
                 style={{ background: "linear-gradient(180deg, #f0f9f8 0%, #ffffff 22%)" }}
             >
                 <div
@@ -176,84 +284,59 @@ export default function ROIPage() {
                         backgroundSize: "26px 26px",
                     }}
                 />
-                <div className="absolute inset-x-0 top-0 h-1.5 bg-slate-100 z-10">
-                    <div
-                        className="h-full bg-gradient-to-r from-voca-green to-teal-400 transition-all duration-500 ease-out"
-                        style={{ width: `${((step + 1) / STEP_COUNT) * 100}%` }}
-                    />
-                </div>
+                <CardHeader className="relative p-6 pb-2 sm:p-10 sm:pb-2">
+                    <Stepper step={step} onBack={handleBack} />
 
-                <CardHeader className="relative p-8 pb-2 sm:p-10 sm:pb-2">
-                    <div className="flex items-center justify-between gap-3">
-                        {step > 0 ? (
-                            <button
-                                type="button"
-                                onClick={handleBack}
-                                className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-slate-200 text-slate-500 hover:text-slate-700 hover:border-slate-300 transition-colors"
-                            >
-                                <ArrowLeft size={16} />
-                            </button>
-                        ) : (
-                            <div className="h-9 w-9 shrink-0" />
-                        )}
-
-                        <div className="flex items-center gap-2.5">
-                            <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-voca-green/10 text-voca-green">
-                                {(() => {
-                                    const StepIcon = STEP_ICONS[step];
-                                    return <StepIcon size={17} />;
-                                })()}
-                            </span>
-                            <CardTitle className="text-xl sm:text-2xl font-extrabold text-slate-900">
-                                {STEP_TITLES[step]}
-                            </CardTitle>
-                        </div>
-
-                        <span className="h-9 w-9 shrink-0 flex items-center justify-end text-xs font-bold text-slate-400 tracking-wide">
-                            {step + 1}/{STEP_COUNT}
+                    <div className="flex items-center justify-center gap-2.5 pt-7">
+                        <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-voca-green/10 text-voca-green">
+                            {(() => {
+                                const StepIcon = STEP_ICONS[step];
+                                return <StepIcon size={17} />;
+                            })()}
                         </span>
+                        <CardTitle className="text-xl sm:text-2xl font-extrabold text-slate-900">
+                            {STEP_TITLES[step]}
+                        </CardTitle>
                     </div>
                 </CardHeader>
 
                 <CardContent className="relative p-5 pt-5 sm:p-10 sm:pt-6">
-                    <AnimatePresence mode="wait" initial={false}>
+                    <AnimatePresence mode="wait" initial={false} custom={direction}>
                         <motion.div
                             key={step}
-                            initial={{ opacity: 0, x: 16 }}
+                            custom={direction}
+                            initial={{ opacity: 0, x: direction * 28 }}
                             animate={{ opacity: 1, x: 0 }}
-                            exit={{ opacity: 0, x: -16 }}
-                            transition={{ duration: 0.25, ease: "easeOut" }}
+                            exit={{ opacity: 0, x: direction * -28 }}
+                            transition={{ duration: 0.34, ease: [0.22, 1, 0.36, 1] }}
                         >
                             {step === 0 && (
-                                <div className="max-w-md mx-auto space-y-8">
-                                    <p className="text-slate-500 text-sm leading-relaxed text-center">
+                                <div className="mx-auto max-w-xl">
+                                    <div className="space-y-8">
+                                    <p className="text-slate-500 text-base leading-relaxed text-center">
                                         Em poucos passos, mostramos quanto sua empresa pode economizar consolidando várias ferramentas de gestão de pessoas numa plataforma só.
                                     </p>
 
                                     <div>
-                                        <div className="flex items-center gap-2 text-slate-700">
-                                            <Building size={18} />
-                                            <span className="text-sm font-semibold">Nome da empresa (opcional)</span>
-                                        </div>
+                                        <FieldLabel icon={Building} text="Nome da empresa" hint="opcional" />
                                         <input
                                             type="text"
                                             placeholder="Ex: Acme Ltda"
                                             value={companyName}
                                             onChange={(event) => setCompanyName(event.target.value)}
-                                            className="w-full h-12 rounded-xl border border-slate-200 bg-slate-50 px-4 mt-3 text-sm font-semibold text-slate-900 focus:outline-none focus:ring-2 focus:ring-voca-green/40 focus:bg-white"
+                                            className={FIELD_CLASS}
                                         />
                                     </div>
 
                                     <div>
-                                        <div className="flex items-center justify-between">
-                                            <div className="flex items-center gap-2 text-slate-700">
-                                                <Users size={18} />
-                                                <span className="text-sm font-semibold">Número de colaboradores</span>
-                                            </div>
-                                            <span className="text-xl font-extrabold text-voca-green">{employees}</span>
+                                        <div className="flex items-end justify-between gap-4">
+                                            <FieldLabel icon={Users} text="Número de colaboradores" />
+                                            <span className="voca-title text-3xl font-extrabold tabular-nums leading-none">
+                                                {employees}
+                                            </span>
                                         </div>
 
-                                        <div className="flex gap-2 mt-3">
+                                        <div className="flex gap-2.5 mt-4">
                                             {sizePresets.map((preset, index) => {
                                                 const prevMax = index === 0 ? 0 : sizePresets[index - 1].max;
                                                 const isActive = employees > prevMax && employees <= preset.max;
@@ -262,17 +345,18 @@ export default function ROIPage() {
                                                         key={preset.label}
                                                         type="button"
                                                         onClick={() => setEmployees(preset.value)}
+                                                        aria-pressed={isActive}
                                                         className={cn(
-                                                            "flex-1 rounded-xl border px-2 py-1.5 text-center transition-colors duration-150",
+                                                            "flex-1 rounded-xl border-2 px-3 py-3 text-center transition-all duration-200 ease-out",
                                                             isActive
-                                                                ? "bg-voca-green border-voca-green"
-                                                                : "border-slate-200 hover:border-slate-300"
+                                                                ? "border-voca-green bg-voca-green/[0.07] shadow-sm -translate-y-0.5"
+                                                                : "border-slate-200 hover:border-slate-300 hover:-translate-y-0.5"
                                                         )}
                                                     >
-                                                        <p className={cn("text-xs font-bold", isActive ? "text-white" : "text-slate-700")}>
+                                                        <p className={cn("text-sm font-bold", isActive ? "text-voca-green" : "text-slate-700")}>
                                                             {preset.label}
                                                         </p>
-                                                        <p className={cn("text-[10px]", isActive ? "text-white/70" : "text-slate-400")}>
+                                                        <p className={cn("text-xs mt-0.5", isActive ? "text-voca-green/70" : "text-slate-400")}>
                                                             {preset.sublabel}
                                                         </p>
                                                     </button>
@@ -287,12 +371,15 @@ export default function ROIPage() {
                                             step={10}
                                             value={employees}
                                             onChange={(event) => setEmployees(Number(event.target.value))}
-                                            className="w-full h-2 mt-4 rounded-full appearance-none cursor-pointer bg-slate-100 accent-voca-green"
+                                            aria-label="Número de colaboradores"
+                                            className="voca-range mt-5"
+                                            style={{ "--fill": `${((employees - 10) / 990) * 100}%` } as CSSProperties}
                                         />
-                                        <div className="flex justify-between text-xs text-slate-400 mt-1">
+                                        <div className="flex justify-between text-xs text-slate-400 mt-2">
                                             <span>10</span>
                                             <span>1000+</span>
                                         </div>
+                                    </div>
                                     </div>
                                 </div>
                             )}
@@ -307,11 +394,16 @@ export default function ROIPage() {
                                     </p>
 
                                     <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                        {pillars.map((pillar) => (
+                                        {pillars.map((pillar) => {
+                                            const pillarPicked = pillar.features.filter((f) => selectedFeatures.has(f.name)).length;
+                                            return (
                                             <div
                                                 key={pillar.id}
-                                                className="rounded-2xl border p-4"
-                                                style={{ borderColor: `${pillar.color}25`, backgroundColor: `${pillar.color}08` }}
+                                                className="rounded-2xl border p-4 transition-colors duration-300"
+                                                style={{
+                                                    borderColor: pillarPicked > 0 ? `${pillar.color}55` : `${pillar.color}25`,
+                                                    backgroundColor: pillarPicked > 0 ? `${pillar.color}12` : `${pillar.color}08`,
+                                                }}
                                             >
                                                 <div className="flex items-center gap-2">
                                                     <span
@@ -323,6 +415,17 @@ export default function ROIPage() {
                                                     <p className="text-[11px] font-bold uppercase tracking-widest" style={{ color: pillar.color }}>
                                                         {pillar.title}
                                                     </p>
+
+                                                    <span
+                                                        className="ml-auto flex h-5 min-w-[1.25rem] items-center justify-center rounded-full px-1.5 text-[10px] font-bold transition-all duration-300"
+                                                        style={{
+                                                            backgroundColor: pillarPicked > 0 ? pillar.color : "transparent",
+                                                            color: pillarPicked > 0 ? "#ffffff" : "transparent",
+                                                            transform: pillarPicked > 0 ? "scale(1)" : "scale(0.6)",
+                                                        }}
+                                                    >
+                                                        {pillarPicked}
+                                                    </span>
                                                 </div>
                                                 <div className="flex flex-wrap gap-2 mt-3">
                                                     {pillar.features.map((feature) => {
@@ -334,70 +437,79 @@ export default function ROIPage() {
                                                                 onClick={() => toggleFeature(feature.name)}
                                                                 style={isSelected ? { backgroundColor: pillar.color, borderColor: pillar.color } : undefined}
                                                                 className={cn(
-                                                                    "inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-semibold transition-colors duration-150",
-                                                                    isSelected ? "text-white" : "border-slate-200 bg-white text-slate-600 hover:border-slate-300"
+                                                                    "inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-semibold transition-all duration-200 ease-out",
+                                                                    isSelected
+                                                                        ? "text-white shadow-sm -translate-y-px"
+                                                                        : "border-slate-200 bg-white text-slate-600 hover:border-slate-300 hover:-translate-y-px"
                                                                 )}
                                                             >
-                                                                <feature.icon size={12} />
+                                                                {isSelected ? <Check size={12} strokeWidth={3} /> : <feature.icon size={12} />}
                                                                 {feature.name}
                                                             </button>
                                                         );
                                                     })}
                                                 </div>
                                             </div>
-                                        ))}
+                                            );
+                                        })}
                                     </div>
-                                    <p className="text-xs text-slate-400 mt-4 text-center">{selectedFeatures.size} selecionadas</p>
+                                    <p className="text-xs text-slate-500 mt-4 text-center font-medium">
+                                        <span className="font-bold text-voca-green">{selectedFeatures.size}</span> selecionadas
+                                    </p>
                                 </div>
                             )}
 
                             {step === 2 && (
-                                <div className="max-w-md mx-auto space-y-8">
-                                    <div className="text-center">
-                                        <div className="flex items-center justify-center gap-2 text-slate-700">
-                                            <Building2 size={18} />
-                                            <span className="text-sm font-semibold">Em quantas plataformas diferentes isso está hoje?</span>
+                                <div className="mx-auto max-w-xl">
+                                    <div className="space-y-8">
+                                        <div>
+                                            <FieldLabel icon={Building2} text="Em quantas plataformas diferentes isso está hoje?" />
+                                            <div className="flex items-center gap-3 mt-4">
+                                                <button
+                                                    type="button"
+                                                    onClick={() => setPlatformCount((n) => Math.max(1, n - 1))}
+                                                    aria-label="Menos uma plataforma"
+                                                    className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-slate-200 text-slate-500 transition-colors hover:border-voca-green/40 hover:text-voca-green"
+                                                >
+                                                    <Minus size={16} />
+                                                </button>
+                                                <span className="voca-title w-14 text-center text-3xl font-extrabold tabular-nums">
+                                                    {platformCount}
+                                                </span>
+                                                <button
+                                                    type="button"
+                                                    onClick={() => setPlatformCount((n) => Math.min(20, n + 1))}
+                                                    aria-label="Mais uma plataforma"
+                                                    className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-slate-200 text-slate-500 transition-colors hover:border-voca-green/40 hover:text-voca-green"
+                                                >
+                                                    <Plus size={16} />
+                                                </button>
+                                            </div>
                                         </div>
-                                        <div className="flex items-center justify-center gap-3 mt-3">
-                                            <button
-                                                type="button"
-                                                onClick={() => setPlatformCount((n) => Math.max(1, n - 1))}
-                                                className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-slate-200 text-slate-500 hover:border-slate-300"
-                                            >
-                                                <Minus size={16} />
-                                            </button>
-                                            <span className="w-12 text-center text-xl font-extrabold text-slate-900">{platformCount}</span>
-                                            <button
-                                                type="button"
-                                                onClick={() => setPlatformCount((n) => Math.min(20, n + 1))}
-                                                className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-slate-200 text-slate-500 hover:border-slate-300"
-                                            >
-                                                <Plus size={16} />
-                                            </button>
-                                        </div>
-                                    </div>
 
-                                    <div className="text-center">
-                                        <div className="flex items-center justify-center gap-2 text-slate-700">
-                                            <Wallet size={18} />
-                                            <span className="text-sm font-semibold">
-                                                Quanto vocês gastam hoje com essas ferramentas, por mês? (opcional)
-                                            </span>
-                                        </div>
-                                        <div className="relative mt-3">
-                                            <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-sm font-semibold">R$</span>
-                                            <input
-                                                type="text"
-                                                inputMode="numeric"
-                                                placeholder="Não sei ao certo"
-                                                value={monthlySpendInput ? Number(monthlySpendInput).toLocaleString("pt-BR") : ""}
-                                                onChange={(event) => setMonthlySpendInput(onlyDigits(event.target.value))}
-                                                className="w-full h-12 rounded-xl border border-slate-200 bg-slate-50 pl-10 pr-4 text-center text-sm font-semibold text-slate-900 focus:outline-none focus:ring-2 focus:ring-voca-green/40 focus:bg-white"
+                                        <div>
+                                            <FieldLabel
+                                                icon={Wallet}
+                                                text="Quanto vocês gastam hoje com essas ferramentas, por mês?"
+                                                hint="opcional"
                                             />
+                                            <div className="relative">
+                                                <span className="absolute left-4 top-1/2 z-10 mt-1.5 -translate-y-1/2 text-sm font-semibold text-slate-400">
+                                                    R$
+                                                </span>
+                                                <input
+                                                    type="text"
+                                                    inputMode="numeric"
+                                                    placeholder="Não sei ao certo"
+                                                    value={monthlySpendInput ? Number(monthlySpendInput).toLocaleString("pt-BR") : ""}
+                                                    onChange={(event) => setMonthlySpendInput(onlyDigits(event.target.value))}
+                                                    className={cn(FIELD_CLASS, "pl-11")}
+                                                />
+                                            </div>
+                                            <p className="text-xs text-slate-400 mt-2">
+                                                Campo opcional. Se não souber, usamos uma estimativa baseada no mercado.
+                                            </p>
                                         </div>
-                                        <p className="text-xs text-slate-400 mt-2">
-                                            Se não souber, sem problema: usamos uma estimativa baseada no mercado.
-                                        </p>
                                     </div>
                                 </div>
                             )}
@@ -408,21 +520,68 @@ export default function ROIPage() {
                                         className="rounded-[1.5rem] p-6 sm:p-10 text-center overflow-hidden relative"
                                         style={{ background: "linear-gradient(135deg, #012e31 0%, #016b72 100%)" }}
                                     >
+
+                                        <div
+                                            aria-hidden="true"
+                                            className="pointer-events-none absolute inset-0 opacity-[0.09]"
+                                            style={{
+                                                backgroundImage: "radial-gradient(circle, rgba(255,255,255,0.7) 1px, transparent 1px)",
+                                                backgroundSize: "24px 24px",
+                                            }}
+                                        />
+                                        <div
+                                            aria-hidden="true"
+                                            className="pointer-events-none absolute -top-24 left-1/2 h-[26rem] w-[26rem] -translate-x-1/2 rounded-full bg-teal-300/15 blur-3xl"
+                                        />
+                                        <svg
+                                            aria-hidden="true"
+                                            viewBox="0 0 28 28"
+                                            className="pointer-events-none absolute -right-10 -bottom-12 h-56 w-56 text-white opacity-[0.06]"
+                                            fill="currentColor"
+                                        >
+                                            <rect x="10" width="18" height="18" rx="5" fillOpacity="0.38" />
+                                            <path d="M4 3h12a4 4 0 0 1 4 4v9a4 4 0 0 1-4 4h-6l-6 7v-7a4 4 0 0 1-4-4V7a4 4 0 0 1 4-4z" />
+                                        </svg>
+
+                                        <div className="relative">
                                         <p className="text-xs sm:text-sm font-bold text-white/50 uppercase tracking-widest">
                                             Hoje: {selectedFeatures.size} funcionalidades em {platformCount} {platformCount === 1 ? "plataforma" : "plataformas"} diferentes
                                         </p>
-                                        <p className="text-xl sm:text-2xl font-extrabold text-white mt-3 leading-snug">
-                                            O VOCA faz tudo isso sozinho, numa única plataforma.
-                                        </p>
-                                        <p className="text-white/80 text-base sm:text-lg mt-5">
-                                            Com o VOCA, a <span className="font-bold text-white">{companyName.trim() || "sua empresa"}</span> pode economizar até
-                                        </p>
-                                        <p className="text-5xl sm:text-7xl font-extrabold text-white mt-2 leading-none">
-                                            {monthlyDisplay}
-                                            <span className="text-lg sm:text-2xl font-semibold text-white/60"> /mês</span>
-                                        </p>
+
+                                        {noSavings ? (
+                                            <>
+                                                <p className="text-2xl sm:text-3xl font-extrabold text-white mt-4 leading-snug">
+                                                    Aqui o ganho não é de preço.
+                                                </p>
+                                                <p className="text-white/80 text-base sm:text-lg mt-4 max-w-xl mx-auto leading-relaxed">
+                                                    O valor que a{" "}
+                                                    <span className="font-bold text-white">{companyName.trim() || "sua empresa"}</span>{" "}
+                                                    informou já está abaixo da nossa estimativa para um time de {employees} pessoas.
+                                                    O que muda é a consolidação: {selectedFeatures.size} funcionalidades num contrato só,
+                                                    em vez de {platformCount}.
+                                                </p>
+                                                <p className="text-teal-200 text-sm mt-6">
+                                                    Com os números reais da sua operação, conseguimos montar uma proposta sob medida.
+                                                </p>
+                                            </>
+                                        ) : (
+                                            <>
+                                                <p className="text-xl sm:text-2xl font-extrabold text-white mt-3 leading-snug">
+                                                    O VOCA faz tudo isso sozinho, numa única plataforma.
+                                                </p>
+                                                <p className="text-white/80 text-base sm:text-lg mt-5">
+                                                    Com o VOCA, a <span className="font-bold text-white">{companyName.trim() || "sua empresa"}</span> pode economizar até
+                                                </p>
+                                                <p className="text-5xl sm:text-7xl font-extrabold text-white mt-2 leading-none">
+                                                    {monthlyDisplay}
+                                                    <span className="text-lg sm:text-2xl font-semibold text-white/60"> /mês</span>
+                                                </p>
+                                            </>
+                                        )}
+                                        </div>
                                     </div>
 
+                                    {!noSavings && (
                                     <div className="flex flex-wrap items-center justify-center gap-x-12 gap-y-6 mt-8">
                                         <div className="text-center">
                                             <p className="text-3xl sm:text-4xl font-extrabold text-voca-green">{totalDisplay}</p>
@@ -439,29 +598,73 @@ export default function ROIPage() {
                                             </p>
                                         </div>
                                     </div>
+                                    )}
 
-                                    <div className="rounded-2xl border border-slate-100 bg-slate-50 p-4 sm:p-10 mt-8">
-                                        <p className="text-sm sm:text-base font-semibold text-slate-600 mb-6 sm:mb-8">Economia acumulada ao longo do contrato</p>
-                                        <div className="flex items-end gap-1.5 sm:gap-5 h-64">
-                                            {milestoneMonths.map((month) => {
+                                    {!noSavings && (
+                                    <div className="relative mt-8 overflow-hidden rounded-2xl border border-slate-100 bg-slate-50 p-4 sm:p-10">
+                                        <p className="mb-6 text-sm font-semibold text-slate-600 sm:mb-8 sm:text-base">
+                                            Economia acumulada ao longo do contrato
+                                        </p>
+
+                                        <div className="relative flex h-64 items-end gap-1.5 sm:gap-5">
+
+                                            <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 bottom-8 top-0">
+                                                {[0, 0.5, 1].map((t) => (
+                                                    <span
+                                                        key={t}
+                                                        className="absolute inset-x-0 h-px bg-slate-200/80"
+                                                        style={{ bottom: `${t * 100}%` }}
+                                                    />
+                                                ))}
+                                            </div>
+
+                                            {milestoneMonths.map((month, index) => {
                                                 const value = result.monthlySavings * month;
                                                 const maxValue = result.monthlySavings * CONTRACT_LENGTH_MONTHS || 1;
                                                 const barHeightPx = Math.max(16, (value / maxValue) * 190);
+                                                const isLast = index === milestoneMonths.length - 1;
+
                                                 return (
-                                                    <div key={month} className="flex-1 flex flex-col items-center justify-end h-full min-w-0">
-                                                        <p className="text-[9px] sm:text-sm font-bold text-slate-700 mb-2 text-center leading-tight break-words">
+                                                    <div key={month} className="relative flex h-full min-w-0 flex-1 flex-col items-center justify-end">
+                                                        <p
+                                                            className={cn(
+                                                                "mb-2 break-words text-center text-[9px] font-bold leading-tight sm:text-sm",
+                                                                isLast ? "text-voca-green" : "text-slate-700"
+                                                            )}
+                                                            style={{
+                                                                opacity: 0,
+                                                                animation: `roi-bar-label 400ms ease-out ${420 + index * 110}ms forwards`,
+                                                            }}
+                                                        >
                                                             {formatCurrency(value)}
                                                         </p>
+
                                                         <div
-                                                            className="w-full rounded-t-lg bg-voca-green transition-all duration-500 ease-out"
-                                                            style={{ height: `${barHeightPx}px` }}
+                                                            className="w-full origin-bottom rounded-t-lg"
+                                                            style={{
+                                                                height: `${barHeightPx}px`,
+                                                                background: isLast
+                                                                    ? "linear-gradient(180deg, #2dd4bf 0%, #007980 100%)"
+                                                                    : "linear-gradient(180deg, #0d9a9f 0%, #007980 100%)",
+                                                                boxShadow: isLast ? "0 6px 18px -6px rgba(0,121,128,0.55)" : "none",
+                                                                animation: `roi-bar-grow 620ms cubic-bezier(0.22, 1, 0.36, 1) ${index * 110}ms both`,
+                                                            }}
                                                         />
-                                                        <p className="text-[10px] sm:text-xs text-slate-400 mt-2 font-semibold">{month}m</p>
+
+                                                        <p
+                                                            className={cn(
+                                                                "mt-2 text-[10px] font-semibold sm:text-xs",
+                                                                isLast ? "text-voca-green" : "text-slate-400"
+                                                            )}
+                                                        >
+                                                            {month}m
+                                                        </p>
                                                     </div>
                                                 );
                                             })}
                                         </div>
                                     </div>
+                                    )}
                                 </div>
                             )}
                         </motion.div>
@@ -519,8 +722,7 @@ export default function ROIPage() {
 
         <div className="py-16 sm:py-20 px-6 bg-white">
             <div className="max-w-4xl mx-auto text-center">
-                <p className="text-sm font-bold tracking-widest text-voca-green uppercase">Não é só simulação</p>
-                <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-3">
+                <h2 className="voca-title text-2xl sm:text-3xl font-extrabold">
                     Empresas reais já vivem essa economia
                 </h2>
             </div>
@@ -565,8 +767,7 @@ export default function ROIPage() {
 
         <div className="py-16 sm:py-20 px-6 bg-white overflow-hidden">
             <div className="max-w-4xl mx-auto text-center">
-                <p className="text-sm font-bold tracking-widest text-voca-green uppercase">Sem letra miúda</p>
-                <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-3">
+                <h2 className="voca-title text-2xl sm:text-3xl font-extrabold">
                     Como chegamos nesse número
                 </h2>
             </div>
@@ -610,8 +811,7 @@ export default function ROIPage() {
 
         <div className="py-16 sm:py-20 px-6 bg-slate-50">
             <div className="max-w-4xl mx-auto text-center">
-                <p className="text-sm font-bold tracking-widest text-voca-green uppercase">Tudo incluso</p>
-                <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 mt-3">
+                <h2 className="voca-title text-3xl sm:text-4xl font-extrabold">
                     Você viu quanto pode economizar. Agora veja tudo que está incluso.
                 </h2>
                 <p className="text-slate-500 mt-4 max-w-xl mx-auto">
@@ -653,8 +853,7 @@ export default function ROIPage() {
         <div className="py-16 sm:py-20 px-6 bg-white">
             <div className="max-w-4xl mx-auto">
                 <div className="text-center max-w-xl mx-auto">
-                    <p className="text-sm font-bold tracking-widest text-voca-green uppercase">Perguntas frequentes</p>
-                    <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-3">
+                    <h2 className="voca-title text-2xl sm:text-3xl font-extrabold">
                         Sobre a calculadora e o contrato
                     </h2>
                 </div>
@@ -677,8 +876,7 @@ export default function ROIPage() {
             <div className="max-w-4xl mx-auto rounded-[2rem] overflow-hidden shadow-xl">
                 <div className="grid grid-cols-1 sm:grid-cols-2">
                     <div className="p-10 sm:p-12 flex flex-col justify-center bg-white">
-                        <p className="text-sm font-bold tracking-widest text-voca-green uppercase">Sua vez</p>
-                        <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-3 leading-snug">
+                        <h2 className="voca-title text-2xl sm:text-3xl font-extrabold leading-snug">
                             Pronto pra ver isso funcionando na sua empresa?
                         </h2>
                     </div>

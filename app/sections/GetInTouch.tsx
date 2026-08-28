@@ -41,7 +41,7 @@ export default function GetInTouchSection() {
     }, []);
 
     return (
-        <div
+        <div data-nav-dark
             id="contact"
             ref={sectionRef}
             className="relative py-20 sm:py-28 px-6 overflow-hidden"

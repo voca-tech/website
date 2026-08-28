@@ -73,12 +73,70 @@ export const complianceBadges: ComplianceBadge[] = [
     },
 ];
 
+export const nr1Timeline = [
+    {
+        date: "26 mai 2026",
+        title: "Passou a valer",
+        description: "A gestão de riscos psicossociais virou item obrigatório do PGR.",
+    },
+    {
+        date: "24 ago 2026",
+        title: "Fim da fase orientativa",
+        description: "Encerrou o prazo de dupla visita. A fiscalização voltou ao regime padrão.",
+    },
+];
+
 export const nr1Support = [
-    "Termômetro de Humor: sinal diário do bem-estar dos times",
-    "Leitura de sentimento por IA nas interações da plataforma",
-    "Pesquisas customizadas para mapear riscos psicossociais por área",
-    "Ouvidoria anônima para escuta segura de qualquer colaborador",
-    "Indicadores e relatórios para embasar o plano de ação do RH",
+    {
+        stage: "Identificar",
+        summary: "Captar o sinal antes de virar afastamento.",
+        items: [
+            {
+                label: "Termômetro de Humor",
+                detail: "Captura diária do sentimento do time, com notificação de alerta para o RH e para o gestor direto quando o indicador cai.",
+            },
+            {
+                label: "Canais de escuta",
+                detail: "Ouvidoria, Fale com a Liderança e Caixa de Ideias em canal privado, anônimo ou identificado, com anexo de evidências.",
+            },
+        ],
+    },
+    {
+        stage: "Avaliar",
+        summary: "Transformar percepção em dado por área.",
+        items: [
+            {
+                label: "Pesquisas com modelo de NR-1",
+                detail: "Base com 200 perguntas prontas, customização ilimitada de temas e perguntas condicionais, anônimas ou identificadas.",
+            },
+            {
+                label: "Leitura de sentimento por IA",
+                detail: "Análise passiva do texto nas respostas abertas e nas interações, para captar o que a nota numérica não mostra.",
+            },
+            {
+                label: "Segmentação por área e período",
+                detail: "Resultado compilado ou recortado por área, grupo e intervalo, que é onde o risco psicossocial costuma se concentrar.",
+            },
+        ],
+    },
+    {
+        stage: "Acompanhar e documentar",
+        summary: "Sustentar o plano de ação e a prestação de contas.",
+        items: [
+            {
+                label: "Dashboards em tempo real",
+                detail: "Indicadores por funcionalidade, área e período, com exportação dos dados em Excel.",
+            },
+            {
+                label: "Report estratégico",
+                detail: "Highlights e recomendações de ação a cada trimestre, para embasar as decisões do plano.",
+            },
+            {
+                label: "Histórico rastreável",
+                detail: "Registro completo de interações, treinamentos e políticas internas para prestação de contas em fiscalização.",
+            },
+        ],
+    },
 ];
 
 export const digitalShieldLayers = [

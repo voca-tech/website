@@ -1,8 +1,9 @@
 "use client"
 
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { getLenisInstance } from "@/lib/lenis";
 import {
     Check,
     Smile,
@@ -15,9 +16,13 @@ import {
     ShieldCheck,
     Sparkles,
     Megaphone,
+    Network,
     ClipboardCheck,
     MessageSquarePlus,
     ChevronDown,
+    ChevronLeft,
+    ChevronRight,
+    ArrowDown,
     ArrowRight,
     type LucideIcon,
 } from "lucide-react";
@@ -28,7 +33,7 @@ import { cn } from "@/lib/utils";
 interface Challenge {
     id: string;
     label: string;
-    stat: string;
+    stat?: string;
     icon: LucideIcon;
     solutionTitle: string;
     solutionPoints: string[];
@@ -107,6 +112,17 @@ const challengeGroups: ChallengeGroup[] = [
                     "Rede Social Corporativa com canais temáticos, notificações push e reports de alcance por área.",
                     "O gestor vira um líder conectado, mesmo a distância.",
                     "Canal customizável, Fale com a Liderança e PDI com chat entre gestor e liderado.",
+                ],
+            },
+            {
+                id: "comunicacao",
+                label: "Ineficiência da comunicação interna",
+                icon: Network,
+                solutionTitle: "Comunicação que chega e é medida",
+                solutionPoints: [
+                    "Rede Social Corporativa com canais temáticos, organizando o fluxo e o perfil da comunicação na palma da mão do time.",
+                    "Notificações que puxam ação por parte dos usuários.",
+                    "Relatórios em tempo real com a eficácia da comunicação por área.",
                 ],
             },
             {
@@ -204,12 +220,28 @@ export default function ProblemSolutionSelector() {
     const [isOtherOpen, setIsOtherOpen] = useState(false);
     const [otherText, setOtherText] = useState("");
     const panelRef = useRef<HTMLDivElement>(null);
-    const [edges, setEdges] = useState({ top: false, bottom: false });
+    const [panelInView, setPanelInView] = useState(true);
+
+    const [activeIndex, setActiveIndex] = useState(0);
+    const [activeGroupLabel, setActiveGroupLabel] = useState(challengeGroups[0].label);
+
+    const selected = allChallenges.filter((challenge) => selectedIds.includes(challenge.id));
+    const safeIndex = Math.min(activeIndex, Math.max(0, selected.length - 1));
+    const active = selected[safeIndex];
 
     function toggleChallenge(id: string) {
-        setSelectedIds((current) =>
-            current.includes(id) ? current.filter((item) => item !== id) : [...current, id]
-        );
+        setSelectedIds((current) => {
+            if (current.includes(id)) {
+                const next = current.filter((item) => item !== id);
+                setActiveIndex((index) => Math.max(0, Math.min(index, next.length - 1)));
+                return next;
+            }
+
+            const next = [...current, id];
+
+            setActiveIndex(allChallenges.filter((c) => next.includes(c.id)).findIndex((c) => c.id === id));
+            return next;
+        });
     }
 
     function handleSendOther() {
@@ -218,33 +250,55 @@ export default function ProblemSolutionSelector() {
         router.push(`/contact?${params.toString()}`);
     }
 
-    const selected = allChallenges.filter((challenge) => selectedIds.includes(challenge.id));
+    function focusSolution(index: number) {
+        const total = selected.length;
+        if (total === 0) return;
+
+        const next = ((index % total) + total) % total;
+        setActiveIndex(next);
+
+        const group = challengeGroups.find((g) =>
+            g.challenges.some((c) => c.id === selected[next].id)
+        );
+        if (group) setActiveGroupLabel(group.label);
+    }
 
     useEffect(() => {
         const element = panelRef.current;
         if (!element) return;
 
-        function update() {
-            if (!element) return;
-            const scrollable = element.scrollHeight > element.clientHeight + 1;
-            setEdges({
-                top: scrollable && element.scrollTop > 4,
-                bottom: scrollable && element.scrollTop + element.clientHeight < element.scrollHeight - 4,
-            });
-        }
+        const observer = new IntersectionObserver(
+            ([entry]) => setPanelInView(entry.isIntersecting),
+            { rootMargin: "0px 0px -30% 0px" }
+        );
+        observer.observe(element);
+        return () => observer.disconnect();
+    }, []);
 
-        update();
-        element.addEventListener("scroll", update, { passive: true });
-        window.addEventListener("resize", update);
-        return () => {
-            element.removeEventListener("scroll", update);
-            window.removeEventListener("resize", update);
-        };
-    }, [selectedIds]);
+    const scrollToPanel = useCallback(() => {
+        const element = panelRef.current;
+        if (!element) return;
+
+        const lenis = getLenisInstance();
+        if (lenis) {
+            lenis.scrollTo(element, { offset: -96, duration: 1.1 });
+        } else {
+            element.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+    }, []);
 
     return (
-        <div id="challenges" className="relative bg-slate-50 py-16 sm:py-24 px-6 overflow-hidden">
+        <>
+
+        <div
+            id="challenges"
+            className="relative py-16 sm:py-24 px-6 overflow-hidden"
+            style={{
+                background: "linear-gradient(180deg, #ffffff 0%, #f8fafc 15%, #f8fafc 85%, #ffffff 100%)",
+            }}
+        >
             <div className="absolute inset-0 pointer-events-none">
+
                 <div
                     className="absolute inset-0 opacity-[0.35]"
                     style={{
@@ -252,22 +306,34 @@ export default function ProblemSolutionSelector() {
                         backgroundSize: "28px 28px",
                     }}
                 />
+
                 <div
-                    className="absolute -top-32 -left-24 w-[32rem] h-[32rem] bg-voca-green/10 rounded-full blur-3xl"
-                    style={{ animation: "drift-b 24s ease-in-out infinite" }}
-                />
-                <div
-                    className="absolute -bottom-40 -right-24 w-[28rem] h-[28rem] bg-teal-300/15 rounded-full blur-3xl"
-                    style={{ animation: "drift-a 28s ease-in-out infinite" }}
+                    className="absolute inset-0"
+                    style={{
+                        background: [
+                            "radial-gradient(46rem 24rem at 16% 26%, rgba(0,121,128,0.14), transparent 62%)",
+                            "radial-gradient(38rem 22rem at 86% 16%, rgba(94,234,212,0.18), transparent 60%)",
+                            "radial-gradient(32rem 20rem at 62% 78%, rgba(232,178,61,0.10), transparent 64%)",
+                        ].join(", "),
+                        maskImage: "linear-gradient(180deg, transparent 0%, #000 16%, #000 80%, transparent 100%)",
+                        WebkitMaskImage: "linear-gradient(180deg, transparent 0%, #000 16%, #000 80%, transparent 100%)",
+                        animation: "aurora-drift 34s ease-in-out infinite",
+                    }}
                 />
             </div>
 
             <div className="relative max-w-6xl mx-auto">
-                <div className="text-center max-w-2xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-700">
-                    <p className="text-sm font-bold tracking-widest text-voca-green uppercase">
-                        Dores que resolvemos
-                    </p>
-                    <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 leading-tight mt-3">
+                <div className="relative text-center max-w-2xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-700">
+
+                    <div
+                        aria-hidden="true"
+                        className="pointer-events-none absolute left-1/2 top-1/2 -z-10 h-[26rem] w-[46rem] max-w-[130vw] -translate-x-1/2 -translate-y-1/2"
+                        style={{
+                            background: "radial-gradient(closest-side, rgba(255,255,255,0.95), rgba(255,255,255,0.6) 45%, transparent 100%)",
+                        }}
+                    />
+
+                    <h2 className="voca-title text-3xl sm:text-4xl font-extrabold leading-tight">
                         Quais desafios sua empresa enfrenta?
                     </h2>
                     <p className="text-lg text-slate-500 mt-4">
@@ -276,15 +342,48 @@ export default function ProblemSolutionSelector() {
                 </div>
 
                 <div className="grid grid-cols-1 lg:grid-cols-[1fr_1.05fr] gap-8 lg:gap-10 mt-10 items-start">
-                    <div className="flex flex-col gap-6">
-                        {challengeGroups.map((group) => (
+                    <div className="flex flex-col gap-4">
+
+                        <div className="flex flex-wrap gap-2">
+                            {challengeGroups.map((group) => {
+                                const isActive = group.label === activeGroupLabel;
+                                const count = group.challenges.filter((c) => selectedIds.includes(c.id)).length;
+                                return (
+                                    <button
+                                        key={group.label}
+                                        type="button"
+                                        onClick={() => setActiveGroupLabel(group.label)}
+                                        aria-pressed={isActive}
+                                        style={{
+                                            borderColor: isActive ? group.color : undefined,
+                                            backgroundColor: isActive ? group.color : undefined,
+                                        }}
+                                        className={cn(
+                                            "flex items-center gap-2 rounded-full border px-3.5 py-2 text-xs font-bold transition-all duration-300 ease-out",
+                                            isActive
+                                                ? "text-white shadow-md -translate-y-0.5"
+                                                : "border-slate-200 bg-white text-slate-600 hover:border-slate-300 hover:-translate-y-0.5"
+                                        )}
+                                    >
+                                        {group.label}
+                                        {count > 0 && (
+                                            <span
+                                                className="flex h-4 min-w-[1rem] items-center justify-center rounded-full px-1 text-[10px]"
+                                                style={{
+                                                    backgroundColor: isActive ? "rgba(255,255,255,0.28)" : `${group.color}1F`,
+                                                    color: isActive ? "#ffffff" : group.color,
+                                                }}
+                                            >
+                                                {count}
+                                            </span>
+                                        )}
+                                    </button>
+                                );
+                            })}
+                        </div>
+
+                        {challengeGroups.filter((group) => group.label === activeGroupLabel).map((group) => (
                             <div key={group.label}>
-                                <p
-                                    className="text-xs font-bold tracking-widest uppercase mb-2.5 pl-1"
-                                    style={{ color: group.color }}
-                                >
-                                    {group.label}
-                                </p>
                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                                     {group.challenges.map((challenge) => {
                                         const isSelected = selectedIds.includes(challenge.id);
@@ -380,26 +479,15 @@ export default function ProblemSolutionSelector() {
                     </div>
 
                     <div className="lg:sticky lg:top-24">
-                        <div className="relative">
-                            <div
-                                className={cn(
-                                    "pointer-events-none absolute inset-x-0 top-0 h-12 z-10 bg-gradient-to-b from-slate-50 to-transparent transition-opacity duration-200",
-                                    edges.top ? "opacity-100" : "opacity-0"
-                                )}
-                            />
-
-                            <div
-                                ref={panelRef}
-                                data-lenis-prevent
-                                className="voca-scroll lg:max-h-[calc(100vh-8rem)] lg:overflow-y-auto lg:pr-3 lg:pb-20"
-                            >
+                        <div ref={panelRef} className="relative">
                         {selected.length === 0 ? (
-                            <div className="rounded-2xl border-2 border-dashed border-slate-300 bg-white/50 py-16 px-6 text-center">
+                            <div className="flex min-h-[20rem] sm:min-h-[22rem] flex-col items-center justify-center rounded-2xl border-2 border-dashed border-slate-300 bg-white/50 px-6 py-16 text-center">
                                 <div className="flex h-12 w-12 mx-auto items-center justify-center rounded-full bg-voca-green/10 text-voca-green">
                                     <Check size={22} />
                                 </div>
                                 <p className="text-slate-500 font-medium mt-4">
-                                    Selecione um desafio ao lado
+                                    <span className="lg:hidden">Selecione um desafio acima</span>
+                                    <span className="hidden lg:inline">Selecione um desafio ao lado</span>
                                 </p>
                                 <p className="text-slate-400 text-sm mt-1">
                                     A solução do VOCA aparece aqui, sem sair da tela.
@@ -425,109 +513,187 @@ export default function ProblemSolutionSelector() {
                                     </button>
                                 </div>
 
-                                {selected.map((challenge) => {
-                                    const Icon = challenge.icon;
-                                    return (
-                                        <div
-                                            key={challenge.id}
-                                            className="rounded-2xl border border-slate-200 bg-white p-5 sm:p-6 shadow-sm animate-in fade-in slide-in-from-bottom-2 duration-300"
-                                            style={{ borderTopColor: challenge.color, borderTopWidth: 3 }}
-                                        >
-                                            <div className="flex items-start gap-3">
-                                                <span
-                                                    className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full"
-                                                    style={{ backgroundColor: `${challenge.color}1A`, color: challenge.color }}
+                                <div className="relative">
+                                    {selected.slice(0, 3).map((_, depth) => {
+                                        if (depth === 0) return null;
+                                        return (
+                                            <div
+                                                key={`peek-${depth}`}
+                                                aria-hidden="true"
+                                                className="absolute inset-x-0 top-0 h-full rounded-2xl border border-slate-200 bg-white shadow-sm transition-all duration-500 ease-out"
+                                                style={{
+                                                    transform: `translateY(${depth * 9}px) scale(${1 - depth * 0.035})`,
+                                                    opacity: 1 - depth * 0.35,
+                                                    zIndex: -depth,
+                                                }}
+                                            />
+                                        );
+                                    })}
+
+                                    {active && (() => {
+                                        const Icon = active.icon;
+                                        return (
+                                            <div
+                                                key={active.id}
+
+                                                className="relative flex min-h-[20rem] sm:min-h-[22rem] flex-col rounded-2xl border border-slate-200 bg-white p-5 sm:p-6 shadow-md animate-in fade-in slide-in-from-right-4 duration-500"
+                                                style={{ borderTopColor: active.color, borderTopWidth: 3 }}
+                                            >
+                                                <div className="flex items-start gap-3">
+                                                    <span
+                                                        className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full"
+                                                        style={{ backgroundColor: `${active.color}1A`, color: active.color }}
+                                                    >
+                                                        <Icon size={18} />
+                                                    </span>
+                                                    <div className="min-w-0">
+                                                        <p className="text-sm font-bold text-slate-900 leading-snug">
+                                                            {active.label}
+                                                        </p>
+                                                        {active.stat && (
+                                                            <p className="text-xs text-slate-400 mt-1 leading-relaxed">
+                                                                {active.stat}
+                                                            </p>
+                                                        )}
+                                                    </div>
+                                                </div>
+
+                                                <div className="relative mt-5 flex items-center gap-3">
+                                                    <span className="h-px flex-1 bg-slate-100" />
+                                                    <span
+                                                        className="flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-widest"
+                                                        style={{ color: active.color }}
+                                                    >
+                                                        <ArrowDown size={13} />
+                                                        O VOCA resolve assim
+                                                    </span>
+                                                    <span className="h-px flex-1 bg-slate-100" />
+                                                </div>
+
+                                                <div
+                                                    className="mt-4 flex items-center gap-2.5 rounded-xl px-3.5 py-3 animate-in fade-in zoom-in-95 duration-500"
+                                                    style={{
+                                                        backgroundColor: `${active.color}12`,
+                                                        animationDelay: "80ms",
+                                                        animationFillMode: "both",
+                                                    }}
                                                 >
-                                                    <Icon size={18} />
-                                                </span>
-                                                <div className="min-w-0">
-                                                    <p className="text-sm font-bold text-slate-900 leading-snug">
-                                                        {challenge.label}
-                                                    </p>
-                                                    <p className="text-xs text-slate-400 mt-1 leading-relaxed">
-                                                        {challenge.stat}
+                                                    <span
+                                                        className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-white"
+                                                        style={{ backgroundColor: active.color }}
+                                                    >
+                                                        <Icon size={16} />
+                                                    </span>
+                                                    <p className="text-sm font-bold" style={{ color: active.color }}>
+                                                        {active.solutionTitle}
                                                     </p>
                                                 </div>
-                                            </div>
 
-                                            <div className="mt-4 pt-4 border-t border-slate-100">
-                                                <p
-                                                    className="text-xs font-bold uppercase tracking-widest mb-2.5"
-                                                    style={{ color: challenge.color }}
-                                                >
-                                                    {challenge.solutionTitle}
-                                                </p>
-                                                <ul className="flex flex-col gap-2">
-                                                    {challenge.solutionPoints.map((point) => (
-                                                        <li key={point} className="text-sm text-slate-600 flex gap-2 leading-relaxed">
-                                                            <Check
-                                                                size={15}
-                                                                className="shrink-0 mt-1"
-                                                                style={{ color: challenge.color }}
-                                                            />
-                                                            {point}
-                                                        </li>
-                                                    ))}
-                                                </ul>
+                                                <ol className="relative mt-5 flex flex-col gap-4">
+                                                    {active.solutionPoints.map((point, i) => {
+                                                        const isLast = i === active.solutionPoints.length - 1;
+                                                        return (
+                                                            <li
+                                                                key={point}
+                                                                className="relative flex gap-3.5 animate-in fade-in slide-in-from-bottom-1 duration-500"
+                                                                style={{ animationDelay: `${200 + i * 90}ms`, animationFillMode: "both" }}
+                                                            >
+                                                                {!isLast && (
+                                                                    <span
+                                                                        aria-hidden="true"
+                                                                        className="absolute left-[11px] top-7 bottom-[-14px] w-px"
+                                                                        style={{ backgroundColor: `${active.color}33` }}
+                                                                    />
+                                                                )}
+                                                                <span
+                                                                    className="relative z-10 flex h-[22px] w-[22px] shrink-0 items-center justify-center rounded-full border-2 bg-white text-[10px] font-bold"
+                                                                    style={{ borderColor: active.color, color: active.color }}
+                                                                >
+                                                                    {i + 1}
+                                                                </span>
+                                                                <p className="text-sm leading-relaxed text-slate-600 pt-0.5">
+                                                                    {point}
+                                                                </p>
+                                                            </li>
+                                                        );
+                                                    })}
+                                                </ol>
                                             </div>
+                                        );
+                                    })()}
+                                </div>
+
+                                {selected.length > 1 && (
+                                    <div className="flex items-center justify-center gap-3 pt-1" style={{ marginTop: 8 + Math.min(selected.length - 1, 2) * 9 }}>
+                                        <button
+                                            type="button"
+                                            onClick={() => focusSolution(safeIndex - 1)}
+                                            aria-label="Solução anterior"
+                                            className="flex h-8 w-8 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-500 transition-colors hover:border-voca-green/40 hover:text-voca-green"
+                                        >
+                                            <ChevronLeft size={16} />
+                                        </button>
+
+                                        <div className="flex items-center gap-1.5">
+                                            {selected.map((challenge, i) => (
+                                                <button
+                                                    key={challenge.id}
+                                                    type="button"
+                                                    onClick={() => focusSolution(i)}
+                                                    aria-label={challenge.label}
+                                                    className="rounded-full transition-all duration-300"
+                                                    style={{
+                                                        height: 7,
+                                                        width: i === safeIndex ? 22 : 7,
+                                                        backgroundColor: i === safeIndex ? challenge.color : "#cbd5e1",
+                                                    }}
+                                                />
+                                            ))}
                                         </div>
-                                    );
-                                })}
 
-                                <Link href="/contact" className="lg:hidden mt-2">
+                                        <button
+                                            type="button"
+                                            onClick={() => focusSolution(safeIndex + 1)}
+                                            aria-label="Próxima solução"
+                                            className="flex h-8 w-8 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-500 transition-colors hover:border-voca-green/40 hover:text-voca-green"
+                                        >
+                                            <ChevronRight size={16} />
+                                        </button>
+                                    </div>
+                                )}
+
+                                <Link href="/contact" className="mt-2">
                                     <Button className="w-full bg-voca-green hover:bg-voca-green/90 rounded-md h-12 text-base font-semibold">
                                         Agendar demonstração
+                                        <ArrowRight className="ml-2" size={16} />
                                     </Button>
                                 </Link>
                             </div>
                         )}
-                            </div>
-
-                            {selected.length > 0 && (
-                                <div className="hidden lg:flex pointer-events-none absolute inset-x-0 bottom-0 z-20 justify-center pt-16 pb-1 pr-3 bg-gradient-to-t from-slate-50 via-slate-50/85 to-transparent">
-                                    <Link
-                                        href="/contact"
-                                        aria-label={edges.bottom ? "Role para ver mais soluções" : "Agendar demonstração"}
-                                        onClick={(event) => {
-                                            if (!edges.bottom) return;
-                                            event.preventDefault();
-                                            panelRef.current?.scrollTo({
-                                                top: panelRef.current.scrollHeight,
-                                                behavior: "smooth",
-                                            });
-                                        }}
-                                        className={cn(
-                                            "pointer-events-auto relative flex h-12 w-full items-center justify-center overflow-hidden font-bold shadow-md transition-all duration-500 ease-out",
-                                            edges.bottom
-                                                ? "max-w-[12rem] rounded-full bg-white text-voca-green ring-1 ring-voca-green/20 hover:ring-voca-green/40"
-                                                : "max-w-full rounded-md bg-voca-green text-white shadow-voca-green/25 hover:bg-voca-green/90"
-                                        )}
-                                    >
-                                        <span
-                                            className={cn(
-                                                "absolute flex items-center gap-1.5 text-xs whitespace-nowrap transition-all duration-300",
-                                                edges.bottom ? "opacity-100 translate-y-0 delay-150" : "opacity-0 -translate-y-4"
-                                            )}
-                                        >
-                                            Role para ver mais
-                                            <ChevronDown size={13} className="animate-bounce" />
-                                        </span>
-                                        <span
-                                            className={cn(
-                                                "absolute flex items-center gap-2 text-base whitespace-nowrap transition-all duration-300",
-                                                edges.bottom ? "opacity-0 translate-y-4" : "opacity-100 translate-y-0 delay-150"
-                                            )}
-                                        >
-                                            Agendar demonstração
-                                            <ArrowRight size={16} />
-                                        </span>
-                                    </Link>
-                                </div>
-                            )}
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+
+            <button
+                type="button"
+                onClick={scrollToPanel}
+                aria-hidden={panelInView || selected.length === 0}
+                tabIndex={panelInView || selected.length === 0 ? -1 : 0}
+                className={cn(
+                    "lg:hidden fixed bottom-5 left-1/2 z-40 flex items-center gap-2 rounded-full bg-voca-green py-3 pl-3 pr-4 text-sm font-bold text-white shadow-xl shadow-voca-green/30 transition-all duration-500 ease-out",
+                    panelInView || selected.length === 0
+                        ? "pointer-events-none -translate-x-1/2 translate-y-8 opacity-0"
+                        : "-translate-x-1/2 translate-y-0 opacity-100"
+                )}
+            >
+                <span className="flex h-5 min-w-[1.25rem] items-center justify-center rounded-full bg-white/25 px-1.5 text-[11px]">
+                    {selected.length}
+                </span>
+                {selected.length === 1 ? "Ver a solução" : "Ver as soluções"}
+                <ChevronDown size={16} className="animate-bounce" />
+            </button>
+        </>
     );
 }

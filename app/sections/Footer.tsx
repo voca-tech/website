@@ -19,7 +19,7 @@ export default function Footer() {
     const year = new Date().getFullYear();
 
     return (
-        <footer className="relative bg-slate-900 pt-16 pb-8 px-6 overflow-hidden">
+        <footer data-nav-dark className="relative bg-slate-900 pt-16 pb-8 px-6 overflow-hidden">
             <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-voca-green to-transparent" />
             <div
                 className="absolute inset-0 opacity-[0.05] pointer-events-none"
@@ -84,7 +84,7 @@ export default function Footer() {
                         <div className="flex items-start gap-2.5 text-sm text-white/70">
                             <MapPin size={15} className="shrink-0 mt-0.5 text-voca-green" />
                             <span>
-                                Rua Joaquim Lustosa, 15, Apto. 302
+                                Rua Joaquim Lustosa, 15, Sala 302
                                 <br />
                                 Anchieta, Belo Horizonte/MG
                                 <br />

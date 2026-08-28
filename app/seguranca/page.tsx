@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Check, ShieldCheck, ArrowRight } from "lucide-react";
+import { Check, ShieldCheck, ArrowRight, CalendarClock } from "lucide-react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Button } from "@/components/ui/button";
@@ -11,7 +11,7 @@ import { WhatsappLink } from "@/components/WhatsappLink";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { ClientLogoMarquee } from "@/components/ClientLogoMarquee";
 import { cn } from "@/lib/utils";
-import { securityFeatures, nr1Support, digitalShieldLayers, awsPillars } from "./data";
+import { securityFeatures, nr1Support, nr1Timeline, digitalShieldLayers, awsPillars } from "./data";
 
 const credi10Metrics = [
     { value: "100%", label: "conformidade para auditoria" },
@@ -25,12 +25,12 @@ const featureProof: Record<string, { company: string; metric: string; slug: stri
 
 const securityFaqs = [
     {
-        question: "Vocês têm certificação ISO 27001 ou SOC 2?",
-        answer: "Ainda não. O VOCA segue a LGPD e mantém processos rastreáveis e auditáveis, mas ainda não possui certificações internacionais como ISO 27001 ou SOC 2.",
+        question: "Como funciona a conformidade com a LGPD na prática?",
+        answer: "Adotamos boas práticas de segurança e compliance desde a implantação, garantindo privacidade e confidencialidade dos dados nos processos da empresa. Fazemos uso responsável de IA, com governança alinhada às diretrizes da LGPD e às recomendações da ANPD. E disponibilizamos relatórios de auditoria com rastreabilidade completa para fiscalização e prestação de contas.",
     },
     {
-        question: "Como funciona a conformidade com a LGPD na prática?",
-        answer: "Os dados dos colaboradores são coletados apenas com consentimento. A plataforma garante anonimato nos canais de ouvidoria, e os dados pessoais são armazenados e tratados em conformidade com a LGPD, com controle de acesso por perfil e histórico auditável de todas as interações.",
+        question: "Vocês têm certificação ISO 27001 ou SOC 2?",
+        answer: "Ainda não. O VOCA segue a LGPD e mantém processos rastreáveis e auditáveis, mas ainda não possui certificações internacionais como ISO 27001 ou SOC 2.",
     },
     {
         question: "A ouvidoria é realmente anônima?",
@@ -80,7 +80,6 @@ export default function SegurancaPage() {
                     className="absolute inset-0 bg-cover bg-center"
                     style={{
                         backgroundImage: "url('https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=2000&q=80')",
-                        backgroundAttachment: "fixed",
                     }}
                 />
                 <div
@@ -105,7 +104,7 @@ export default function SegurancaPage() {
                 </div>
             </div>
 
-            <div className="relative overflow-hidden" style={{ background: "linear-gradient(180deg, #012e31 0%, #0a1f21 100%)" }}>
+            <div data-nav-dark className="relative overflow-hidden" style={{ background: "linear-gradient(180deg, #012e31 0%, #0a1f21 100%)" }}>
                 <div
                     className="absolute inset-0 opacity-[0.05] pointer-events-none"
                     style={{
@@ -318,7 +317,6 @@ export default function SegurancaPage() {
                     className="absolute inset-0 bg-cover bg-center"
                     style={{
                         backgroundImage: "url('https://images.unsplash.com/photo-1531123897727-8f129e1688ce?auto=format&fit=crop&w=2000&q=80')",
-                        backgroundAttachment: "fixed",
                     }}
                 />
                 <div
@@ -333,51 +331,94 @@ export default function SegurancaPage() {
                             backgroundSize: "24px 24px",
                         }}
                     />
-                    <div className="absolute inset-0 flex items-center justify-center">
-                        <p
-                            aria-hidden="true"
-                            className="text-[9rem] sm:text-[18rem] font-black text-white/[0.06] leading-none select-none whitespace-nowrap"
-                        >
-                            NR-1
-                        </p>
-                    </div>
                 </div>
 
                 <div className="relative max-w-5xl mx-auto">
                     <div className="text-center max-w-2xl mx-auto">
-                        <h2 className="text-3xl sm:text-5xl font-extrabold text-white leading-tight">
-                            Apoio para a gestão de riscos psicossociais
+                        <h2 className="voca-title-invert text-3xl sm:text-5xl font-extrabold leading-tight">
+                            NR-1 da teoria à prática
                         </h2>
                     </div>
 
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mt-12">
-                        <div>
-                            <p className="text-white/70 text-lg leading-relaxed">
-                                A NR-1 passou a exigir que empresas mapeiem e gerenciem riscos psicossociais no ambiente de trabalho, como estresse, sobrecarga e assédio. O VOCA não substitui a avaliação técnica exigida pela norma, mas oferece as ferramentas de escuta e dados que sustentam esse trabalho no dia a dia.
-                            </p>
-                            <div className="mt-8">
-                                <Link href="/contact">
-                                    <Button className="bg-white text-voca-green hover:bg-white/90 rounded-md px-6 h-12 text-base font-semibold">
-                                        Falar sobre NR-1 com o time
-                                    </Button>
-                                </Link>
+                    <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-3xl mx-auto">
+                        {nr1Timeline.map((milestone) => (
+                            <div
+                                key={milestone.date}
+                                className="rounded-2xl border border-white/15 bg-white/[0.06] p-5 backdrop-blur-sm"
+                            >
+                                <div className="flex items-center gap-2">
+                                    <CalendarClock size={15} className="shrink-0 text-teal-300" />
+                                    <p className="text-xs font-bold uppercase tracking-widest text-teal-300">
+                                        {milestone.date}
+                                    </p>
+                                </div>
+                                <p className="mt-2.5 font-bold text-white">{milestone.title}</p>
+                                <p className="mt-1 text-sm leading-relaxed text-white/70">{milestone.description}</p>
                             </div>
-                        </div>
+                        ))}
+                    </div>
 
-                        <div className="rounded-2xl border-l-4 border-teal-300 bg-white/[0.06] backdrop-blur-sm p-6 sm:p-8">
-                            <div className="flex items-center gap-2.5 mb-5">
-                                <ShieldCheck size={20} className="text-teal-300" />
-                                <p className="font-bold text-white text-sm font-mono uppercase tracking-wide">Como o VOCA ajuda</p>
+                    <div className="mx-auto mt-10 max-w-3xl text-center">
+                        <p className="text-white/80 text-lg leading-relaxed">
+                            A norma exige que as empresas mapeiem e gerenciem riscos psicossociais no trabalho, como
+                            estresse, sobrecarga e assédio. Vale para <span className="font-semibold text-white">toda
+                            empresa com empregados CLT</span>, de qualquer porte e grau de risco.
+                        </p>
+                        <p className="text-white/60 text-base leading-relaxed mt-4">
+                            O VOCA não substitui a avaliação técnica exigida pela norma. O que ele resolve é o resto:
+                            a escuta contínua, o diagnóstico por área e o registro que sustenta o plano de ação.
+                        </p>
+                    </div>
+
+                    <div className="mt-14 flex items-center justify-center gap-2.5">
+                        <ShieldCheck size={20} className="text-teal-300" />
+                        <p className="text-sm font-bold uppercase tracking-widest text-white">Onde o VOCA entra</p>
+                    </div>
+
+                    <div className="mt-8 grid grid-cols-1 lg:grid-cols-3 gap-5">
+                        {nr1Support.map((group, index) => (
+                            <div
+                                key={group.stage}
+                                className="relative flex flex-col rounded-2xl border border-white/15 bg-white/[0.06] p-6 sm:p-7 backdrop-blur-sm"
+                            >
+                                <div className="flex items-center gap-2.5">
+                                    <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-teal-300/15 text-[11px] font-bold text-teal-300">
+                                        {index + 1}
+                                    </span>
+                                    <p className="text-[11px] font-bold uppercase tracking-widest text-teal-300">
+                                        {group.stage}
+                                    </p>
+                                </div>
+
+                                <p className="mt-3 text-base font-semibold leading-snug text-white">
+                                    {group.summary}
+                                </p>
+
+                                <ul className="mt-5 flex flex-col gap-4 border-t border-white/10 pt-5">
+                                    {group.items.map((item) => (
+                                        <li key={item.label}>
+                                            <div className="flex items-start gap-2.5">
+                                                <Check size={15} className="mt-1 shrink-0 text-teal-300" />
+                                                <div>
+                                                    <p className="text-sm font-bold text-white">{item.label}</p>
+                                                    <p className="mt-1 text-sm leading-relaxed text-white/65">
+                                                        {item.detail}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    ))}
+                                </ul>
                             </div>
-                            <ul className="flex flex-col gap-3.5">
-                                {nr1Support.map((item) => (
-                                    <li key={item} className="flex items-start gap-2.5 text-sm text-white/80">
-                                        <Check size={16} className="shrink-0 mt-0.5 text-teal-300" />
-                                        {item}
-                                    </li>
-                                ))}
-                            </ul>
-                        </div>
+                        ))}
+                    </div>
+
+                    <div className="mt-12 flex justify-center">
+                        <Link href="/contact">
+                            <Button className="bg-white text-voca-green hover:bg-white/90 rounded-md px-6 h-12 text-base font-semibold">
+                                Falar sobre NR-1 com o time
+                            </Button>
+                        </Link>
                     </div>
                 </div>
             </div>
@@ -385,8 +426,7 @@ export default function SegurancaPage() {
             <div className="py-16 sm:py-20 px-6 bg-white">
                 <div className="max-w-4xl mx-auto">
                     <div className="text-center max-w-xl mx-auto">
-                        <p className="text-sm font-bold tracking-widest text-voca-green uppercase">Perguntas frequentes</p>
-                        <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-3">
+                        <h2 className="voca-title text-2xl sm:text-3xl font-extrabold">
                             Sobre segurança e conformidade
                         </h2>
                     </div>
@@ -444,7 +484,7 @@ export default function SegurancaPage() {
                 </div>
             </div>
 
-            <div className="relative overflow-hidden py-20 sm:py-24 px-6" style={{ background: "linear-gradient(135deg, #012e31 0%, #016b72 100%)" }}>
+            <div data-nav-dark className="relative overflow-hidden py-20 sm:py-24 px-6" style={{ background: "linear-gradient(135deg, #012e31 0%, #016b72 100%)" }}>
                 <div
                     className="absolute inset-0 opacity-[0.06] pointer-events-none"
                     style={{

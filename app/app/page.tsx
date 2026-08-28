@@ -7,14 +7,13 @@ import { Separator } from '@/components/ui/separator';
 
 export default function Redirect() {
   const params = useParams();
-  // const path = params.path as string;
+
   const [isMobile, setIsMobile] = useState(true)
   const [playStoreUrl, setPlayStoreUrl] = useState('https://play.google.com/store/apps/details?id=voca.app');
   const [appStoreUrl, setAppStoreUrl] = useState('https://apps.apple.com/br/app/voca/id1438359659');
   let destinationUrl = "https://www.voca.com.br/app";
 
   useEffect(() => {
-    // Função para detectar o sistema operacional
     const getMobileOS = () => {
       const userAgent = navigator.userAgent || (window as any).opera;
 
@@ -30,7 +29,7 @@ export default function Redirect() {
     };
 
     const os = getMobileOS();
-    // URLs para cada plataforma
+
     if (os === 'web') {
       setIsMobile(false)
     } else if (os === 'Android') {
@@ -103,4 +102,4 @@ export default function Redirect() {
       )}
     </div>
   );
-} 
+}

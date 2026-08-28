@@ -52,15 +52,11 @@ export default function BlogPage() {
             </div>
 
             <div className="relative max-w-2xl mx-auto text-center">
-                <p className="text-sm font-bold tracking-widest text-voca-green uppercase">Blog</p>
-                <h1 className="text-3xl sm:text-5xl font-extrabold text-slate-900 leading-tight mt-3">
+                <h1 className="voca-title text-3xl sm:text-5xl font-extrabold leading-tight">
                     Conteúdo para quem cuida de pessoas
                 </h1>
                 <p className="text-lg text-slate-500 mt-5">
                     Artigos sobre cultura, engajamento, dados e gestão de pessoas, direto do time VOCA.
-                </p>
-                <p className="text-xs text-slate-400 mt-4">
-                    Página de exemplo com conteúdo fictício (lorem ipsum), só para visualizar o layout.
                 </p>
             </div>
 

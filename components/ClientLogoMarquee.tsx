@@ -91,23 +91,31 @@ const GROUP_ROWS: Record<LogoGroup, Logo[][]> = {
     partners: [partnerLogos],
 };
 
+type MarqueeDirection = "ltr" | "rtl";
+
 interface ClientLogoMarqueeProps {
     caption?: ReactNode;
     group?: LogoGroup;
+
+    direction?: MarqueeDirection;
 }
 
-export function ClientLogoMarquee({ caption, group = "all" }: ClientLogoMarqueeProps) {
+export function ClientLogoMarquee({ caption, group = "all", direction = "ltr" }: ClientLogoMarqueeProps) {
     const rows = GROUP_ROWS[group];
+    const firstRowIsLtr = direction === "ltr";
 
     return (
         <div>
-            {rows.map((row, rowIndex) => (
+            {rows.map((row, rowIndex) => {
+                const isLtr = rowIndex % 2 === 0 ? firstRowIsLtr : !firstRowIsLtr;
+
+                return (
                 <Fragment key={rowIndex}>
                     <div className="w-full overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_8%,black_92%,transparent)]">
                         <div
                             className="marquee-track flex items-center w-max"
                             style={{
-                                animation: `${rowIndex % 2 === 0 ? "marquee-right" : "marquee-left"} 26s linear infinite`,
+                                animation: `${isLtr ? "marquee-right" : "marquee-left"} 26s linear infinite`,
                             }}
                         >
                             {[...row, ...row].map((logo, index) => (
@@ -126,7 +134,8 @@ export function ClientLogoMarquee({ caption, group = "all" }: ClientLogoMarqueeP
                         </div>
                     )}
                 </Fragment>
-            ))}
+                );
+            })}
         </div>
     );
 }

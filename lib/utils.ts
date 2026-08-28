@@ -6,7 +6,6 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-
 export async function sendEmail(data: FormDataProps) {
   const apiEndpoint = '/api/email';
 
@@ -17,7 +16,7 @@ export async function sendEmail(data: FormDataProps) {
     });
 
     const response = await res.json();
-    
+
     return response.status;
   } catch (err) {
     return 500;

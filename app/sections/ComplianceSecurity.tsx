@@ -39,7 +39,7 @@ export default function ComplianceSecurity() {
     }, []);
 
     return (
-        <div ref={sectionRef} className="relative py-20 sm:py-28 px-6 overflow-hidden">
+        <div data-nav-dark ref={sectionRef} className="relative py-28 sm:py-36 px-6 overflow-hidden">
             <div
                 className="absolute inset-0"
                 style={{
@@ -65,13 +65,10 @@ export default function ComplianceSecurity() {
                 style={{ animation: "drift-a 28s ease-in-out infinite" }}
             />
 
-            <div className="relative max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-[1.1fr_1fr] gap-12 lg:gap-16 items-center">
+            <div className="relative max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-[1.1fr_1fr] gap-12 lg:gap-16 items-start lg:pt-4">
                 <div>
-                    <span className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-1.5 text-xs font-bold tracking-widest text-white uppercase backdrop-blur-sm">
-                        Segurança & Compliance
-                    </span>
-                    <h2 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold text-white leading-[1.05] mt-5">
-                        Segurança não é detalhe. É a base de tudo.
+                    <h2 className="voca-title-invert text-4xl sm:text-6xl lg:text-7xl font-extrabold leading-[1.05]">
+                        Segurança aqui não é tratada apenas como detalhe.
                     </h2>
                     <p className="text-xl text-white/70 mt-6 max-w-lg">
                         Dados protegidos, processos auditáveis e ferramentas que apoiam o RH na gestão de riscos, inclusive os psicossociais, exigidos pela NR-1.
@@ -115,8 +112,9 @@ export default function ComplianceSecurity() {
                                     onMouseEnter={() => setHoveredIndex(i)}
                                     onMouseLeave={() => setHoveredIndex(null)}
                                     className={cn(
-                                        "compliance-row relative px-6 sm:px-7 py-5 border-b border-white/10 last:border-b-0",
-                                        isLast && "rounded-b-[1.75rem]"
+                                        "compliance-row relative px-6 sm:px-7 py-5 border-b border-white/10 last:border-b-0 transition-colors duration-500",
+                                        hoveredIndex === i && "bg-white/[0.04]",
+                                        isLast && "rounded-b-[1.75rem] border-b-0"
                                     )}
                                 >
                                     <div className="flex items-center gap-4">
@@ -136,11 +134,23 @@ export default function ComplianceSecurity() {
                                     </div>
 
                                     <div
-                                        className="grid transition-[grid-template-rows] duration-300 ease-out"
-                                        style={{ gridTemplateRows: hoveredIndex === i ? "1fr" : "0fr" }}
+                                        className="grid transition-[grid-template-rows] duration-[520ms]"
+                                        style={{
+                                            gridTemplateRows: hoveredIndex === i ? "1fr" : "0fr",
+                                            transitionTimingFunction: "cubic-bezier(0.22, 1, 0.36, 1)",
+                                        }}
                                     >
                                         <div className="overflow-hidden">
-                                            <p className="text-sm text-white/70 leading-relaxed pl-[3.75rem] pt-3">
+                                            <p
+                                                className="text-sm text-white/70 leading-relaxed pl-[3.75rem] pt-3"
+                                                style={{
+                                                    opacity: hoveredIndex === i ? 1 : 0,
+                                                    transform: hoveredIndex === i ? "translateY(0)" : "translateY(-8px)",
+                                                    transition:
+                                                        "opacity 380ms ease-out, transform 520ms cubic-bezier(0.22, 1, 0.36, 1)",
+                                                    transitionDelay: hoveredIndex === i ? "110ms" : "0ms",
+                                                }}
+                                            >
                                                 {feature.short}
                                             </p>
                                         </div>
@@ -148,6 +158,7 @@ export default function ComplianceSecurity() {
                                 </div>
                             );
                         })}
+
                     </div>
                 </div>
             </div>

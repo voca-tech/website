@@ -1,6 +1,6 @@
 export default function PrivacyPolicy() {
     return (
-        <div className="bg-voca-green text-white">
+        <div data-nav-dark className="bg-voca-green text-white">
             <div className="max-w-7xl m-auto py-12 px-4">
                 <div>
                     <h1 className="font-bold text-3xl mb-8">Política de Privacidade</h1>

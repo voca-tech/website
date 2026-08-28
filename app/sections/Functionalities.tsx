@@ -59,9 +59,8 @@ export default function Functionalities() {
             </div>
 
             <div className="relative max-w-4xl mx-auto text-center">
-                <p className="text-sm font-bold tracking-widest text-voca-green uppercase">Funcionalidades</p>
-                <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 mt-3">
-                    18 funcionalidades, 1 sistema só
+                <h2 className="voca-title text-3xl sm:text-4xl font-extrabold">
+                    21 funcionalidades, 1 sistema só
                 </h2>
                 <p className="text-lg text-slate-500 mt-4 max-w-2xl mx-auto">
                     Da comunicação do dia a dia até os dados que orientam suas decisões, tudo em uma plataforma.

@@ -39,7 +39,7 @@ export default function WhyVocaTeaser() {
     }, []);
 
     return (
-        <div ref={sectionRef} className="relative py-16 sm:py-24 px-6 overflow-hidden" style={{ background: "linear-gradient(160deg, #012e31 0%, #016b72 100%)" }}>
+        <div data-nav-dark ref={sectionRef} className="relative py-16 sm:py-24 px-6 overflow-hidden" style={{ background: "linear-gradient(160deg, #012e31 0%, #016b72 100%)" }}>
             <div className="absolute inset-0 pointer-events-none">
                 <div
                     className="absolute inset-0 opacity-[0.08]"
@@ -71,8 +71,7 @@ export default function WhyVocaTeaser() {
                         height={111}
                         className="w-10 h-auto mx-auto mb-6 brightness-0 invert"
                     />
-                    <p className="text-sm font-bold tracking-widest text-teal-300 uppercase">Por que o VOCA</p>
-                    <h2 className="text-3xl sm:text-4xl font-extrabold text-white leading-tight mt-3">
+                    <h2 className="voca-title-invert text-3xl sm:text-4xl font-extrabold leading-tight">
                         Tecnologia forte. Time de verdade.
                     </h2>
                     <p className="text-lg text-white/70 mt-4">
@@ -112,7 +111,7 @@ export default function WhyVocaTeaser() {
                     </div>
                     <div className="text-center sm:text-left">
                         <p className="text-white/80 text-lg leading-relaxed">{highlightStat.label}</p>
-                        <p className="text-white/40 text-sm mt-2">Fonte: {highlightStat.source}</p>
+                        {highlightStat.source && <p className="text-white/40 text-sm mt-2">Fonte: {highlightStat.source}</p>}
                     </div>
                 </div>
 

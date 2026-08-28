@@ -1,4 +1,5 @@
 import { NavBar } from '@/components/NavigationBar'
+import 'lenis/dist/lenis.css'
 import './globals.css'
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
@@ -6,12 +7,17 @@ import Script from 'next/script'
 import Footer from './sections/Footer'
 import { Toaster } from '@/components/ui/toaster'
 import SmoothScrollProvider from '@/components/SmoothScrollProvider'
+import { LoadingScreen } from '@/components/LoadingScreen'
 
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://www.voca.com.br'),
-  title: 'VOCA | Plataforma de DHO completa para gestão, comunicação e inteligência de dados',
+
+  title: {
+    default: 'VOCA | Plataforma de DHO completa para gestão, comunicação e inteligência de dados',
+    template: '%s | VOCA',
+  },
   description: 'A plataforma de DHO que conecta, organiza e ativa as pessoas da sua empresa: 21 funcionalidades integradas, suporte humano e resultados desde o primeiro mês.',
   openGraph: {
     title: 'VOCA | Comunicação, engajamento e inteligência de pessoas em uma única plataforma',
@@ -28,7 +34,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en">
+    <html lang="pt-BR">
       <head>
         <script
           dangerouslySetInnerHTML={{
@@ -52,6 +58,8 @@ export default function RootLayout({
 
           <Footer />
         </SmoothScrollProvider>
+
+        <LoadingScreen />
       </body>
     </html>
   )

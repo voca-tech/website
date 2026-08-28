@@ -103,3 +103,157 @@
     from { background-position: 0 0; }
     to { background-position: 24px 24px; }
 }
+
+@keyframes hero-underline {
+    from { stroke-dashoffset: 1; }
+    to { stroke-dashoffset: 0; }
+}
+
+@keyframes hero-ping {
+    0% { transform: scale(1); opacity: 0.75; }
+    70% { transform: scale(2.6); opacity: 0; }
+    100% { transform: scale(2.6); opacity: 0; }
+}
+
+@keyframes device-shine {
+    0% { transform: translateX(0) skewX(-14deg); opacity: 0; }
+    8% { opacity: 1; }
+    38% { opacity: 0; }
+    100% { transform: translateX(420%) skewX(-14deg); opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    [style*="device-shine"],
+    [style*="hero-ping"] {
+        animation: none !important;
+    }
+}
+
+.glass-panel {
+    background-color: rgb(255 255 255 / 0.6);
+    backdrop-filter: blur(24px) saturate(190%);
+    -webkit-backdrop-filter: blur(24px) saturate(190%);
+    border: 1px solid rgb(255 255 255 / 0.5);
+    box-shadow:
+        inset 0 1px 0 rgb(255 255 255 / 0.85),
+        inset 0 0 0 1px rgb(255 255 255 / 0.14),
+        0 8px 24px -12px rgb(2 20 22 / 0.3),
+        0 40px 80px -32px rgb(2 20 22 / 0.5);
+}
+
+.glass-tile {
+    background-color: rgb(255 255 255 / 0.4);
+    border: 1px solid rgb(255 255 255 / 0.6);
+    box-shadow:
+        inset 0 1px 0 rgb(255 255 255 / 0.9),
+        0 1px 2px rgb(15 23 42 / 0.05);
+}
+
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+    .glass-panel {
+        background-color: rgb(255 255 255 / 0.98);
+    }
+
+    .glass-tile {
+        background-color: rgb(241 245 249 / 1);
+    }
+}
+
+@keyframes rail-progress {
+    from { transform: scaleX(0); }
+    to { transform: scaleX(1); }
+}
+
+.voca-range {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 8px;
+    border-radius: 999px;
+    background: linear-gradient(
+        90deg,
+        #007980 0%,
+        #2dd4bf var(--fill, 0%),
+        #e2e8f0 var(--fill, 0%),
+        #e2e8f0 100%
+    );
+    cursor: pointer;
+    outline: none;
+}
+
+.voca-range::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 26px;
+    height: 26px;
+    border-radius: 999px;
+    background: #ffffff;
+    border: 3px solid #007980;
+    box-shadow: 0 2px 8px rgb(2 20 22 / 0.22);
+    transition: transform 150ms ease-out, box-shadow 150ms ease-out;
+}
+
+.voca-range::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    border-radius: 999px;
+    background: #ffffff;
+    border: 3px solid #007980;
+    box-shadow: 0 2px 8px rgb(2 20 22 / 0.22);
+    transition: transform 150ms ease-out, box-shadow 150ms ease-out;
+}
+
+.voca-range:hover::-webkit-slider-thumb,
+.voca-range:focus-visible::-webkit-slider-thumb {
+    transform: scale(1.12);
+    box-shadow: 0 0 0 6px rgb(0 121 128 / 0.14), 0 2px 8px rgb(2 20 22 / 0.22);
+}
+
+.voca-range:hover::-moz-range-thumb,
+.voca-range:focus-visible::-moz-range-thumb {
+    transform: scale(1.12);
+    box-shadow: 0 0 0 6px rgb(0 121 128 / 0.14), 0 2px 8px rgb(2 20 22 / 0.22);
+}
+
+@keyframes roi-bar-grow {
+    from { transform: scaleY(0); }
+    to { transform: scaleY(1); }
+}
+
+@keyframes roi-bar-label {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.voca-title {
+    color: #0f172a;
+}
+
+.voca-title-invert {
+    color: #ffffff;
+}
+
+@supports ((background-clip: text) or (-webkit-background-clip: text)) {
+    .voca-title {
+        background-image: linear-gradient(102deg, #0f172a 0%, #08454b 52%, #007980 100%);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+    }
+
+    .voca-title-invert {
+        background-image: linear-gradient(102deg, #ffffff 0%, #cdf3ef 54%, #5eead4 100%);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+    }
+}
+
+@keyframes aurora-drift {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50%      { transform: scale(1.08); opacity: 0.82; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    [style*="aurora-drift"] { animation: none !important; }
+}

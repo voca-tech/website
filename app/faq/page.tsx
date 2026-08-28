@@ -75,10 +75,7 @@ export default function FAQPage() {
                 className="relative max-w-5xl mx-auto"
             >
                 <div className="text-center max-w-2xl mx-auto">
-                    <p className="text-sm font-bold tracking-widest text-voca-green uppercase">
-                        Dúvidas frequentes
-                    </p>
-                    <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900 mt-3">
+                    <h1 className="voca-title text-3xl sm:text-4xl font-extrabold">
                         Perguntas que a gente sempre recebe
                     </h1>
                     <p className="text-lg text-slate-500 mt-4">

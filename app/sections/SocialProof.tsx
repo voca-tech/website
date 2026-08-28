@@ -77,8 +77,7 @@ export default function SocialProofSection() {
 
             <div className="relative max-w-6xl mx-auto">
                 <div className="text-center max-w-2xl mx-auto">
-                    <p className="text-sm font-bold tracking-widest text-voca-green uppercase">Clientes &amp; Parceiros</p>
-                    <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-3">
+                    <h2 className="voca-title text-2xl sm:text-3xl font-extrabold">
                         Empresas e instituições que confiam no VOCA
                     </h2>
                     <p className="text-slate-500 mt-3">
@@ -95,7 +94,7 @@ export default function SocialProofSection() {
                 </p>
 
                 <div className="mt-6">
-                    <ClientLogoMarquee group="partners" />
+                    <ClientLogoMarquee group="partners" direction="rtl" />
                 </div>
 
                 <div

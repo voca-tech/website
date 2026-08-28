@@ -1,8 +1,4 @@
-// Reference draft — the GSAP ScrollTrigger "pinned stage + synced sidebar" version
-// of the Functionalities section. Not wired into any page; kept here in case we
-// want to reuse this interaction pattern elsewhere later.
-//
-// Rename to .tsx and move into app/sections/ to bring it back into use.
+
 
 'use client'
 
@@ -142,7 +138,7 @@ export default function Functionalities() {
 
     return (
         <>
-            {/* Desktop: pinned stage synced to scroll position */}
+
             <div
                 id="functionalities"
                 ref={containerRef}
@@ -227,7 +223,6 @@ export default function Functionalities() {
                 </div>
             </div>
 
-            {/* Mobile: simple stacked list, no pinning */}
             <div className="lg:hidden bg-white py-16 px-6">
                 <div className="flex flex-col gap-16">
                     {features.map((feature) => (

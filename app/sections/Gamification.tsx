@@ -30,9 +30,6 @@ const achievements: Achievement[] = [
     { icon: Award, title: "Trilhas de aprendizado", description: "Conquistas que guiam o desenvolvimento." },
 ];
 
-// A horizontal clothesline of lights spanning the section, sagging gently between
-// anchors. Each badge hangs from its own anchor point at an alternating cord length,
-// like bunting flags — the title sits clear below the whole strip.
 const BAND_WIDTH = 1200;
 const BAND_HEIGHT = 320;
 const ANCHOR_Y = [20, 55, 20, 55, 20, 55, 20, 55];
@@ -129,7 +126,6 @@ export default function Gamification() {
                     </p>
                 </div>
 
-                {/* Clothesline of lights, badges hanging from it — spans the full width */}
                 <div className="hidden lg:block relative max-w-6xl mx-auto mt-4" style={{ height: BAND_HEIGHT }}>
                     <svg
                         viewBox={`0 0 ${BAND_WIDTH} ${BAND_HEIGHT}`}
@@ -189,7 +185,6 @@ export default function Gamification() {
                     ))}
                 </div>
 
-                {/* Mobile: simple grid, the hanging clothesline doesn't translate to narrow screens */}
                 <div className="lg:hidden grid grid-cols-2 sm:grid-cols-3 gap-4 max-w-2xl mx-auto mt-10">
                     {achievements.map((item, index) => (
                         <button

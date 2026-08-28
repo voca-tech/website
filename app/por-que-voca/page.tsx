@@ -11,7 +11,7 @@ import { Button } from "@/components/ui/button";
 import { WhatsappLink } from "@/components/WhatsappLink";
 import { ShieldCheckIcon } from "@/components/ui/shield-check";
 import { ClientLogoMarquee } from "@/components/ClientLogoMarquee";
-import { Avatar, AvatarImage } from "@/components/ui/avatar";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { quotes } from "@/lib/testimonials";
 import { PERCENT_SAVINGS } from "@/app/roi/constants";
 import { reasons, whyVocaStats as stats, type Reason, type AnimatedIconHandle } from "./data";
@@ -19,17 +19,15 @@ import { cn } from "@/lib/utils";
 
 const playfair = Playfair_Display({ subsets: ["latin"], weight: ["400", "500"], style: ["normal", "italic"], display: "swap" });
 
-const featuredQuote = quotes.find((q) => q.name === "Cristiano")!;
+const featuredQuote = quotes.find((q) => q.name === "Walter Rodrigues")!;
 
 const comparison = [
-    { label: "Atendimento durante a implementação", voca: "Time humano dedicado", others: "Tickets e filas de suporte" },
-    { label: "Tempo até o primeiro resultado", voca: "Onboarding assistido, sem meses de setup", others: "Configuração longa e técnica" },
-    { label: "Gamificação", voca: "Nativa na plataforma", others: "Raramente incluída, ou como add-on" },
-    { label: "Conformidade com a LGPD", voca: "Por padrão", others: "Varia de fornecedor pra fornecedor" },
-    { label: "Evolução com a empresa", voca: "Acompanha do local ao internacional", others: "Geralmente pensada pra um único porte" },
-    { label: "White-label", voca: "Plataforma com a cara da empresa", others: "Visual genérico do fornecedor" },
-    { label: "Idiomas", voca: "Português, inglês e espanhol nativos", others: "Normalmente só em inglês" },
-    { label: "IA de sentimento", voca: "Em 100% das interações escritas", others: "Não faz parte do produto" },
+    { label: "Suporte pós-venda", voca: "Atendimento reconhecido pelos clientes, inclusive em cases de migração.", others: "Reclamações recorrentes de lentidão, acesso e burocracia." },
+    { label: "Integração com DP", voca: "Senior, Microsoft, Synergy e SSO Google, com API para outros ERPs.", others: "Nativa com foco maior no parceiro atual do fornecedor." },
+    { label: "Experiência do colaborador", voca: "Método VOCA de engajamento contínuo, com jornada integrada e intuitiva.", others: "Interface corporativa e fria, com usabilidade difícil na web e no app." },
+    { label: "Flexibilidade de roadmap", voca: "Parceiro de inovação, aberto a customizações estratégicas.", others: "Burocracia corporativa, processo longo e que raramente acontece." },
+    { label: "Estabilidade de relacionamento", voca: "100% humano, dedicado e customizado. Você fala com quem decide.", others: "Engessado e frio, com chatbots e processos sem olhar humano." },
+    { label: "Produto", voca: "DHO na palma da mão: 21 funcionalidades em 1 plataforma.", others: "Normalmente, foco maior em algumas funcionalidades específicas." },
 ];
 
 function PersonAvatar({ size = 32, color }: { size?: number; color: string }) {
@@ -72,8 +70,8 @@ function HumanChatMockup({ color }: { color: string }) {
 
 function OnboardingMockup({ color }: { color: string }) {
     const steps = [
-        { label: "Kickoff estratégico", done: true },
-        { label: "Capacitação das lideranças", done: true },
+        { label: "Alinhamento estratégico", done: true },
+        { label: "Capacitação dos embaixadores", done: true },
         { label: "Onboarding (Go Live)", done: true },
         { label: "Primeiros dados gerados", done: false },
     ];
@@ -310,9 +308,9 @@ function CountUpStat({ target, suffix, className = "text-4xl sm:text-5xl font-ex
 
 const noPromiseLines: { before: string; value: string; after: string; align: string }[] = [
     { before: "Hoje, ", value: "62%", after: " dos colaboradores usam a plataforma todos os dias.", align: "text-left" },
-    { before: "", value: "96%", after: " de engajamento nas pesquisas internas.", align: "text-right" },
-    { before: "Onboardings ", value: "54%", after: " mais produtivos.", align: "text-left" },
-    { before: "", value: "100%", after: " das interações já passam por leitura de sentimento com IA.", align: "text-right" },
+    { before: "", value: "-40 horas", after: " por mês no tempo gasto com processos manuais de DHO.", align: "text-right" },
+    { before: "Onboarding ", value: "54%", after: " mais eficiente.", align: "text-left" },
+    { before: "", value: "100%", after: " de conformidade em auditorias externas e internas.", align: "text-right" },
 ];
 
 function NoPromiseSection() {
@@ -378,8 +376,7 @@ export default function PorQueVocaPage() {
 
                 <div className="relative max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-12 items-center">
                     <div className="text-center lg:text-left">
-                        <p className="text-sm font-bold tracking-widest text-voca-green uppercase">Por que o VOCA</p>
-                        <h1 className="text-3xl sm:text-5xl font-extrabold text-slate-900 leading-tight mt-3">
+                        <h1 className="voca-title text-3xl sm:text-5xl font-extrabold leading-tight">
                             Tecnologia forte. Time de verdade.
                         </h1>
                         <p className="text-lg text-slate-500 mt-5">
@@ -399,12 +396,11 @@ export default function PorQueVocaPage() {
                         </div>
 
                         <div className="absolute -bottom-7 -left-6 sm:-left-10 rounded-2xl border border-slate-200 bg-white shadow-xl p-4 flex items-center gap-3">
-                            <RadialStat percent={72} color="#007980" />
+                            <RadialStat percent={47} color="#007980" />
                             <div>
-                                <p className="text-xs text-slate-500 leading-snug max-w-[8.5rem]">
-                                    dos funcionários estão insatisfeitos no trabalho
+                                <p className="text-xs text-slate-500 leading-snug max-w-[9.5rem]">
+                                    menos chance de procurar outro emprego, entre colaboradores conectados com a cultura
                                 </p>
-                                <p className="text-[10px] text-slate-400 mt-1">Fonte: ISMA Brasil</p>
                             </div>
                         </div>
 
@@ -443,6 +439,9 @@ export default function PorQueVocaPage() {
                     <div className="flex items-center justify-center gap-3 mt-6">
                         <Avatar className="h-11 w-11 ring-2 ring-white shadow-sm">
                             <AvatarImage src={featuredQuote.avatar} />
+                            <AvatarFallback className="bg-voca-green/10 text-voca-green text-xs font-bold">
+                                {featuredQuote.name.split(" ").map((part) => part[0]).slice(0, 2).join("")}
+                            </AvatarFallback>
                         </Avatar>
                         <div className="text-left">
                             <p className="font-bold text-slate-900 text-sm">{featuredQuote.name}</p>
@@ -461,7 +460,7 @@ export default function PorQueVocaPage() {
                 </div>
             </div>
 
-            <div className="relative py-16 sm:py-20 px-6 overflow-hidden" style={{ background: "linear-gradient(135deg, #012e31 0%, #016b72 100%)" }}>
+            <div data-nav-dark className="relative py-16 sm:py-20 px-6 overflow-hidden" style={{ background: "linear-gradient(135deg, #012e31 0%, #016b72 100%)" }}>
                 <Image
                     src="/voca-symbol.png"
                     alt=""
@@ -479,18 +478,17 @@ export default function PorQueVocaPage() {
                 />
 
                 <div className="relative max-w-4xl mx-auto text-center">
-                    <p className="text-sm font-bold tracking-widest text-white/60 uppercase">Por que isso importa</p>
-                    <h2 className="text-2xl sm:text-3xl font-extrabold text-white mt-3">
+                    <h2 className="voca-title-invert text-2xl sm:text-3xl font-extrabold">
                         Comunicação ruim custa caro
                     </h2>
                 </div>
 
                 <div className="relative grid grid-cols-1 sm:grid-cols-3 gap-6 mt-12 max-w-4xl mx-auto">
                     {stats.map((stat) => (
-                        <div key={stat.source} className="rounded-2xl bg-white/5 border border-white/10 p-6 text-center">
+                        <div key={stat.label} className="rounded-2xl bg-white/5 border border-white/10 p-6 text-center">
                             <CountUpStat target={Number(stat.value)} suffix={stat.suffix} />
                             <p className="text-sm text-white/70 mt-3 leading-relaxed">{stat.label}</p>
-                            <p className="text-xs text-white/40 mt-3">Fonte: {stat.source}</p>
+                            {stat.source && <p className="text-xs text-white/40 mt-3">Fonte: {stat.source}</p>}
                         </div>
                     ))}
                 </div>
@@ -501,12 +499,11 @@ export default function PorQueVocaPage() {
             <div className="py-16 sm:py-24 px-6">
                 <div className="max-w-4xl mx-auto">
                     <div className="text-center max-w-2xl mx-auto">
-                        <p className="text-sm font-bold tracking-widest text-voca-green uppercase">Comparativo</p>
-                        <h2 className="text-3xl font-extrabold text-slate-900 mt-3">
+                        <h2 className="voca-title text-3xl font-extrabold">
                             VOCA vs. ferramentas tradicionais
                         </h2>
                         <p className="text-slate-500 mt-4">
-                            Uma comparação geral com o que costuma ser padrão de mercado em ferramentas de gestão de pessoas.
+                            Clientes escolhem o VOCA, inclusive migrando de outras plataformas do mercado.
                         </p>
                     </div>
 
@@ -605,8 +602,7 @@ export default function PorQueVocaPage() {
 
                     <div className="relative flex flex-col lg:flex-row items-center gap-10 p-8 sm:p-12">
                         <div className="flex-1 text-center lg:text-left">
-                            <p className="text-sm font-bold tracking-widest text-voca-green uppercase">Calculadora de ROI</p>
-                            <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-3 max-w-md mx-auto lg:mx-0">
+                            <h2 className="voca-title text-2xl sm:text-3xl font-extrabold max-w-md mx-auto lg:mx-0">
                                 Veja o retorno em números, não em promessas
                             </h2>
                             <p className="text-slate-500 mt-3 max-w-md mx-auto lg:mx-0">

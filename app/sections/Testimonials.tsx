@@ -53,7 +53,7 @@ export default function TestimonialsSection() {
     }, []);
 
     return (
-        <div id="testimonials" ref={sectionRef} className="relative bg-gradient-to-b from-[#012e31] to-[#016b72] py-16 sm:py-24 px-6 overflow-hidden">
+        <div data-nav-dark id="testimonials" ref={sectionRef} className="relative bg-gradient-to-b from-[#012e31] to-[#016b72] py-16 sm:py-24 px-6 overflow-hidden">
             <div className="absolute inset-0 pointer-events-none">
                 <div
                     className="absolute inset-0 opacity-[0.15]"

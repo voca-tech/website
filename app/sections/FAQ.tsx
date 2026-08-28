@@ -126,10 +126,7 @@ export default function FAQSection() {
 
             <div className="relative max-w-3xl mx-auto">
                 <div className="text-center max-w-2xl mx-auto">
-                    <p className="text-sm font-bold tracking-widest text-voca-green uppercase">
-                        Dúvidas frequentes
-                    </p>
-                    <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 mt-3">
+                    <h2 className="voca-title text-3xl sm:text-4xl font-extrabold">
                         Perguntas que a gente sempre recebe
                     </h2>
                     <p className="text-lg text-slate-500 mt-4">

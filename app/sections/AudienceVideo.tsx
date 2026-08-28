@@ -4,7 +4,7 @@ import { useEffect, useRef, useState, type CSSProperties } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Playfair_Display } from "next/font/google";
-import { Check, ArrowRight, LayoutGrid, Play, Pause, RotateCcw, Volume2, VolumeX } from "lucide-react";
+import { ArrowRight, LayoutGrid, Play, Pause, RotateCcw, Volume2, VolumeX } from "lucide-react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useIsDesktop } from "@/components/useIsDesktop";
@@ -21,12 +21,74 @@ function formatTime(seconds: number) {
 
 const playfair = Playfair_Display({ subsets: ["latin"], weight: ["400", "500"], style: ["normal", "italic"], display: "swap" });
 
+const PERSONA_CYCLE = 4200;
+
+const RESUME_AFTER_IDLE = 18000;
+
 function PersonaTeaser() {
     const [activeId, setActiveId] = useState(personas[0].id);
     const active = personas.find((p) => p.id === activeId)!;
     const sectionRef = useRef<HTMLDivElement>(null);
     const revealRef = useRef<HTMLDivElement>(null);
     const parallaxRef = useRef<HTMLDivElement>(null);
+
+    const [autoplay, setAutoplay] = useState(true);
+    const [inView, setInView] = useState(false);
+    const [hovering, setHovering] = useState(false);
+
+    const rotating = autoplay && inView && !hovering;
+
+    useEffect(() => {
+        const element = sectionRef.current;
+        if (!element) return;
+
+        const observer = new IntersectionObserver(
+            ([entry]) => setInView(entry.isIntersecting),
+            { threshold: 0.35 }
+        );
+        observer.observe(element);
+        return () => observer.disconnect();
+    }, []);
+
+    useEffect(() => {
+        if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) setAutoplay(false);
+    }, []);
+
+    useEffect(() => {
+        if (!rotating) return;
+
+        const id = window.setTimeout(() => {
+            const index = personas.findIndex((p) => p.id === activeId);
+            setActiveId(personas[(index + 1) % personas.length].id);
+        }, PERSONA_CYCLE);
+
+        return () => window.clearTimeout(id);
+    }, [activeId, rotating]);
+
+    const idleRef = useRef<number>();
+
+    function armResume() {
+        window.clearTimeout(idleRef.current);
+        idleRef.current = window.setTimeout(() => setAutoplay(true), RESUME_AFTER_IDLE);
+    }
+
+    function pick(id: string) {
+        setActiveId(id);
+        setAutoplay(false);
+        armResume();
+    }
+
+    function onPointerEnter() {
+        setHovering(true);
+        window.clearTimeout(idleRef.current);
+    }
+
+    function onPointerLeave() {
+        setHovering(false);
+        if (!autoplay) armResume();
+    }
+
+    useEffect(() => () => window.clearTimeout(idleRef.current), []);
 
     useEffect(() => {
         gsap.registerPlugin(ScrollTrigger);
@@ -84,8 +146,7 @@ function PersonaTeaser() {
 
             <div ref={revealRef} className="relative max-w-6xl mx-auto">
                 <div className="reveal-item text-center max-w-2xl mx-auto">
-                    <p className="text-sm font-bold tracking-widest text-voca-green uppercase">Público-alvo</p>
-                    <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 leading-tight mt-3">
+                    <h2 className="voca-title text-3xl sm:text-4xl font-extrabold leading-tight">
                         Um VOCA diferente para cada pessoa na sua empresa
                     </h2>
                     <p className="text-lg text-slate-500 mt-4">
@@ -93,38 +154,89 @@ function PersonaTeaser() {
                     </p>
                 </div>
 
-                <div className="reveal-item flex flex-wrap justify-center gap-2 mt-10">
-                    {personas.map((persona) => {
-                        const isActive = persona.id === activeId;
-                        return (
-                            <button
-                                key={persona.id}
-                                onClick={() => setActiveId(persona.id)}
-                                style={{
-                                    backgroundColor: isActive ? persona.color : "transparent",
-                                    borderColor: isActive ? persona.color : undefined,
-                                }}
-                                className={cn(
-                                    "flex items-center gap-2.5 rounded-full border px-4 py-2.5 text-sm font-bold transition-all duration-300 ease-out",
-                                    isActive
-                                        ? "text-white shadow-lg -translate-y-0.5 scale-105"
-                                        : "border-slate-200 text-slate-600 hover:border-slate-300 hover:-translate-y-0.5"
-                                )}
-                            >
-                                <persona.icon
-                                    size={16}
-                                    className={cn("transition-transform duration-500 ease-out", isActive && "scale-110 rotate-[-8deg]")}
-                                />
-                                {persona.title}
-                            </button>
-                        );
-                    })}
-                </div>
-
                 <div
-                    className="reveal-item relative mt-8 rounded-[2.5rem] border border-white/60 bg-white/40 shadow-xl overflow-hidden"
-                    style={{ backdropFilter: "blur(28px)", WebkitBackdropFilter: "blur(28px)" }}
+                    className="reveal-item relative mt-10 grid grid-cols-1 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] gap-6 lg:gap-8"
+                    onMouseEnter={onPointerEnter}
+                    onMouseLeave={onPointerLeave}
                 >
+
+                    <div className="flex flex-col gap-2">
+                        {personas.map((persona) => {
+                            const isActive = persona.id === activeId;
+                            return (
+                                <button
+                                    key={persona.id}
+                                    onClick={() => pick(persona.id)}
+                                    aria-pressed={isActive}
+                                    style={{ color: persona.color }}
+                                    className={cn(
+                                        "group relative overflow-hidden rounded-2xl border px-5 py-4 text-left transition-all duration-500 ease-out",
+                                        isActive
+                                            ? "border-transparent bg-white shadow-lg"
+                                            : "border-slate-200/80 bg-white/50 hover:border-slate-300 hover:bg-white/80"
+                                    )}
+                                >
+                                    <span
+                                        aria-hidden="true"
+                                        className="absolute inset-y-0 left-0 w-[3px] transition-transform duration-500 ease-out"
+                                        style={{
+                                            backgroundColor: persona.color,
+                                            transform: isActive ? "scaleY(1)" : "scaleY(0)",
+                                        }}
+                                    />
+
+                                    <span className="flex items-center gap-3">
+                                        <span
+                                            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full transition-colors duration-500"
+                                            style={{
+                                                backgroundColor: isActive ? persona.color : `${persona.color}14`,
+                                                color: isActive ? "#ffffff" : persona.color,
+                                            }}
+                                        >
+                                            <persona.icon size={16} />
+                                        </span>
+                                        <span
+                                            className="text-base font-bold transition-colors duration-500"
+                                            style={{ color: isActive ? persona.color : "#334155" }}
+                                        >
+                                            {persona.title}
+                                        </span>
+                                    </span>
+
+                                    <span
+                                        className="grid transition-[grid-template-rows] duration-500 ease-out"
+                                        style={{ gridTemplateRows: isActive ? "1fr" : "0fr" }}
+                                    >
+                                        <span className="overflow-hidden">
+                                            <span
+                                                className="block pl-12 pt-2 text-sm leading-relaxed text-slate-500 transition-opacity duration-500"
+                                                style={{ opacity: isActive ? 1 : 0 }}
+                                            >
+                                                {persona.description}
+                                            </span>
+                                        </span>
+                                    </span>
+
+                                    {isActive && rotating && (
+                                        <span
+                                            key={`${persona.id}-progress`}
+                                            aria-hidden="true"
+                                            className="absolute bottom-0 left-0 h-[2px] w-full origin-left"
+                                            style={{
+                                                backgroundColor: persona.color,
+                                                animation: `rail-progress ${PERSONA_CYCLE}ms linear forwards`,
+                                            }}
+                                        />
+                                    )}
+                                </button>
+                            );
+                        })}
+                    </div>
+
+                    <div
+                        className="relative rounded-[2.5rem] border border-white/60 bg-white/40 shadow-xl overflow-hidden"
+                        style={{ backdropFilter: "blur(28px)", WebkitBackdropFilter: "blur(28px)" }}
+                    >
                     <div
                         className="absolute inset-0 pointer-events-none transition-colors duration-700"
                         style={{ background: `linear-gradient(135deg, ${active.color}22, transparent 55%)` }}
@@ -156,24 +268,10 @@ function PersonaTeaser() {
                                         >
                                             {persona.title}
                                         </p>
+
                                         <p className="text-lg font-semibold text-slate-900 mt-3 max-w-md leading-snug" style={step(1)}>
                                             {persona.headline}
                                         </p>
-                                        <p className="text-slate-500 text-sm mt-2 max-w-md" style={step(2)}>
-                                            {persona.description}
-                                        </p>
-                                        <ul className="flex flex-col gap-2 mt-5">
-                                            {persona.points.slice(0, 3).map((point, index) => (
-                                                <li
-                                                    key={point}
-                                                    className="text-sm text-slate-600 flex gap-2.5"
-                                                    style={step(3 + index)}
-                                                >
-                                                    <Check size={16} className="shrink-0 mt-0.5" style={{ color: persona.color }} />
-                                                    {point}
-                                                </li>
-                                            ))}
-                                        </ul>
 
                                         <Link
                                             href={`/casos-de-sucesso#${persona.stat.caseSlug}`}
@@ -230,6 +328,7 @@ function PersonaTeaser() {
                                 <p className="text-white font-bold text-sm">{active.title}</p>
                             </div>
                         </div>
+                    </div>
                     </div>
                 </div>
 
@@ -396,7 +495,7 @@ function VideoShowcase() {
     const progressPct = duration > 0 ? (currentTime / duration) * 100 : 0;
 
     return (
-        <div
+        <div data-nav-dark
             ref={sectionRef}
             className="relative py-20 sm:py-28 px-6 overflow-hidden"
             style={{ background: "linear-gradient(135deg, #012e31 0%, #016b72 100%)" }}
@@ -419,8 +518,7 @@ function VideoShowcase() {
 
             <div ref={revealRef} className="relative max-w-6xl mx-auto">
                 <div className="text-center max-w-2xl mx-auto mb-10 sm:mb-14">
-                    <p className="text-sm font-bold tracking-widest text-white/70 uppercase">Conheça o VOCA</p>
-                    <h2 className={cn(playfair.className, "italic text-3xl sm:text-4xl lg:text-5xl font-normal text-white leading-snug mt-3")}>
+                    <h2 className={cn(playfair.className, "voca-title-invert italic text-3xl sm:text-4xl lg:text-5xl font-normal leading-snug")}>
                         Cada colaborador, uma voz que importa.
                     </h2>
                     <p className="text-white/70 mt-4 max-w-xl mx-auto">
@@ -500,31 +598,6 @@ function VideoShowcase() {
                     </div>
                 </div>
 
-                <div className="max-w-2xl mx-auto text-center mt-12">
-                    <p className="text-xl sm:text-2xl font-semibold text-white leading-snug">
-                        Cuidamos de pessoas para que elas possam cuidar das empresas.
-                    </p>
-                    <p className="text-white/70 mt-4 leading-relaxed">
-                        Não é só tecnologia. É um time que se importa com o que acontece com sua empresa durante e depois da implementação.
-                    </p>
-
-                    <Link
-                        href="/sobre"
-                        className="group/cta inline-flex items-center gap-2 mt-8 rounded-md bg-white text-voca-green pl-6 pr-5 h-12 text-base font-semibold shadow-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-0.5"
-                    >
-                        Conheça nossa história
-                        <span className="relative flex h-4 w-4 items-center justify-center overflow-hidden">
-                            <ArrowRight
-                                size={16}
-                                className="transition-transform duration-500 ease-out group-hover/cta:translate-x-6"
-                            />
-                            <ArrowRight
-                                size={16}
-                                className="absolute -translate-x-6 transition-transform duration-500 ease-out group-hover/cta:translate-x-0"
-                            />
-                        </span>
-                    </Link>
-                </div>
             </div>
         </div>
     );
@@ -535,29 +608,12 @@ function VideoMobileCard() {
         <div className="px-6 pb-16 sm:pb-20">
             <div className="max-w-md mx-auto">
                 <div className="text-center mb-6">
-                    <p className="text-sm font-bold tracking-widest text-voca-green uppercase">Conheça o VOCA</p>
-                    <h2 className="text-2xl font-extrabold text-slate-900 mt-3">Assista ao nosso vídeo institucional</h2>
+                    <h2 className="voca-title text-2xl font-extrabold">Assista ao nosso vídeo institucional</h2>
                 </div>
                 <div className="rounded-3xl overflow-hidden shadow-xl bg-black relative aspect-video">
                     <video src="/videos/institucional.mp4" controls playsInline preload="metadata" className="h-full w-full object-cover" />
                 </div>
 
-                <div className="text-center mt-8">
-                    <p className="text-lg font-semibold text-slate-900 leading-snug">
-                        Cuidamos de pessoas para que elas possam cuidar das empresas.
-                    </p>
-                    <p className="text-slate-500 text-sm mt-3 leading-relaxed">
-                        Não é só tecnologia. É um time que se importa com o que acontece com sua empresa durante e depois da implementação.
-                    </p>
-
-                    <Link
-                        href="/sobre"
-                        className="inline-flex items-center gap-2 mt-6 rounded-md bg-voca-green text-white px-6 h-12 text-base font-semibold shadow-md"
-                    >
-                        Conheça nossa história
-                        <ArrowRight size={16} />
-                    </Link>
-                </div>
             </div>
         </div>
     );

@@ -64,6 +64,7 @@ export const personas: Persona[] = [
             "Aprendizado que parece jogo, não obrigação",
             "Conquistas, rankings e desafios que engajam de verdade",
             "Espaço pra sugerir ideias e ver o que a empresa faz com elas",
+            "Plataforma white-label, com a cara da própria empresa, no web e no app",
         ],
         features: ["Mural de Elogios", "Gamificação", "Rede Social Corporativa"],
         stat: { value: "92%", label: "de confiança dos colaboradores nos canais de escuta", source: "Credi10", caseSlug: "credi10-compliance" },

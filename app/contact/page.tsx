@@ -36,7 +36,7 @@ export default function Contact() {
             };
 
     return (
-        <div className="bg-voca-green">
+        <div data-nav-dark className="bg-voca-green">
             <div className="relative py-16 sm:py-24 px-6 overflow-hidden">
                 <div className="absolute inset-0 pointer-events-none">
                     <div
@@ -64,10 +64,7 @@ export default function Contact() {
 
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
                         <div className="text-center lg:text-left animate-in fade-in slide-in-from-bottom-4 duration-700">
-                            <p className="text-sm font-bold tracking-widest text-white/70 uppercase">
-                                {copy.eyebrow}
-                            </p>
-                            <h1 className="text-3xl sm:text-4xl font-extrabold text-white leading-tight mt-3">
+                            <h1 className="voca-title-invert text-3xl sm:text-4xl font-extrabold leading-tight">
                                 {copy.title}
                             </h1>
                             <p className="text-lg text-white/80 mt-4 max-w-md mx-auto lg:mx-0">

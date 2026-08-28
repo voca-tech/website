@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
 import { notFound } from "next/navigation";
@@ -6,6 +7,23 @@ import { posts } from "../data";
 
 function formatDate(iso: string) {
     return new Date(iso).toLocaleDateString("pt-BR", { day: "2-digit", month: "long", year: "numeric" });
+}
+
+export function generateMetadata({ params }: { params: { slug: string } }): Metadata {
+    const post = posts.find((p) => p.slug === params.slug);
+    if (!post) return {};
+
+    return {
+        title: post.title,
+        description: post.excerpt,
+        openGraph: {
+            title: `${post.title} | VOCA`,
+            description: post.excerpt,
+            type: "article",
+            publishedTime: post.date,
+            images: [post.coverPhoto],
+        },
+    };
 }
 
 export function generateStaticParams() {
@@ -31,12 +49,15 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
                     Voltar para o blog
                 </Link>
 
-                <span
-                    className="inline-flex mt-6 rounded-full px-3 py-1 text-xs font-bold uppercase tracking-wide"
-                    style={{ backgroundColor: `${post.color}14`, color: post.color }}
-                >
-                    {post.category}
-                </span>
+                <div className="mt-8">
+                    <span
+                        className="inline-flex rounded-full px-3 py-1 text-xs font-bold uppercase tracking-wide"
+                        style={{ backgroundColor: `${post.color}14`, color: post.color }}
+                    >
+                        {post.category}
+                    </span>
+                </div>
+
                 <h1 className="text-2xl sm:text-4xl font-extrabold text-slate-900 leading-tight mt-4">
                     {post.title}
                 </h1>
@@ -65,15 +86,17 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
                     <div className="absolute inset-0" style={{ background: `linear-gradient(180deg, transparent 60%, ${post.color}4D)` }} />
                 </div>
 
-                <div className="prose prose-slate max-w-none mt-8 flex flex-col gap-4">
-                    {post.content.map((paragraph, i) => (
-                        <p key={i} className="text-slate-600 leading-relaxed">{paragraph}</p>
-                    ))}
+                <div className="max-w-none mt-8 flex flex-col gap-5">
+                    {post.content.map((block, i) =>
+                        block.startsWith("## ") ? (
+                            <h2 key={i} className="text-xl sm:text-2xl font-extrabold text-slate-900 mt-4">
+                                {block.slice(3)}
+                            </h2>
+                        ) : (
+                            <p key={i} className="text-slate-600 leading-relaxed">{block}</p>
+                        )
+                    )}
                 </div>
-
-                <p className="text-xs text-slate-400 mt-8 border-t border-slate-100 pt-6">
-                    Texto de exemplo (lorem ipsum), gerado só para visualizar o layout do blog. Conteúdo real entra depois.
-                </p>
             </div>
 
             {relatedPosts.length > 0 && (

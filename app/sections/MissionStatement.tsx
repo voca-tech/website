@@ -10,7 +10,7 @@ export default function MissionStatement() {
     const [showSubtitle, setShowSubtitle] = useState(false);
 
     return (
-        <div className="relative py-28 sm:py-36 px-6 overflow-hidden">
+        <div data-nav-dark className="relative py-28 sm:py-36 px-6 overflow-hidden">
             <div
                 className="absolute inset-0"
                 style={{
@@ -49,7 +49,7 @@ export default function MissionStatement() {
 
             <div className="relative max-w-6xl mx-auto">
                 <BlurText
-                    text="Cuidamos de pessoas para que elas possam cuidar das empresas."
+                    text="Cuidamos das pessoas, para que elas possam cuidar da empresa."
                     className="text-4xl sm:text-6xl lg:text-7xl font-extrabold text-white leading-[1.1]"
                     animateBy="words"
                     direction="top"
@@ -68,7 +68,7 @@ export default function MissionStatement() {
                     }}
                 >
                     <p className="text-lg sm:text-xl text-white/70 max-w-2xl">
-                        Não é só tecnologia. É um time que se importa com o que acontece com sua empresa depois da implementação.
+                        Não somos apenas tecnologia, somos um time que se importa com o que acontece com sua empresa durante & depois da implementação.
                     </p>
                     <Link
                         href="/sobre"

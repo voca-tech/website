@@ -1,6 +1,6 @@
 export default function Terms() {
     return (
-        <div className="bg-voca-green text-white">
+        <div data-nav-dark className="bg-voca-green text-white">
             <div className="max-w-7xl m-auto py-12 px-4">
                 <div>
                     <h1 className="font-bold text-3xl mb-8">Termos de Uso VOCA</h1>
@@ -91,7 +91,7 @@ export default function Terms() {
                     <br />
                     4.3.2 - O USUÁRIO compromete-se a, não ceder, emprestar ou revelar sua senha a terceiros, em nenhuma hipótese.<br />
                     <br />
-                    4.3.3 - O USUÁRIO concorda e está obrigado a: (i) notificar imediatamente o VOCA através de um dos canais de contato disponibilizados (ex: https://voca.com.br/fale-conosco/), sobre qualquer suspeita ou conhecimento de uso não autorizado da sua senha, dados cadastrais, conta ou qualquer outra quebra de segurança; e (ii) sair de sua conta de usuário ao final de cada sessão e assegurar que esta não seja acessada por terceiros não autorizados. O VOCA não será responsabilizado em nenhuma hipótese por qualquer perda ou dano decorrente do descumprimento do disposto nesta cláusula por parte do USUÁRIO<br />
+                    4.3.3 - O USUÁRIO concorda e está obrigado a: (i) notificar imediatamente o VOCA através de um dos canais de contato disponibilizados (ex: https:
                     <br />
                     4.4 - O USUÁRIO deverá registrar-se em formulário específico de cadastro. Ao se cadastrar no site e utilizar os serviços, você declara que: (i) todas as informações fornecidas são verdadeiras, completas, exatas e atuais sobre si mesmo; (ii) o USUÁRIO conservará e atualizará as referidas informações imediatamente sempre que houver qualquer mudança dos dados, a fim de mantê-los verdadeiros, exatos e atuais; (iii) ao utilizar os serviços do VOCA o USUÁRIO não violará qualquer lei, tratado, regulamento ou qualquer outra obrigação legal relacionada à terceiros, incluindo as obrigações contratuais de sigilo e confidencialidade de informações firmadas entre você e o seu Empregador.<br />
                     <br />

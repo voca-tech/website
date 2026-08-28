@@ -220,8 +220,7 @@ export default function PublicoAlvoPage() {
 
             <div className="relative max-w-6xl mx-auto">
                 <div className="text-center max-w-2xl mx-auto">
-                    <p className="text-sm font-bold tracking-widest text-voca-green uppercase">Público-alvo</p>
-                    <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900 mt-3">
+                    <h1 className="voca-title text-3xl sm:text-4xl font-extrabold">
                         Um VOCA diferente para cada pessoa na sua empresa
                     </h1>
                     <p className="text-lg text-slate-500 mt-4">
@@ -406,8 +405,7 @@ export default function PublicoAlvoPage() {
                     <div className="absolute inset-y-0 left-1/2 -translate-x-1/2 w-screen opacity-[0.35] pointer-events-none" style={{ backgroundImage: "radial-gradient(circle, rgba(0,121,128,0.18) 1px, transparent 1px)", backgroundSize: "28px 28px" }} />
                     <div className="relative">
                     <div className="text-center max-w-2xl mx-auto">
-                        <p className="text-sm font-bold tracking-widest text-voca-green uppercase">Um sistema, vários olhares</p>
-                        <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-3">
+                        <h2 className="voca-title text-2xl sm:text-3xl font-extrabold">
                             A mesma funcionalidade, um valor diferente pra cada pessoa
                         </h2>
                         <p className="text-slate-500 mt-4">
@@ -478,8 +476,7 @@ export default function PublicoAlvoPage() {
 
                 <div className="mt-24">
                     <div className="text-center max-w-2xl mx-auto">
-                        <p className="text-sm font-bold tracking-widest text-voca-green uppercase">Depois de se encontrar aqui</p>
-                        <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-3">
+                        <h2 className="voca-title text-2xl sm:text-3xl font-extrabold">
                             Qual é o seu próximo passo?
                         </h2>
                     </div>
@@ -521,8 +518,7 @@ export default function PublicoAlvoPage() {
                     <div className="absolute inset-y-0 left-1/2 -translate-x-1/2 w-screen opacity-[0.35] pointer-events-none" style={{ backgroundImage: "radial-gradient(circle, rgba(0,121,128,0.18) 1px, transparent 1px)", backgroundSize: "28px 28px" }} />
                     <div className="relative">
                     <div className="text-center max-w-2xl mx-auto">
-                        <p className="text-sm font-bold tracking-widest text-voca-green uppercase">O que mais pesa agora</p>
-                        <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-3">
+                        <h2 className="voca-title text-2xl sm:text-3xl font-extrabold">
                             Qual desafio mais bate na sua rotina?
                         </h2>
                         <p className="text-slate-500 mt-4">Selecione um ou mais e veja como o VOCA resolve.</p>
@@ -598,8 +594,7 @@ export default function PublicoAlvoPage() {
 
                 <div className="mt-24">
                     <div className="text-center max-w-2xl mx-auto">
-                        <p className="text-sm font-bold tracking-widest text-voca-green uppercase">Antes e depois</p>
-                        <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-3">
+                        <h2 className="voca-title text-2xl sm:text-3xl font-extrabold">
                             O que muda no dia a dia de cada perfil
                         </h2>
                         <p className="text-slate-500 mt-4">Clique num card pra virar e ver o antes e o depois.</p>

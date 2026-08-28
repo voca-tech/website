@@ -8,10 +8,10 @@ import * as THREE from "three";
 const SCREEN_MESH_NAME = "baf05346569e3be49c2a";
 const SCREEN_MARGIN = 0.95;
 
-const PHONE_EXIT_START = 0.08;
-const PHONE_EXIT_END = 0.5;
-const LAPTOP_ENTER_START = 0.32;
-const LAPTOP_ENTER_END = 0.8;
+const PHONE_EXIT_START = 0;
+const PHONE_EXIT_END = 0.44;
+const LAPTOP_ENTER_START = 0.28;
+const LAPTOP_ENTER_END = 0.76;
 
 const PHONE_TILT_START = THREE.MathUtils.degToRad(-14);
 const PHONE_TILT_END = THREE.MathUtils.degToRad(14);
@@ -131,13 +131,13 @@ function PhoneModel({ progressRef }: ModelProps) {
         if (!group.current) return;
 
         const target = range(progressRef.current, PHONE_EXIT_START, PHONE_EXIT_END);
-        displayed.current = THREE.MathUtils.damp(displayed.current, target, 5, delta);
+        displayed.current = THREE.MathUtils.damp(displayed.current, target, 7, delta);
         const p = displayed.current;
 
         const { width, height } = state.viewport;
 
-        const move = THREE.MathUtils.lerp(p, easeInCubic(p), 0.35);
-        const spin = easeInOutCubic(p);
+        const move = THREE.MathUtils.lerp(p, easeInCubic(p), 0.28);
+        const spin = THREE.MathUtils.lerp(p, easeInOutCubic(p), 0.55);
 
         const startX = width * 0.26;
         const exitX = width * 1.3;
@@ -240,7 +240,7 @@ function LaptopModel({ progressRef }: ModelProps) {
         if (!group.current) return;
 
         const target = range(progressRef.current, LAPTOP_ENTER_START, LAPTOP_ENTER_END);
-        displayed.current = THREE.MathUtils.damp(displayed.current, target, 5, delta);
+        displayed.current = THREE.MathUtils.damp(displayed.current, target, 7, delta);
         const p = displayed.current;
 
         const { width, height } = state.viewport;
@@ -299,9 +299,11 @@ interface DeviceSceneProps {
 export function DeviceScene({ progressRef }: DeviceSceneProps) {
     return (
         <Canvas camera={{ position: [0, 0, 8], fov: 35 }} style={{ pointerEvents: "none" }}>
-            <ambientLight intensity={1.2} />
-            <directionalLight position={[3, 5, 5]} intensity={1.4} />
-            <directionalLight position={[-3, -2, 4]} intensity={0.5} />
+            <ambientLight intensity={1.15} />
+            <directionalLight position={[3, 5, 5]} intensity={1.35} />
+            <directionalLight position={[-3, -2, 4]} intensity={0.45} />
+
+            <directionalLight position={[-5, 3, -4]} intensity={0.9} color="#5eead4" />
             <Suspense fallback={null}>
                 <PhoneModel progressRef={progressRef} />
             </Suspense>

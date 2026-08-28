@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { createContext, useContext, useEffect, useRef, useState } from 'react'
 import { usePathname } from 'next/navigation'
 import {
     Menu, ChevronDown, LogIn,
@@ -13,6 +13,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 import Link from "next/link";
 import { cn } from '@/lib/utils';
 import { Button } from './ui/button';
+import { ScrollProgressBar } from './ScrollProgressBar';
 
 interface DropdownItem {
     name: string;
@@ -34,9 +35,13 @@ const empresaItems: DropdownItem[] = [
     { name: "Blog", href: "/blog", icon: Newspaper },
 ];
 
+const OnDarkContext = createContext(false)
+
 export function NavBar() {
     const pathname = usePathname()
     const [scrolled, setScrolled] = useState(false)
+    const [onDark, setOnDark] = useState(false)
+    const navRef = useRef<HTMLElement>(null)
 
     useEffect(() => {
         if (pathname === '/' && window.location.hash) {
@@ -53,21 +58,62 @@ export function NavBar() {
         return () => window.removeEventListener('scroll', onScroll)
     }, [])
 
+    useEffect(() => {
+        let raf = 0
+
+        function update() {
+            raf = 0
+            const nav = navRef.current
+            if (!nav) return
+
+            const probeY = nav.getBoundingClientRect().bottom + 4
+            let dark = false
+
+            document.querySelectorAll<HTMLElement>('[data-nav-dark]').forEach((section) => {
+                if (dark) return
+                const rect = section.getBoundingClientRect()
+                if (rect.width > 0 && rect.top <= probeY && rect.bottom >= probeY) dark = true
+            })
+
+            setOnDark((prev) => (prev === dark ? prev : dark))
+        }
+
+        function onScroll() {
+            if (!raf) raf = requestAnimationFrame(update)
+        }
+
+        update()
+        window.addEventListener('scroll', onScroll, { passive: true })
+        window.addEventListener('resize', onScroll)
+        return () => {
+            window.removeEventListener('scroll', onScroll)
+            window.removeEventListener('resize', onScroll)
+            if (raf) cancelAnimationFrame(raf)
+        }
+    }, [pathname])
+
     return (
+        <OnDarkContext.Provider value={onDark}>
         <nav
+            ref={navRef}
             id="home"
             className={cn(
                 "sticky top-0 inset-x-0 z-50 px-6 border-b backdrop-saturate-150 transition-[padding,background-color,backdrop-filter,border-color,box-shadow] duration-500",
-                scrolled
-                    ? "py-1.5 bg-white/30 backdrop-blur-2xl border-white/40 shadow-lg"
-                    : "py-4 bg-white/20 backdrop-blur-md border-transparent shadow-none"
+                scrolled && (onDark
+                    ? "py-1.5 bg-slate-950/25 backdrop-blur-2xl border-white/15 shadow-lg"
+                    : "py-1.5 bg-white/30 backdrop-blur-2xl border-white/40 shadow-lg"),
+                !scrolled && (onDark
+                    ? "py-4 bg-slate-950/10 backdrop-blur-md border-transparent shadow-none"
+                    : "py-4 bg-white/20 backdrop-blur-md border-transparent shadow-none")
             )}
             style={{ transitionTimingFunction: "cubic-bezier(0.16, 1, 0.3, 1)" }}
         >
+            <ScrollProgressBar />
+
             <div className="grid grid-cols-2 lg:grid-cols-3 items-center max-w-7xl m-auto">
                 <Link href='/' className="justify-self-start">
                     <Image
-                        src='/logo-voca.png'
+                        src={onDark ? '/logo-voca-negativo.png' : '/logo-voca.png'}
                         alt="Logomarcar VOCA"
                         width={126}
                         height={40}
@@ -97,9 +143,15 @@ export function NavBar() {
                     <LoginLink />
                 </div>
 
-                <div className="lg:hidden justify-self-end text-slate-600">
+                <div className={cn(
+                    "lg:hidden justify-self-end transition-colors duration-500",
+                    onDark ? "text-white" : "text-slate-700"
+                )}>
                     <Popover>
-                        <PopoverTrigger className="flex items-center p-2 -mr-2 rounded-md hover:bg-slate-100 transition-colors">
+                        <PopoverTrigger className={cn(
+                            "flex items-center p-2 -mr-2 rounded-md transition-colors",
+                            onDark ? "hover:bg-white/15" : "hover:bg-slate-100"
+                        )}>
                             <Menu size={22} />
                         </PopoverTrigger>
                         <PopoverContent align="end" className="w-80 max-h-[80vh] overflow-y-auto">
@@ -125,6 +177,7 @@ export function NavBar() {
                 </div>
             </div>
         </nav>
+        </OnDarkContext.Provider>
     )
 }
 
@@ -134,10 +187,21 @@ interface NavDropdownProps {
     viewAllHref?: string;
 }
 
+function navTextClass(onDark: boolean) {
+    return onDark
+        ? "text-white hover:text-teal-300"
+        : "text-slate-700 hover:text-voca-green"
+}
+
 function NavDropdown({ label, items, viewAllHref }: NavDropdownProps) {
+    const onDark = useContext(OnDarkContext)
+
     return (
         <div className="group relative">
-            <button className="flex items-center gap-1 py-2 text-sm font-medium text-slate-600 hover:text-voca-green transition-colors duration-200 whitespace-nowrap">
+            <button className={cn(
+                "flex items-center gap-1 py-2 text-sm font-medium transition-colors duration-300 whitespace-nowrap",
+                navTextClass(onDark)
+            )}>
                 {label}
                 <ChevronDown size={14} className="transition-transform duration-200 group-hover:rotate-180" />
             </button>
@@ -201,6 +265,7 @@ interface MenuItemProps {
 
 function MenuItem({ name, reference, isMobile = false }: MenuItemProps) {
     const pathname = usePathname()
+    const onDark = useContext(OnDarkContext)
     const isHash = reference.startsWith('#')
     const isSamePageHash = isHash && pathname === '/'
     const href = isHash ? (pathname === '/' ? reference : `/${reference}`) : reference
@@ -216,8 +281,9 @@ function MenuItem({ name, reference, isMobile = false }: MenuItemProps) {
             href={href}
             onClick={handleClick}
             className={cn(
-                "cursor-pointer font-medium text-slate-600 hover:text-voca-green transition-colors duration-200 whitespace-nowrap",
-                isMobile ? "text-base py-2" : "text-sm"
+                "cursor-pointer font-medium transition-colors duration-300 whitespace-nowrap",
+
+                isMobile ? "text-base py-2 text-slate-700 hover:text-voca-green" : cn("text-sm", navTextClass(onDark))
             )}
         >
             {name}
@@ -226,9 +292,18 @@ function MenuItem({ name, reference, isMobile = false }: MenuItemProps) {
 }
 
 function DemoButton({ isMobile = false }: { isMobile?: boolean }) {
+    const onDark = useContext(OnDarkContext)
+
     return (
         <Link href='/contact'>
-            <Button className={cn('font-semibold bg-voca-green hover:bg-voca-green/90', isMobile && 'w-full')}>
+            <Button className={cn(
+                'font-semibold transition-colors duration-300',
+
+                !isMobile && onDark
+                    ? 'bg-white text-voca-green hover:bg-white/90'
+                    : 'bg-voca-green text-white hover:bg-voca-green/90',
+                isMobile && 'w-full'
+            )}>
                 Agendar demonstração
             </Button>
         </Link>
@@ -236,12 +311,17 @@ function DemoButton({ isMobile = false }: { isMobile?: boolean }) {
 }
 
 function LoginLink({ isMobile = false }: { isMobile?: boolean }) {
+    const onDark = useContext(OnDarkContext)
+
     return (
         <a href="https://plataforma.voca.com.br/login" className={cn(isMobile && "w-full")}>
             <Button
                 variant="outline"
                 className={cn(
-                    "font-semibold border-slate-300 text-slate-700 hover:border-voca-green hover:text-voca-green hover:bg-voca-green/5",
+                    "font-semibold transition-colors duration-300",
+                    !isMobile && onDark
+                        ? "border-white/45 bg-transparent text-white hover:border-white hover:bg-white/15 hover:text-white"
+                        : "border-slate-300 text-slate-700 hover:border-voca-green hover:text-voca-green hover:bg-voca-green/5",
                     isMobile && "w-full"
                 )}
             >

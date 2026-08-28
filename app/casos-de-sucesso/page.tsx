@@ -32,11 +32,11 @@ const pillarFilters: Array<{ id: PillarId | "all"; label: string }> = [
 ];
 
 const journey = [
-    { icon: Search, title: "Kickoff estratégico", description: "Alinhamento com RH e liderança, mapeamento dos fluxos, desafios e configurações iniciais." },
-    { icon: GraduationCap, title: "Capacitação das lideranças", description: "Treinamento do time de RH e gestores, com foco nas prioridades do cliente." },
+    { icon: Search, title: "Alinhamento estratégico", description: "Entendemos sua realidade, desafios e objetivos, com definição de metas e prioridades." },
+    { icon: GraduationCap, title: "Capacitação dos embaixadores", description: "Treinamento do time de RH e gestores, com suporte do VOCA no setup até o Go Live." },
     { icon: Rocket, title: "Onboarding (Go Live)", description: "Entrada dos colaboradores com suporte ativo do VOCA e acompanhamento das lideranças." },
     { icon: BarChart3, title: "Primeiros dados gerados", description: "Interações semanais com o time VOCA e direcionamento de uso a partir dos primeiros indicadores." },
-    { icon: Milestone, title: "Revisão e evolução", description: "Reunião trimestral com report estratégico e definição de novas frentes." },
+    { icon: Milestone, title: "Revisão e evolução contínua", description: "Revisão trimestral com relatório estratégico e alinhamentos com a liderança." },
 ];
 
 function JourneyImmersive() {
@@ -100,8 +100,7 @@ function JourneyImmersive() {
 
             <div ref={trackRef} className="relative flex items-center gap-8 pl-6 sm:pl-16 pr-[25vw] will-change-transform">
                 <div className="shrink-0 w-64 sm:w-80">
-                    <p className="text-xs font-bold tracking-widest text-white/60 uppercase">Como trabalhamos</p>
-                    <h2 className="text-3xl sm:text-4xl font-extrabold text-white mt-3 leading-tight">
+                    <h2 className="voca-title-invert text-3xl sm:text-4xl font-extrabold leading-tight">
                         A mesma jornada, em todos os cases
                     </h2>
                     <p className="text-white/60 mt-3 text-sm">Continue rolando para conhecer as 5 etapas.</p>
@@ -166,8 +165,7 @@ function JourneyDragCards() {
             <div className="max-w-6xl mx-auto px-6">
                 <div className="flex flex-wrap items-end justify-between gap-4">
                     <div>
-                        <p className="text-sm font-bold tracking-widest text-voca-green uppercase">Como trabalhamos</p>
-                        <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-3">
+                        <h2 className="voca-title text-2xl sm:text-3xl font-extrabold">
                             A mesma jornada de implementação, em todos os cases
                         </h2>
                     </div>
@@ -267,6 +265,18 @@ export default function CasosDeSucessoPage() {
 
     const filteredCases = pillarFilter === "all" ? cases : cases.filter((c) => c.pillar === pillarFilter);
 
+    useEffect(() => {
+        let second = 0;
+        const first = requestAnimationFrame(() => {
+            second = requestAnimationFrame(() => ScrollTrigger.refresh());
+        });
+
+        return () => {
+            cancelAnimationFrame(first);
+            cancelAnimationFrame(second);
+        };
+    }, [pillarFilter]);
+
     const sectionRef = useRef<HTMLDivElement>(null);
     const showcaseRef = useRef<HTMLDivElement>(null);
     const gridRef = useRef<HTMLDivElement>(null);
@@ -331,8 +341,7 @@ export default function CasosDeSucessoPage() {
                 </div>
 
                 <div className="relative max-w-3xl mx-auto text-center">
-                    <p className="text-sm font-bold tracking-widest text-voca-green uppercase">Cases de sucesso</p>
-                    <h1 className={cn(playfair.className, "italic text-3xl sm:text-5xl text-slate-900 leading-tight mt-3")}>
+                    <h1 className={cn(playfair.className, "voca-title italic text-3xl sm:text-5xl leading-tight")}>
                         Empresas que fazem do{" "}
                         <span className="font-sans not-italic font-extrabold text-voca-green">VOCA</span>{" "}
                         uma extensão delas
@@ -508,7 +517,7 @@ export default function CasosDeSucessoPage() {
             </div>
 
             <Dialog open={detailOpen} onOpenChange={setDetailOpen}>
-                <DialogContent className="w-[95vw] max-w-4xl max-h-[88vh] p-0 rounded-3xl border-none flex flex-col overflow-hidden">
+                <DialogContent className="w-[95vw] max-w-4xl max-h-[88vh] p-0 rounded-3xl flex flex-col overflow-hidden">
                     <DialogTitle className="sr-only">{displayed.company}</DialogTitle>
 
                     {displayed.photo && (
@@ -539,16 +548,20 @@ export default function CasosDeSucessoPage() {
                             )}
                             <div>
                                 <p className="font-bold text-slate-900">{displayed.name ?? displayed.company}</p>
-                                {displayed.role && <p className="text-slate-500 text-sm">{displayed.role} · {displayed.company}</p>}
+                                {displayed.role && <p className="text-slate-600 text-sm">{displayed.role} · {displayed.company}</p>}
                             </div>
                         </div>
 
                         {displayed.metrics.length > 0 && (
                             <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mt-6">
-                                {displayed.metrics.map((metric) => (
-                                    <div key={metric.label} className="rounded-xl p-3" style={{ backgroundColor: `${color}0D` }}>
+                                {displayed.metrics.map((metric, i) => (
+                                    <div
+                                        key={metric.label}
+                                        className="glass-tile rounded-xl p-3 animate-in fade-in slide-in-from-bottom-1 duration-500"
+                                        style={{ animationDelay: `${140 + i * 70}ms`, animationFillMode: "both" }}
+                                    >
                                         <p className="text-xl font-extrabold" style={{ color }}>{metric.value}</p>
-                                        <p className="text-xs text-slate-500 mt-1">{metric.label}</p>
+                                        <p className="text-xs font-medium text-slate-700 mt-1">{metric.label}</p>
                                     </div>
                                 ))}
                             </div>
@@ -557,7 +570,7 @@ export default function CasosDeSucessoPage() {
                         {displayed.objective && (
                             <>
                                 <p className="text-sm font-bold tracking-widest uppercase mt-8" style={{ color }}>Objetivo</p>
-                                <p className="text-slate-600 mt-2">{displayed.objective}</p>
+                                <p className="text-slate-700 mt-2">{displayed.objective}</p>
                             </>
                         )}
 
@@ -566,7 +579,7 @@ export default function CasosDeSucessoPage() {
                                 <p className="text-sm font-bold tracking-widest uppercase mt-6" style={{ color }}>Solução</p>
                                 <ul className="mt-3 flex flex-col gap-2">
                                     {displayed.solution.map((point) => (
-                                        <li key={point} className="text-sm text-slate-600 flex gap-2">
+                                        <li key={point} className="text-sm text-slate-700 flex gap-2">
                                             <Check size={16} className="shrink-0 mt-0.5" style={{ color }} />
                                             {point}
                                         </li>
@@ -634,8 +647,7 @@ export default function CasosDeSucessoPage() {
                 />
 
                 <div className="relative max-w-2xl mx-auto text-center">
-                    <p className="text-sm font-bold tracking-widest text-white/60 uppercase">Sua vez</p>
-                    <h2 className={cn(playfair.className, "italic text-3xl sm:text-4xl text-white leading-snug mt-3")}>
+                    <h2 className={cn(playfair.className, "voca-title-invert italic text-3xl sm:text-4xl leading-snug")}>
                         Pronto para ser o próximo case de sucesso?
                     </h2>
                     <p className="text-white/60 mt-4 max-w-md mx-auto">

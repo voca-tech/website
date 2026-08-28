@@ -42,21 +42,21 @@ const values: Value[] = [
     {
         icon: Users,
         title: "Tecnologia com atendimento humano",
-        description: "Usamos inteligência artificial para gerar insights, mas quem acompanha sua empresa é sempre um time de verdade.",
+        description: "Aplicamos inteligência artificial no produto, mas quem acompanha a sua empresa é sempre um time de verdade.",
         color: "#2f6690",
         photo: "https://images.unsplash.com/photo-1573167243872-43c6433b9d40?auto=format&fit=crop&w=900&q=80",
     },
     {
         icon: LineChart,
-        title: "Dados a serviço de decisões melhores",
-        description: "Acreditamos que boas decisões de gestão de pessoas vêm de dados claros, não de achismo.",
+        title: "Decisão assertiva baseada em dados",
+        description: "Acreditamos que boas decisões na gestão de pessoas vêm de dados claros, não de achismo.",
         color: "#798f4f",
         photo: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=900&q=80",
     },
     {
         icon: ShieldCheck,
         title: "Segurança e transparência",
-        description: "Tratamos os dados que nossos clientes confiam a nós com responsabilidade, em conformidade com a LGPD.",
+        description: "Tratamos os dados dos nossos clientes com responsabilidade, em conformidade com a LGPD.",
         color: "#85568a",
         photo: "https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&w=900&q=80",
     },
@@ -98,16 +98,16 @@ const founders = [
 ];
 
 const evolutionSteps = [
-    { icon: Layers, title: "ERP", description: "Organizou todos os processos da empresa." },
+    { icon: Layers, title: "ERP", description: "Organizou os processos da empresa." },
     { icon: Users2, title: "CRM", description: "Organizou a jornada dos clientes." },
     { icon: Sparkles, title: "VOCA", description: "Veio para organizar as pessoas da empresa.", highlight: true },
 ];
 
 const proofMetrics = [
-    { slug: "sp-engenharia", value: "85%", label: "redução no tempo gasto", company: "SP Engenharia" },
-    { slug: "credi10-compliance", value: "92%", label: "confiança nos canais de voz", company: "Credi10" },
-    { slug: "credi10-treinamentos", value: "-40%", label: "tempo de integração", company: "Credi10" },
-    { slug: "woodbridge-pesquisa", value: "95%", label: "taxa de resposta às pesquisas", company: "Woodbridge" },
+    { slug: "sp-engenharia", value: "85%", label: "redução no tempo gasto pelo RH com Av. Desempenho", company: "SP Engenharia" },
+    { slug: "credi10-compliance", value: "92%", label: "colaboradores confiam nos canais de voz", company: "Credi10" },
+    { slug: "credi10-treinamentos", value: "-40%", label: "redução do tempo de integração de novos colaboradores", company: "Credi10" },
+    { slug: "woodbridge-pesquisa", value: "95%", label: "taxa de resposta nas pesquisas", company: "Woodbridge" },
 ];
 
 const partnershipSteps = [
@@ -342,12 +342,11 @@ export default function SobrePage() {
 
                 <div className="relative max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-14 items-center">
                     <div>
-                        <p className="text-sm font-bold tracking-widest text-voca-green uppercase">Sobre o VOCA</p>
-                        <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900 leading-tight mt-3">
-                            Cuidamos de pessoas para que elas possam cuidar das empresas
+                        <h1 className="voca-title text-3xl sm:text-4xl font-extrabold leading-tight">
+                            Ajudamos as empresas a cuidar das pessoas, para que elas possam cuidar das empresas
                         </h1>
                         <p className="text-lg text-slate-500 mt-4">
-                            O VOCA nasceu para dar voz aos colaboradores e, ao mesmo tempo, entregar aos times de RH e liderança os dados que precisam para agir antes que os problemas cresçam.
+                            O VOCA nasceu para dar voz aos colaboradores e para simplificar e direcionar a jornada das lideranças. Transformamos insights de pessoas em resultados do negócio.
                         </p>
 
                         <div className="flex flex-wrap gap-x-10 gap-y-6 mt-10 pt-8 border-t border-slate-200">
@@ -377,7 +376,7 @@ export default function SobrePage() {
                 </div>
             </div>
 
-            <div className="bg-voca-green py-16 sm:py-20 px-6 relative overflow-hidden">
+            <div data-nav-dark className="bg-voca-green py-16 sm:py-20 px-6 relative overflow-hidden">
                 <div
                     className="absolute inset-0 opacity-[0.08] pointer-events-none"
                     style={{
@@ -387,8 +386,7 @@ export default function SobrePage() {
                 />
                 <div className="relative max-w-4xl mx-auto">
                     <div className="text-center mb-12">
-                        <p className="text-sm font-bold tracking-widest text-white/70 uppercase">Por que o VOCA existe</p>
-                        <h2 className={cn(playfair.className, "text-2xl sm:text-4xl italic font-normal text-white mt-3")}>
+                        <h2 className={cn(playfair.className, "voca-title-invert text-2xl sm:text-4xl italic font-normal")}>
                             A evolução da gestão dentro das empresas
                         </h2>
                     </div>
@@ -400,8 +398,7 @@ export default function SobrePage() {
             <div className="py-16 sm:py-24 px-6 bg-white">
                 <div className="max-w-5xl mx-auto">
                     <div className="text-center max-w-2xl mx-auto mb-14 sm:mb-20">
-                        <p className="text-sm font-bold tracking-widest text-voca-green uppercase">No que acreditamos</p>
-                        <h2 className="text-3xl font-extrabold text-slate-900 mt-3">
+                        <h2 className="voca-title text-3xl font-extrabold">
                             Os princípios por trás da plataforma
                         </h2>
                     </div>
@@ -427,9 +424,8 @@ export default function SobrePage() {
                 <div className="relative py-20 sm:py-28 px-6">
                     <div className="max-w-6xl mx-auto">
                         <div className="text-center max-w-2xl mx-auto">
-                            <p className="text-sm font-bold tracking-widest text-teal-300 uppercase">Resultados reais</p>
-                            <h2 className={cn(playfair.className, "text-3xl sm:text-5xl italic font-normal text-white mt-3")}>
-                                O impacto em números de quem já usa
+                            <h2 className={cn(playfair.className, "voca-title-invert text-3xl sm:text-5xl italic font-normal")}>
+                                O impacto em números de quem já utiliza
                             </h2>
                             <p className="text-white/70 mt-4">
                                 Hoje já são {uniqueClientCount} empresas de setores diferentes confiando o dia a dia de pessoas ao VOCA.
@@ -492,8 +488,7 @@ export default function SobrePage() {
             <div className="py-16 sm:py-24 px-6 bg-slate-50">
                 <div className="max-w-6xl mx-auto">
                     <div className="text-center max-w-2xl mx-auto">
-                        <p className="text-sm font-bold tracking-widest text-voca-green uppercase">O que o VOCA entrega</p>
-                        <h2 className="text-3xl font-extrabold text-slate-900 mt-3">
+                        <h2 className="voca-title text-3xl font-extrabold">
                             Uma plataforma, {totalFeatureCount} funcionalidades reais
                         </h2>
                         <p className="text-slate-500 mt-4">
@@ -536,9 +531,8 @@ export default function SobrePage() {
             <div className="py-16 sm:py-24 px-6 bg-white">
                 <div className="max-w-5xl mx-auto">
                     <div className="text-center max-w-2xl mx-auto">
-                        <p className="text-sm font-bold tracking-widest text-voca-green uppercase">Como é ser cliente VOCA</p>
-                        <h2 className="text-3xl font-extrabold text-slate-900 mt-3">
-                            Parceria de verdade, não só um login
+                        <h2 className="voca-title text-3xl font-extrabold">
+                            Parceria de verdade, não apenas um sistema
                         </h2>
                     </div>
 
@@ -562,8 +556,7 @@ export default function SobrePage() {
             <div className="py-16 sm:py-24 px-6 bg-slate-50">
                 <div className="max-w-5xl mx-auto">
                     <div className="text-center max-w-2xl mx-auto">
-                        <p className="text-sm font-bold tracking-widest text-voca-green uppercase">Quem faz</p>
-                        <h2 className="text-3xl font-extrabold text-slate-900 mt-3">
+                        <h2 className="voca-title text-3xl font-extrabold">
                             Time executivo
                         </h2>
                     </div>
@@ -622,8 +615,7 @@ export default function SobrePage() {
                     </div>
 
                     <div className="flex-1 text-center sm:text-left">
-                        <p className="text-sm font-bold tracking-widest text-voca-green uppercase">Conheça o VOCA</p>
-                        <h3 className="text-xl sm:text-2xl font-extrabold text-slate-900 mt-2">
+                        <h3 className="voca-title text-xl sm:text-2xl font-extrabold">
                             Assista ao vídeo institucional
                         </h3>
                         <p className="text-slate-500 mt-2 max-w-md mx-auto sm:mx-0">

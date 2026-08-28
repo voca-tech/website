@@ -96,10 +96,7 @@ export default function CasesShowcase() {
 
             <div ref={revealRef} className="relative max-w-6xl mx-auto">
                 <div>
-                    <p className="text-base sm:text-lg font-bold tracking-widest text-voca-green uppercase">
-                        Cases de sucesso
-                    </p>
-                    <h2 className={cn(playfair.className, "text-2xl sm:text-4xl lg:text-5xl font-normal text-slate-900 leading-tight mt-4")}>
+                    <h2 className={cn(playfair.className, "voca-title text-2xl sm:text-4xl lg:text-5xl font-normal leading-tight")}>
                         Empresas que fazem do{" "}
                         <span className="font-sans font-extrabold text-voca-green">VOCA</span>{" "}
                         uma extensão delas
@@ -280,7 +277,7 @@ export default function CasesShowcase() {
             </div>
 
             <Dialog open={!!openSlug} onOpenChange={(open) => !open && setOpenSlug(null)}>
-                <DialogContent className="w-[95vw] max-w-4xl max-h-[88vh] p-0 rounded-3xl border-none flex flex-col overflow-hidden">
+                <DialogContent className="w-[95vw] max-w-4xl max-h-[88vh] p-0 rounded-3xl flex flex-col overflow-hidden">
                     {selected && (
                         <>
                             <DialogTitle className="sr-only">{selected.data.company}</DialogTitle>
@@ -314,10 +311,14 @@ export default function CasesShowcase() {
 
                                 {selected.data.metrics.length > 0 && (
                                     <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mt-6">
-                                        {selected.data.metrics.map((metric) => (
-                                            <div key={metric.label} className="rounded-xl p-3" style={{ backgroundColor: `${selectedColor}0D` }}>
+                                        {selected.data.metrics.map((metric, i) => (
+                                            <div
+                                                key={metric.label}
+                                                className="glass-tile rounded-xl p-3 animate-in fade-in slide-in-from-bottom-1 duration-500"
+                                                style={{ animationDelay: `${140 + i * 70}ms`, animationFillMode: "both" }}
+                                            >
                                                 <p className="text-xl font-extrabold" style={{ color: selectedColor }}>{metric.value}</p>
-                                                <p className="text-xs text-slate-500 mt-1">{metric.label}</p>
+                                                <p className="text-xs font-medium text-slate-700 mt-1">{metric.label}</p>
                                             </div>
                                         ))}
                                     </div>

@@ -325,13 +325,13 @@ export const pillars: Pillar[] = [
             },
             {
                 name: "Integração com Sistemas",
-                description: "Funciona com o sistema que você já tem.",
+                description: "Funciona integrado com o sistema que você já utiliza.",
                 icon: Plug,
                 details: [
-                    "Integrações já existentes com Microsoft, Senior, Synergy e Google",
-                    "API preparada para integrar com outras plataformas, sob demanda",
-                    "Login por SSO",
-                    "Integração incluída na implementação",
+                    "Integrações já existentes com Microsoft, Senior e Synergy",
+                    "API preparada para integrar com outras plataformas",
+                    "Login por SSO Google",
+                    "Integração incluída na implantação",
                 ],
             },
         ],
