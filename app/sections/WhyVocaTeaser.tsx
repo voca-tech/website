@@ -74,9 +74,9 @@ export default function WhyVocaTeaser() {
                     <h2 className="voca-title-invert text-3xl sm:text-4xl font-extrabold leading-tight">
                         Tecnologia forte. Time de verdade.
                     </h2>
-                    <p className="text-lg text-white/70 mt-4">
+                    {/* <p className="text-lg text-white/70 mt-4">
                         A tecnologia é só metade da equação. A outra metade é um time que se importa com o que acontece depois da implementação.
-                    </p>
+                    </p> */}
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-12">

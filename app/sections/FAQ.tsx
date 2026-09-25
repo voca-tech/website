@@ -35,7 +35,7 @@ export const faqs = [
     {
         question: "O VOCA serve para empresas de qualquer tamanho?",
         category: "comercial",
-        answer: "Sim. Atendemos desde empresas de médio porte até operações com mais de 1.900 colaboradores, como a Grant Thornton. A plataforma evolui junto com a sua empresa, da operação local até a expansão para novas unidades ou países.",
+        answer: "Sim. Atendemos desde empresas com 50 até mais de 1.900 colaboradores, como a Grant Thornton. A plataforma evolui junto com a sua empresa, da operação local até a expansão para novas unidades ou países.",
     },
     {
         question: "Como funciona a gamificação dentro do VOCA?",

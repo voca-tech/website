@@ -128,7 +128,7 @@ const partnershipSteps = [
     },
 ];
 
-const heroMainPhoto = "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?auto=format&fit=crop&w=1000&q=80";
+const heroMainPhoto = "/photos/sobre/hero-main.png";
 const heroAccentPhoto = "https://images.unsplash.com/photo-1600880292089-90a7e086ee0c?auto=format&fit=crop&w=700&q=80";
 const resultsPhoto = "https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=1600&q=70";
 const ctaPhoto = "https://images.unsplash.com/photo-1522071901873-411886a10004?auto=format&fit=crop&w=1600&q=70";
@@ -321,7 +321,7 @@ function ValueRow({ value, reversed, index }: { value: Value; reversed: boolean;
 export default function SobrePage() {
     const uniqueClientCount = new Set(cases.map((c) => c.company)).size;
     const totalFeatureCount = pillars.reduce((sum, pillar) => sum + pillar.features.length, 0);
-    const engeformQuote = quotes.find((q) => q.caseSlug === "engeform");
+    const grantThorntonQuote = quotes.find((q) => q.caseSlug === "grant-thornton");
 
     return (
         <div className="relative bg-white">
@@ -428,7 +428,7 @@ export default function SobrePage() {
                                 O impacto em números de quem já utiliza
                             </h2>
                             <p className="text-white/70 mt-4">
-                                Hoje já são {uniqueClientCount} empresas de setores diferentes confiando o dia a dia de pessoas ao VOCA.
+                                Empresas de diferentes portes e segmentos já confiam no VOCA para a gestão das pessoas.
                             </p>
                         </div>
 
@@ -448,20 +448,20 @@ export default function SobrePage() {
                             ))}
                         </div>
 
-                        {engeformQuote && (
+                        {grantThorntonQuote && (
                             <div className="max-w-2xl mx-auto mt-10 rounded-2xl bg-white/10 backdrop-blur-sm border border-white/15 p-6 flex gap-4 items-start">
                                 <Quote size={26} className="shrink-0 text-teal-300/70 mt-1" />
                                 <div>
-                                    <p className="text-white italic leading-relaxed">{engeformQuote.text}</p>
+                                    <p className="text-white italic leading-relaxed">{grantThorntonQuote.text}</p>
                                     <div className="flex items-center gap-2.5 mt-4">
                                         <Avatar className="h-9 w-9 ring-2 ring-white/20">
-                                            <AvatarImage src={engeformQuote.avatar} />
+                                            <AvatarImage src={grantThorntonQuote.avatar} />
                                             <AvatarFallback className="text-xs text-voca-green font-bold bg-white">
-                                                {initials(engeformQuote.name)}
+                                                {initials(grantThorntonQuote.name)}
                                             </AvatarFallback>
                                         </Avatar>
                                         <p className="text-xs text-white/70">
-                                            <span className="font-bold text-white">{engeformQuote.name}</span> · {engeformQuote.role} · {engeformQuote.company}
+                                            <span className="font-bold text-white">{grantThorntonQuote.name}</span> · {grantThorntonQuote.role} · {grantThorntonQuote.company}
                                         </p>
                                     </div>
                                 </div>
@@ -489,10 +489,10 @@ export default function SobrePage() {
                 <div className="max-w-6xl mx-auto">
                     <div className="text-center max-w-2xl mx-auto">
                         <h2 className="voca-title text-3xl font-extrabold">
-                            Uma plataforma, {totalFeatureCount} funcionalidades reais
+                            Uma plataforma, {totalFeatureCount} funcionalidades
                         </h2>
                         <p className="text-slate-500 mt-4">
-                            Tudo organizado em 4 pilares, pra cada time encontrar exatamente o que precisa.
+                            Organizado em 4 pilares, para cada time encontrar exatamente o que precisa.
                         </p>
                     </div>
 

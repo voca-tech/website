@@ -147,33 +147,7 @@ export function NavBar() {
                     "lg:hidden justify-self-end transition-colors duration-500",
                     onDark ? "text-white" : "text-slate-700"
                 )}>
-                    <Popover>
-                        <PopoverTrigger className={cn(
-                            "flex items-center p-2 -mr-2 rounded-md transition-colors",
-                            onDark ? "hover:bg-white/15" : "hover:bg-slate-100"
-                        )}>
-                            <Menu size={22} />
-                        </PopoverTrigger>
-                        <PopoverContent align="end" className="w-80 max-h-[80vh] overflow-y-auto">
-                            <div className="flex flex-col gap-1">
-                                <MenuItem name="Início" reference="/" isMobile />
-                                <MenuItem name="Produto" reference="/produto" isMobile />
-
-                                <MobileGroup label="Por que VOCA" items={porQueVocaItems} />
-
-                                <MenuItem name="Soluções" reference="/publico-alvo" isMobile />
-
-                                <MobileGroup label="Empresa" items={empresaItems} />
-
-                                <MenuItem name="Contato" reference="#contact" isMobile />
-
-                                <div className="pt-3 mt-2 border-t border-slate-100 flex flex-col gap-2">
-                                    <DemoButton isMobile />
-                                    <LoginLink isMobile />
-                                </div>
-                            </div>
-                        </PopoverContent>
-                    </Popover>
+                    <MobileMenu />
                 </div>
             </div>
         </nav>
@@ -195,23 +169,45 @@ function navTextClass(onDark: boolean) {
 
 function NavDropdown({ label, items, viewAllHref }: NavDropdownProps) {
     const onDark = useContext(OnDarkContext)
+    const pathname = usePathname()
+    const [open, setOpen] = useState(false)
+
+    useEffect(() => {
+        setOpen(false)
+    }, [pathname])
 
     return (
-        <div className="group relative">
-            <button className={cn(
-                "flex items-center gap-1 py-2 text-sm font-medium transition-colors duration-300 whitespace-nowrap",
-                navTextClass(onDark)
-            )}>
+        <div
+            className="relative"
+            onMouseEnter={() => setOpen(true)}
+            onMouseLeave={() => setOpen(false)}
+        >
+            <button
+                type="button"
+                aria-expanded={open}
+                className={cn(
+                    "flex items-center gap-1 py-2 text-sm font-medium transition-colors duration-300 whitespace-nowrap",
+                    navTextClass(onDark)
+                )}
+            >
                 {label}
-                <ChevronDown size={14} className="transition-transform duration-200 group-hover:rotate-180" />
+                <ChevronDown size={14} className={cn("transition-transform duration-200", open && "rotate-180")} />
             </button>
 
-            <div className="absolute z-50 left-1/2 top-full w-72 -translate-x-1/2 pt-3 opacity-0 invisible translate-y-1 transition-all duration-150 group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 group-focus-within:opacity-100 group-focus-within:visible group-focus-within:translate-y-0">
+            <div
+                className={cn(
+                    "absolute z-50 left-1/2 top-full w-72 -translate-x-1/2 pt-3 transition-all duration-150",
+                    open
+                        ? "opacity-100 visible translate-y-0"
+                        : "opacity-0 invisible translate-y-1 pointer-events-none"
+                )}
+            >
                 <div className="rounded-xl border border-slate-200 bg-white shadow-lg p-2">
                     {items.map((item) => (
                         <Link
                             key={item.href}
                             href={item.href}
+                            onClick={() => setOpen(false)}
                             className="flex items-center gap-3 rounded-lg px-3 py-2.5 hover:bg-slate-50 transition-colors"
                         >
                             <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-voca-green/10 text-voca-green">
@@ -223,6 +219,7 @@ function NavDropdown({ label, items, viewAllHref }: NavDropdownProps) {
                     {viewAllHref && (
                         <Link
                             href={viewAllHref}
+                            onClick={() => setOpen(false)}
                             className="block mt-1 pt-2.5 border-t border-slate-100 px-3 py-1.5 text-sm font-semibold text-voca-green hover:underline"
                         >
                             Ver tudo →
@@ -234,7 +231,7 @@ function NavDropdown({ label, items, viewAllHref }: NavDropdownProps) {
     )
 }
 
-function MobileGroup({ label, items, viewAllHref }: NavDropdownProps) {
+function MobileGroup({ label, items, viewAllHref, onNavigate }: NavDropdownProps & { onNavigate?: () => void }) {
     return (
         <div className="py-1">
             <p className="text-xs font-bold tracking-widest text-slate-400 uppercase px-1 pt-3 pb-1">{label}</p>
@@ -242,6 +239,7 @@ function MobileGroup({ label, items, viewAllHref }: NavDropdownProps) {
                 <Link
                     key={item.href}
                     href={item.href}
+                    onClick={onNavigate}
                     className="flex items-center gap-3 rounded-md px-1 py-2 hover:bg-slate-50 transition-colors"
                 >
                     <item.icon size={16} className="text-voca-green shrink-0" />
@@ -249,7 +247,7 @@ function MobileGroup({ label, items, viewAllHref }: NavDropdownProps) {
                 </Link>
             ))}
             {viewAllHref && (
-                <Link href={viewAllHref} className="block px-1 py-1.5 text-sm font-semibold text-voca-green">
+                <Link href={viewAllHref} onClick={onNavigate} className="block px-1 py-1.5 text-sm font-semibold text-voca-green">
                     Ver tudo →
                 </Link>
             )}
@@ -257,13 +255,56 @@ function MobileGroup({ label, items, viewAllHref }: NavDropdownProps) {
     )
 }
 
+function MobileMenu() {
+    const onDark = useContext(OnDarkContext)
+    const pathname = usePathname()
+    const [open, setOpen] = useState(false)
+
+    useEffect(() => {
+        setOpen(false)
+    }, [pathname])
+
+    const close = () => setOpen(false)
+
+    return (
+        <Popover open={open} onOpenChange={setOpen}>
+            <PopoverTrigger className={cn(
+                "flex items-center p-2 -mr-2 rounded-md transition-colors",
+                onDark ? "hover:bg-white/15" : "hover:bg-slate-100"
+            )}>
+                <Menu size={22} />
+            </PopoverTrigger>
+            <PopoverContent align="end" className="w-80 max-h-[80vh] overflow-y-auto">
+                <div className="flex flex-col gap-1">
+                    <MenuItem name="Início" reference="/" isMobile onNavigate={close} />
+                    <MenuItem name="Produto" reference="/produto" isMobile onNavigate={close} />
+
+                    <MobileGroup label="Por que VOCA" items={porQueVocaItems} onNavigate={close} />
+
+                    <MenuItem name="Soluções" reference="/publico-alvo" isMobile onNavigate={close} />
+
+                    <MobileGroup label="Empresa" items={empresaItems} onNavigate={close} />
+
+                    <MenuItem name="Contato" reference="#contact" isMobile onNavigate={close} />
+
+                    <div className="pt-3 mt-2 border-t border-slate-100 flex flex-col gap-2">
+                        <DemoButton isMobile onNavigate={close} />
+                        <LoginLink isMobile onNavigate={close} />
+                    </div>
+                </div>
+            </PopoverContent>
+        </Popover>
+    )
+}
+
 interface MenuItemProps {
     name: string,
     reference: string,
     isMobile?: boolean
+    onNavigate?: () => void
 }
 
-function MenuItem({ name, reference, isMobile = false }: MenuItemProps) {
+function MenuItem({ name, reference, isMobile = false, onNavigate }: MenuItemProps) {
     const pathname = usePathname()
     const onDark = useContext(OnDarkContext)
     const isHash = reference.startsWith('#')
@@ -271,6 +312,7 @@ function MenuItem({ name, reference, isMobile = false }: MenuItemProps) {
     const href = isHash ? (pathname === '/' ? reference : `/${reference}`) : reference
 
     function handleClick(event: React.MouseEvent<HTMLAnchorElement>) {
+        onNavigate?.()
         if (!isSamePageHash) return
         event.preventDefault()
         document.querySelector(reference)?.scrollIntoView({ behavior: 'smooth' })
@@ -291,11 +333,11 @@ function MenuItem({ name, reference, isMobile = false }: MenuItemProps) {
     )
 }
 
-function DemoButton({ isMobile = false }: { isMobile?: boolean }) {
+function DemoButton({ isMobile = false, onNavigate }: { isMobile?: boolean; onNavigate?: () => void }) {
     const onDark = useContext(OnDarkContext)
 
     return (
-        <Link href='/contact'>
+        <Link href='/contact' onClick={onNavigate}>
             <Button className={cn(
                 'font-semibold transition-colors duration-300',
 
@@ -310,11 +352,11 @@ function DemoButton({ isMobile = false }: { isMobile?: boolean }) {
     )
 }
 
-function LoginLink({ isMobile = false }: { isMobile?: boolean }) {
+function LoginLink({ isMobile = false, onNavigate }: { isMobile?: boolean; onNavigate?: () => void }) {
     const onDark = useContext(OnDarkContext)
 
     return (
-        <a href="https://plataforma.voca.com.br/login" className={cn(isMobile && "w-full")}>
+        <a href="https://plataforma.voca.com.br/login" onClick={onNavigate} className={cn(isMobile && "w-full")}>
             <Button
                 variant="outline"
                 className={cn(

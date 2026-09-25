@@ -15,36 +15,54 @@ interface Logo {
 }
 
 const clientLogos: Logo[] = [
-    { name: 'Akaer', src: '/clients/akaer.png', width: 140, height: 140, caseSlug: 'akaer' },
-    { name: 'Credi10', src: '/clients/credi10.png', width: 140, height: 140, caseSlug: 'credi10-compliance' },
-    { name: 'Belas Artes', src: '/clients/belasartes.png', width: 140, height: 140, caseSlug: 'belas-artes' },
     { name: 'Grant Thornton', src: '/clients/grantthornton.png', width: 500, height: 93, caseSlug: 'grant-thornton' },
-    { name: 'NovoNordisk', src: '/clients/novoNordisk.png', width: 110, height: 82 },
-    { name: 'Woodbridge', src: '/clients/woodbridge.png', width: 260, height: 130, caseSlug: 'woodbridge-pesquisa' },
+    { name: 'Wine', src: '/clients/wine.png', width: 216, height: 60, caseSlug: 'grupo-wine' },
+    { name: 'Belas Artes', src: '/clients/belasartes.png', width: 140, height: 140, caseSlug: 'belas-artes' },
     { name: 'Hering', src: '/clients/hering.png', width: 500, height: 101 },
-    { name: 'HomeroCosta', src: '/clients/homeroCosta.png', width: 140, height: 140, boxClassName: 'h-20 w-20' },
+    { name: 'Woodbridge', src: '/clients/woodbridge.png', width: 260, height: 130, caseSlug: 'woodbridge-pesquisa' },
+    { name: 'Akaer', src: '/clients/akaer.png', width: 140, height: 140, caseSlug: 'akaer' },
+    { name: 'SP Engenharia', src: '/clients/spEngenharia.png', width: 558, height: 186, caseSlug: 'sp-engenharia' },
+    { name: 'Cantu', src: '/clients/cantu.png', width: 748, height: 220 },
     { name: 'Guess', src: '/clients/guess.png', width: 500, height: 89 },
-    { name: 'DHS', src: '/clients/DHS.png', width: 140, height: 140 },
+    { name: 'Grupo Vila Nova', src: '/clients/vilaNova.png', width: 512, height: 197 },
+    { name: 'Hwaseung', src: '/clients/hwaseung.png', width: 438, height: 62, caseSlug: 'hwaseung' },
+    { name: 'Credi10', src: '/clients/credi10.png', width: 140, height: 140, caseSlug: 'credi10-compliance' },
+    { name: 'SPS Group', src: '/clients/spsGroup.png', width: 543, height: 216, caseSlug: 'sps-group' },
+    { name: 'Alctel', src: '/clients/alctel.png', width: 411, height: 311 },
+    { name: 'Freitas Ferraz', src: '/clients/freitasFerraz.png', width: 414, height: 172 },
+    { name: 'Sapore', src: '/clients/sapore.png', width: 2678, height: 1054 },
+    //{ name: 'NovoNordisk', src: '/clients/novoNordisk.png', width: 110, height: 82 },
+    //{ name: 'HomeroCosta', src: '/clients/homeroCosta.png', width: 140, height: 140, boxClassName: 'h-20 w-20' },
+    //{ name: 'DHS', src: '/clients/DHS.png', width: 140, height: 140 },
 ];
 
 const partnerLogos: Logo[] = [
     { name: 'AWS', src: '/partners/aws.png', width: 500, height: 334 },
     { name: 'Google', src: '/partners/google.png', width: 500, height: 170 },
     { name: 'Microsoft', src: '/partners/microsoft.png', width: 500, height: 107 },
-    { name: 'SAP', src: '/partners/sap.png', width: 500, height: 248 },
     { name: 'Senior', src: '/partners/senior.png', width: 393, height: 128 },
-    { name: 'Watson', src: '/partners/watson.png', width: 90, height: 90 },
-    { name: 'UFMG', src: '/partners/ufmg.png', width: 130, height: 100 },
-    { name: 'FiemgLab', src: '/partners/fiemgLab.png', width: 100, height: 100 },
+    { name: 'Sinergy RH', src: '/partners/sinergyRh.png', width: 196, height: 50 },
+    { name: 'SAP', src: '/partners/sap.png', width: 500, height: 248 },
+    { name: 'IBM Watson', src: '/partners/ibmWatson.png', width: 155, height: 35, boxClassName: 'h-14 w-44' },
+    { name: 'FIEMG Lab', src: '/partners/fiemgLab.png', width: 100, height: 100 },
     { name: 'Seed', src: '/partners/seed.png', width: 70, height: 70 },
-    { name: 'Plugae', src: '/partners/plugae.png', width: 150, height: 150 },
+    { name: 'Open Mind', src: '/partners/openMind.png', width: 500, height: 322 },
+    //{ name: 'Watson', src: '/partners/watson.png', width: 90, height: 90 },
+    //{ name: 'UFMG', src: '/partners/ufmg.png', width: 130, height: 100 },
+    //{ name: 'Plugae', src: '/partners/plugae.png', width: 150, height: 150 },
 ];
 
 const allLogos = [...clientLogos, ...partnerLogos];
-const findLogo = (name: string) => allLogos.find((logo) => logo.name === name)!;
+const findLogo = (name: string) => {
+    const logo = allLogos.find((item) => item.name === name);
+    if (!logo) {
+        throw new Error(`Logo not found in ClientLogoMarquee: "${name}"`);
+    }
+    return logo;
+};
 
-const logosRowTop = ["Akaer", "NovoNordisk", "HomeroCosta", "Credi10", "Watson", "UFMG"].map(findLogo);
-const logosRowBottom = ["Belas Artes", "DHS", "FiemgLab", "Woodbridge", "Seed", "Plugae"].map(findLogo);
+const logosRowTop = ["Akaer", "Wine", "Grant Thornton", "Credi10", "Cantu", "Grupo Vila Nova", "SPS Group", "Freitas Ferraz"].map(findLogo);
+const logosRowBottom = ["Belas Artes", "Hering", "Woodbridge", "SP Engenharia", "Guess", "Hwaseung", "Alctel", "Sapore"].map(findLogo);
 
 function LogoItem({ logo }: { logo: Logo }) {
     const hasCase = Boolean(logo.caseSlug);

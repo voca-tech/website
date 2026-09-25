@@ -9,6 +9,7 @@ import { DeviceScene } from "@/components/DeviceScene";
 import { useScrollProgress } from "@/components/useScrollProgress";
 import { useIsDesktop } from "@/components/useIsDesktop";
 import { getLenisInstance } from "@/lib/lenis";
+import { PHONE_SCREEN_SLIDES, SCREEN_SLIDE_MS, SCREEN_CROSSFADE_MS } from "@/lib/heroScreens";
 
 const FADE_START = 0.16;
 const FADE_END = 0.46;
@@ -17,6 +18,63 @@ const PHONE_TRAVEL_END = 0.44;
 
 const EASE_OUT = "cubic-bezier(0.22, 1, 0.36, 1)";
 const BRAND_GRADIENT = "linear-gradient(100deg, #0d9a9f 0%, #007980 100%)";
+
+function MobilePhoneScreen() {
+    const [index, setIndex] = useState(0);
+    const [prevIndex, setPrevIndex] = useState(0);
+    const [fading, setFading] = useState(false);
+
+    useEffect(() => {
+        if (PHONE_SCREEN_SLIDES.length < 2) return;
+
+        const id = setInterval(() => {
+            setIndex((current) => {
+                setPrevIndex(current);
+                setFading(true);
+                return (current + 1) % PHONE_SCREEN_SLIDES.length;
+            });
+        }, SCREEN_SLIDE_MS);
+
+        return () => clearInterval(id);
+    }, []);
+
+    useEffect(() => {
+        if (!fading) return;
+        const id = setTimeout(() => setFading(false), SCREEN_CROSSFADE_MS);
+        return () => clearTimeout(id);
+    }, [fading, index]);
+
+    return (
+        <>
+            {PHONE_SCREEN_SLIDES.map((src, i) => {
+                const isCurrent = i === index;
+                const isPrev = fading && i === prevIndex;
+                if (!isCurrent && !isPrev) return null;
+
+                return (
+                    <Image
+                        key={src}
+                        src={src}
+                        alt="Tela do aplicativo VOCA"
+                        fill
+                        sizes="230px"
+                        className="object-cover object-top transition-opacity ease-out"
+                        style={{
+                            filter: "blur(1.25px)",
+                            opacity: isCurrent ? 1 : 0,
+                            transitionDuration: `${SCREEN_CROSSFADE_MS}ms`,
+                            zIndex: isCurrent ? 2 : 1,
+                        }}
+                    />
+                );
+            })}
+            <div
+                aria-hidden="true"
+                className="absolute inset-0 z-[3] bg-white/10 pointer-events-none"
+            />
+        </>
+    );
+}
 
 function easeInOutCubic(value: number) {
     return value < 0.5 ? 4 * value ** 3 : 1 - Math.pow(-2 * value + 2, 3) / 2;
@@ -241,17 +299,17 @@ export default function HeroSection() {
                             className="text-base text-slate-500 animate-in fade-in slide-in-from-bottom-3 duration-700"
                             style={enter(80)}
                         >
-                            <span className="text-xl font-extrabold tracking-tight text-voca-green">DHO</span>
-                            {' '}na palma da mão
-                            <span className="mx-2.5 text-slate-300">·</span>
+                            {/* <span className="text-xl font-extrabold tracking-tight text-voca-green">DHO</span> */}
                             21 funcionalidades
+                            <span className="mx-2.5 text-slate-300">·</span>
+                            Atendimento imbatível
                         </p>
 
                         <h1
                             className="text-4xl sm:text-5xl font-extrabold text-slate-900 leading-tight animate-in fade-in slide-in-from-bottom-4 duration-700"
                             style={enter(200)}
                         >
-                            Centralize a jornada na{' '}
+                            DHO na palma da mão: centralize a jornada dos colaboradores na{' '}
                             <span className="relative whitespace-nowrap text-voca-green">
                                 <svg
                                     aria-hidden="true"
@@ -272,14 +330,14 @@ export default function HeroSection() {
                                 </svg>
                                 <span className="relative">mesma plataforma</span>
                             </span>
-                            : pessoas mais conectadas, engajadas e produtivas.
+                            .
                         </h1>
 
                         <p
                             className="text-lg text-slate-500 max-w-lg animate-in fade-in slide-in-from-bottom-3 duration-700"
                             style={enter(340)}
                         >
-                            Transforme insights de pessoas em resultados do negócio. Inteligência nos dados, atendimento ágil por humanos.
+                            Comunicação, cultura, engajamento, clima, capacitação, performance, gamificação, inteligência de dados e operação.
                         </p>
 
                         <div
@@ -344,7 +402,7 @@ export default function HeroSection() {
                         </h2>
 
                         <p className="text-base text-white/70">
-                            Um &ldquo;Waze&rdquo; para o RH e lideranças: dashboards em tempo real com indicadores de clima, engajamento, comunicação, capacitação e performance.
+                            &ldquo;Waze&rdquo;  para o RH e lideranças - Dashboards em tempo real com indicadores de clima, engajamento, comunicação, capacitação e performance.
                         </p>
 
                         <div className="w-full grid grid-cols-2 gap-3 mt-1">
@@ -356,10 +414,10 @@ export default function HeroSection() {
                                     transition: `opacity 700ms ${EASE_OUT} 60ms, transform 700ms ${EASE_OUT} 60ms`,
                                 }}
                             >
-                                <p className="text-[11px] font-bold text-slate-500 uppercase tracking-widest">Engajamento</p>
+                                <p className="text-[11px] font-bold text-slate-500 uppercase tracking-widest">Termômetro de Sentimento</p>
                                 <div className="flex items-baseline gap-1.5 mt-1">
                                     <span className="voca-title text-3xl font-extrabold tabular-nums leading-none">
-                                        <CountUp value={96} active={actTwo} />%
+                                        <CountUp value={73} active={actTwo} />%
                                     </span>
                                     <span
                                         className="text-[11px] font-bold text-voca-green"
@@ -368,7 +426,7 @@ export default function HeroSection() {
                                             transition: "opacity 500ms ease-out 1100ms",
                                         }}
                                     >
-                                        ▲ 8%
+                                        Muito satisfeito
                                     </span>
                                 </div>
                                 <div className="relative h-9 w-full mt-2 overflow-hidden rounded-md">
@@ -492,17 +550,17 @@ export default function HeroSection() {
                         className="text-base text-slate-500 animate-in fade-in slide-in-from-bottom-3 duration-700"
                         style={enter(80)}
                     >
-                        <span className="text-xl font-extrabold tracking-tight text-voca-green">DHO</span>
-                        {' '}na palma da mão
-                        <span className="mx-2.5 text-slate-300">·</span>
+                        {/* <span className="text-xl font-extrabold tracking-tight text-voca-green">DHO</span> */}
                         21 funcionalidades
+                        <span className="mx-2.5 text-slate-300">·</span>
+                        Atendimento imbatível
                     </p>
 
                     <h1
                         className="text-4xl font-extrabold text-slate-900 leading-tight animate-in fade-in slide-in-from-bottom-4 duration-700"
                         style={enter(200)}
                     >
-                        Centralize a jornada na{' '}
+                        DHO na palma da mão: centralize a jornada dos colaboradores na{' '}
                         <span className="relative whitespace-nowrap text-voca-green">
                             <svg
                                 aria-hidden="true"
@@ -523,14 +581,14 @@ export default function HeroSection() {
                             </svg>
                             <span className="relative">mesma plataforma</span>
                         </span>
-                        : pessoas mais conectadas, engajadas e produtivas.
+                        .
                     </h1>
 
                     <p
                         className="text-lg text-slate-500 max-w-lg animate-in fade-in slide-in-from-bottom-3 duration-700"
                         style={enter(340)}
                     >
-                        Transforme insights de pessoas em resultados do negócio. Inteligência nos dados, atendimento ágil por humanos.
+                        Comunicação, cultura, engajamento, clima, capacitação, performance, gamificação, inteligência de dados e operação.
                     </p>
 
                     <div
@@ -555,13 +613,7 @@ export default function HeroSection() {
 
                         <div className="relative rounded-[2.25rem] border-[8px] border-slate-900 bg-slate-900 shadow-2xl overflow-hidden aspect-[618/1294]">
                             <div className="absolute top-0 left-1/2 -translate-x-1/2 w-16 h-4 bg-slate-900 rounded-b-xl z-10" />
-                            <Image
-                                src="/screens/hero.png"
-                                alt="Tela do aplicativo VOCA"
-                                fill
-                                sizes="230px"
-                                className="object-cover object-top"
-                            />
+                            <MobilePhoneScreen />
                             <span
                                 aria-hidden="true"
                                 className="pointer-events-none absolute inset-y-0 -left-1/2 z-20 w-1/2 bg-gradient-to-r from-transparent via-white/45 to-transparent"

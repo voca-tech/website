@@ -11,6 +11,8 @@ export interface Persona {
     description: string;
     color: string;
     image: string;
+    /** object-position for object-cover crop, e.g. "right center" */
+    imagePosition?: string;
     points: string[];
     features: string[];
     stat: { value: string; label: string; source: string; caseSlug: string };
@@ -24,7 +26,8 @@ export const personas: Persona[] = [
         headline: "Tenha os insights e recomendações de ação que você precisa para tomar decisões assertivas, baseadas em dados estratégicos.",
         description: "Para quem precisa enxergar a empresa toda e decidir com dados, não com achismo, do C-level à diretoria de RH.",
         color: "#2f6690",
-        image: "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=1000&q=80",
+        image: "/photos/home/decisores.png",
+        imagePosition: "right center",
         points: [
             "Dados que antecipam risco de turnover antes que ele vire perda de talento",
             "Indicadores de toda a empresa reunidos em tempo real, sem depender de planilha",
@@ -41,7 +44,8 @@ export const personas: Persona[] = [
         headline: "Lidere times de alta performance, engajando as pessoas e retendo os talentos.",
         description: "Para quem lidera equipes no dia a dia e precisa de sinais antes que os problemas cresçam.",
         color: "#798f4f",
-        image: "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=1000&q=80",
+        image: "/photos/home/gestores.png",
+        imagePosition: "center",
         points: [
             "Alertas de risco de saída por colaborador, com antecedência pra agir",
             "Avaliações de desempenho rápidas, com trilhas de desenvolvimento direcionadas",
@@ -58,7 +62,8 @@ export const personas: Persona[] = [
         headline: "Seja o dono do seu desenvolvimento e dos seus resultados.",
         description: "Para quem quer ser ouvido e reconhecido, com segurança de que sua voz importa, assumindo responsabilidades na empresa.",
         color: "#47ad7f",
-        image: "https://images.unsplash.com/photo-1552664730-d307ca884978?w=1000&q=80",
+        image: "/photos/home/colaboradores.png",
+        imagePosition: "right center",
         points: [
             "Canais de escuta e reconhecimento com anonimato garantido",
             "Aprendizado que parece jogo, não obrigação",
@@ -76,7 +81,8 @@ export const personas: Persona[] = [
         headline: "Construa uma estratégia proativa em comunicação e pessoas.",
         description: "Para quem precisa operacionalizar tudo isso, com o mínimo de dor de cabeça possível.",
         color: "#85568a",
-        image: "https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=1000&q=80",
+        image: "/photos/home/time-rh.png",
+        imagePosition: "right center",
         points: [
             "Implementação assistida, sem meses de configuração até ver resultado",
             "Atendimento humano, sem tickets perdidos no meio do caminho",

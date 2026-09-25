@@ -224,7 +224,7 @@ export default function PublicoAlvoPage() {
                         Um VOCA diferente para cada pessoa na sua empresa
                     </h1>
                     <p className="text-lg text-slate-500 mt-4">
-                        A plataforma se adapta a quem está usando, do C-level ao colaborador da ponta.
+                    A plataforma se adapta a quem usa, do C-level ao colaborador na ponta.
                     </p>
                 </div>
 
@@ -346,12 +346,13 @@ export default function PublicoAlvoPage() {
                                 </div>
 
                                 <div className="stagger-item relative flex-1 order-1 lg:order-2 w-full pb-6 pl-6">
-                                    <div className="relative aspect-[4/3] rounded-3xl overflow-hidden shadow-lg">
+                                    <div className="relative aspect-[3/4] sm:aspect-[4/5] lg:aspect-[4/3] rounded-3xl overflow-hidden shadow-lg">
                                         <Image
                                             src={displayed.image}
                                             alt={displayed.title}
                                             fill
                                             className="object-cover"
+                                            style={{ objectPosition: displayed.imagePosition ?? "center" }}
                                         />
                                         <div
                                             className="absolute inset-0"

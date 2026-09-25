@@ -202,7 +202,7 @@ function JourneyDragCards() {
 }
 
 const statWall = [
-    { value: "1.670", label: "avaliações de desempenho", company: "Grant Thornton" },
+    { value: "261.000", label: "visualizações do time", company: "Grant Thornton" },
     { value: "100%", label: "conformidade para auditoria", company: "Credi10" },
     { value: "96%", label: "engajamento de líderes", company: "SP Engenharia" },
     { value: "95%", label: "taxa de resposta às pesquisas", company: "Woodbridge" },
@@ -585,6 +585,13 @@ export default function CasosDeSucessoPage() {
                                         </li>
                                     ))}
                                 </ul>
+                            </>
+                        )}
+
+                        {displayed.result && (
+                            <>
+                                <p className="text-sm font-bold tracking-widest uppercase mt-6" style={{ color }}>Resultado</p>
+                                <p className="text-slate-700 mt-2">{displayed.result}</p>
                             </>
                         )}
                     </div>

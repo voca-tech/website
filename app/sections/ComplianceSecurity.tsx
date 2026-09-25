@@ -68,7 +68,7 @@ export default function ComplianceSecurity() {
             <div className="relative max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-[1.1fr_1fr] gap-12 lg:gap-16 items-start lg:pt-4">
                 <div>
                     <h2 className="voca-title-invert text-4xl sm:text-6xl lg:text-7xl font-extrabold leading-[1.05]">
-                        Segurança aqui não é tratada apenas como detalhe.
+                        Segurança não é detalhe. É a base de tudo. 
                     </h2>
                     <p className="text-xl text-white/70 mt-6 max-w-lg">
                         Dados protegidos, processos auditáveis e ferramentas que apoiam o RH na gestão de riscos, inclusive os psicossociais, exigidos pela NR-1.

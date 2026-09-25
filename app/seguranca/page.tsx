@@ -79,7 +79,7 @@ export default function SegurancaPage() {
                 <div
                     className="absolute inset-0 bg-cover bg-center"
                     style={{
-                        backgroundImage: "url('https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=2000&q=80')",
+                        backgroundImage: "url('/photos/seguranca/dados-protegidos.png')",
                     }}
                 />
                 <div
@@ -316,7 +316,7 @@ export default function SegurancaPage() {
                 <div
                     className="absolute inset-0 bg-cover bg-center"
                     style={{
-                        backgroundImage: "url('https://images.unsplash.com/photo-1531123897727-8f129e1688ce?auto=format&fit=crop&w=2000&q=80')",
+                        backgroundImage: "url('/photos/seguranca/nr1/nr1-teoria-pratica.png')",
                     }}
                 />
                 <div

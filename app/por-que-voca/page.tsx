@@ -281,17 +281,13 @@ function CountUpStat({ target, suffix, className = "text-4xl sm:text-5xl font-ex
         const ctx = gsap.context(() => {
             gsap.to(counter, {
                 value: target,
-                ease: "none",
+                duration: 1.4,
+                ease: "power2.out",
                 onUpdate: render,
                 scrollTrigger: {
                     trigger: wrapper,
                     start: "top 85%",
-                    end: "top 45%",
-                    scrub: 0.8,
-                    onRefresh: (self) => {
-                        counter.value = self.progress * target;
-                        render();
-                    },
+                    once: true,
                 },
             });
         }, wrapper);
@@ -387,7 +383,7 @@ export default function PorQueVocaPage() {
                     <div className="relative mt-6 lg:mt-0 max-w-sm mx-auto w-full">
                         <div className="relative rounded-3xl overflow-hidden shadow-xl aspect-[4/5]">
                             <Image
-                                src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=900&q=80"
+                                src="/photos/porQueVoca/tecnologia-forte.png"
                                 alt=""
                                 fill
                                 sizes="(max-width: 1024px) 100vw, 400px"

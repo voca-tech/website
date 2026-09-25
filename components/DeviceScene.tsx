@@ -4,9 +4,18 @@ import { Suspense, useEffect, useMemo, useRef, useState, type MutableRefObject }
 import { Canvas, useFrame } from "@react-three/fiber";
 import { useGLTF, useTexture } from "@react-three/drei";
 import * as THREE from "three";
+import {
+    PHONE_SCREEN_SLIDES,
+    LAPTOP_SCREEN_SLIDES,
+    SCREEN_SLIDE_MS,
+    SCREEN_CROSSFADE_MS,
+    drawBlurredScreen,
+} from "@/lib/heroScreens";
 
 const SCREEN_MESH_NAME = "baf05346569e3be49c2a";
 const SCREEN_MARGIN = 0.95;
+/** Corner radius as a fraction of the screen's shorter side — subtle, not pill-like. */
+const PHONE_SCREEN_CORNER_RATIO = 0.055;
 
 const PHONE_EXIT_START = 0;
 const PHONE_EXIT_END = 0.44;
@@ -19,12 +28,15 @@ const PHONE_TILT_END = THREE.MathUtils.degToRad(14);
 const LAPTOP_ATLAS_SIZE = 4096;
 const LAPTOP_TEXTURE_SIZE = 2048;
 const LAPTOP_SCREEN_RECT = { x: 26, y: 1445, w: 2015, h: 1294 };
-const LAPTOP_SCREEN_SOURCE = { x: 150, y: 150, w: 1310, h: 845 };
 
 const LAPTOP_TILT_X = THREE.MathUtils.degToRad(16);
 const LAPTOP_YAW_END = THREE.MathUtils.degToRad(-12);
 const LAPTOP_YAW_SWING = THREE.MathUtils.degToRad(150);
 const LAPTOP_ROLL_IN = THREE.MathUtils.degToRad(-6);
+
+const PHONE_CANVAS_W = 618;
+const PHONE_CANVAS_H = 1294;
+const PHONE_CANVAS_RADIUS = Math.min(PHONE_CANVAS_W, PHONE_CANVAS_H) * PHONE_SCREEN_CORNER_RATIO;
 
 function clamp01(value: number) {
     return Math.min(1, Math.max(0, value));
@@ -52,6 +64,31 @@ function easeOutBack(t: number) {
     return 1 + c3 * Math.pow(t - 1, 3) + c1 * Math.pow(t - 1, 2);
 }
 
+function clipRoundedRect(
+    ctx: CanvasRenderingContext2D,
+    width: number,
+    height: number,
+    radius: number,
+) {
+    const r = Math.min(radius, width / 2, height / 2);
+    ctx.beginPath();
+    if (typeof ctx.roundRect === "function") {
+        ctx.roundRect(0, 0, width, height, r);
+    } else {
+        ctx.moveTo(r, 0);
+        ctx.lineTo(width - r, 0);
+        ctx.quadraticCurveTo(width, 0, width, r);
+        ctx.lineTo(width, height - r);
+        ctx.quadraticCurveTo(width, height, width - r, height);
+        ctx.lineTo(r, height);
+        ctx.quadraticCurveTo(0, height, 0, height - r);
+        ctx.lineTo(0, r);
+        ctx.quadraticCurveTo(0, 0, r, 0);
+    }
+    ctx.closePath();
+    ctx.clip();
+}
+
 function attachScreenPlane(screenMesh: THREE.Mesh, texture: THREE.Texture) {
     const geometry = screenMesh.geometry;
     geometry.computeBoundingBox();
@@ -61,18 +98,32 @@ function attachScreenPlane(screenMesh: THREE.Mesh, texture: THREE.Texture) {
     box.getSize(size);
     box.getCenter(center);
 
-    const material = new THREE.MeshBasicMaterial({ map: texture });
+    // Keep PlaneGeometry so UVs stay correct; rounding comes from the canvas alpha mask.
+    const material = new THREE.MeshBasicMaterial({
+        map: texture,
+        transparent: true,
+        alphaTest: 0.05,
+    });
     let plane: THREE.Mesh;
 
     if (size.z <= size.x && size.z <= size.y) {
-        plane = new THREE.Mesh(new THREE.PlaneGeometry(size.x * SCREEN_MARGIN, size.y * SCREEN_MARGIN), material);
+        plane = new THREE.Mesh(
+            new THREE.PlaneGeometry(size.x * SCREEN_MARGIN, size.y * SCREEN_MARGIN),
+            material,
+        );
         plane.position.set(center.x, center.y, center.z + Math.sign(center.z || 1) * (size.z / 2 + 0.002));
     } else if (size.x <= size.y && size.x <= size.z) {
-        plane = new THREE.Mesh(new THREE.PlaneGeometry(size.z * SCREEN_MARGIN, size.y * SCREEN_MARGIN), material);
+        plane = new THREE.Mesh(
+            new THREE.PlaneGeometry(size.z * SCREEN_MARGIN, size.y * SCREEN_MARGIN),
+            material,
+        );
         plane.rotation.y = Math.PI / 2;
         plane.position.set(center.x + Math.sign(center.x || 1) * (size.x / 2 + 0.002), center.y, center.z);
     } else {
-        plane = new THREE.Mesh(new THREE.PlaneGeometry(size.x * SCREEN_MARGIN, size.z * SCREEN_MARGIN), material);
+        plane = new THREE.Mesh(
+            new THREE.PlaneGeometry(size.x * SCREEN_MARGIN, size.z * SCREEN_MARGIN),
+            material,
+        );
         plane.rotation.x = -Math.PI / 2;
         plane.position.set(center.x, center.y + Math.sign(center.y || 1) * (size.y / 2 + 0.002), center.z);
     }
@@ -81,15 +132,72 @@ function attachScreenPlane(screenMesh: THREE.Mesh, texture: THREE.Texture) {
     return plane;
 }
 
+function imageFromTexture(texture: THREE.Texture): CanvasImageSource | null {
+    const image = texture.image as CanvasImageSource | undefined;
+    if (!image) return null;
+    if ("complete" in image && image instanceof HTMLImageElement && !image.complete) return null;
+    return image;
+}
+
+function paintSlide(
+    ctx: CanvasRenderingContext2D,
+    textures: THREE.Texture[],
+    index: number,
+    width: number,
+    height: number,
+) {
+    const source = imageFromTexture(textures[index]);
+    if (!source) return;
+    ctx.clearRect(0, 0, width, height);
+    ctx.save();
+    clipRoundedRect(ctx, width, height, PHONE_CANVAS_RADIUS);
+    drawBlurredScreen(ctx, source, width, height, { fit: "cover", alignY: "top" });
+    ctx.restore();
+}
+
+function paintSlideCrossfade(
+    ctx: CanvasRenderingContext2D,
+    textures: THREE.Texture[],
+    fromIndex: number,
+    toIndex: number,
+    amount: number,
+    width: number,
+    height: number,
+) {
+    const from = imageFromTexture(textures[fromIndex]);
+    const to = imageFromTexture(textures[toIndex]);
+    if (!from) return;
+
+    ctx.clearRect(0, 0, width, height);
+    ctx.save();
+    clipRoundedRect(ctx, width, height, PHONE_CANVAS_RADIUS);
+    drawBlurredScreen(ctx, from, width, height, { fit: "cover", alignY: "top" });
+    ctx.fillStyle = `rgba(255,255,255,${amount * 0.35})`;
+    ctx.fillRect(0, 0, width, height);
+    if (to) {
+        ctx.globalAlpha = amount;
+        drawBlurredScreen(ctx, to, width, height, { fit: "cover", alignY: "top" });
+        ctx.globalAlpha = 1;
+    }
+    ctx.restore();
+}
+
 interface ModelProps {
     progressRef: MutableRefObject<number>;
 }
 
 function PhoneModel({ progressRef }: ModelProps) {
     const { scene } = useGLTF("/models/phone/scene.gltf");
-    const [screenTextureFront, screenTextureBack] = useTexture(["/screens/hero.png", "/screens/hero-dashboard-example.jpg"]);
+    const slideTextures = useTexture([...PHONE_SCREEN_SLIDES]) as THREE.Texture[];
     const group = useRef<THREE.Group>(null!);
     const planeRef = useRef<THREE.Mesh | null>(null);
+    const displayTextureRef = useRef<THREE.CanvasTexture | null>(null);
+    const canvasRef = useRef<HTMLCanvasElement | null>(null);
+    const slideIndex = useRef(0);
+    const fade = useRef(1);
+    const fadingOut = useRef(false);
+    const nextIndex = useRef(1 % PHONE_SCREEN_SLIDES.length);
+    const lastSwap = useRef(0);
     const displayed = useRef(0);
     const showingBack = useRef(false);
 
@@ -106,26 +214,50 @@ function PhoneModel({ progressRef }: ModelProps) {
     }, [clonedScene]);
 
     useEffect(() => {
+        slideTextures.forEach((texture) => {
+            texture.colorSpace = THREE.SRGBColorSpace;
+            texture.needsUpdate = true;
+        });
+
         const screenMesh = clonedScene.getObjectByName(SCREEN_MESH_NAME) as THREE.Mesh | undefined;
         if (!screenMesh) return;
 
-        screenTextureFront.colorSpace = THREE.SRGBColorSpace;
-        screenTextureFront.needsUpdate = true;
-        screenTextureBack.colorSpace = THREE.SRGBColorSpace;
-        screenTextureBack.needsUpdate = true;
+        const canvas = document.createElement("canvas");
+        canvas.width = PHONE_CANVAS_W;
+        canvas.height = PHONE_CANVAS_H;
+        const ctx = canvas.getContext("2d");
+        if (!ctx) return;
+
+        paintSlide(ctx, slideTextures, 0, PHONE_CANVAS_W, PHONE_CANVAS_H);
+
+        const displayTexture = new THREE.CanvasTexture(canvas);
+        displayTexture.colorSpace = THREE.SRGBColorSpace;
+        displayTexture.premultiplyAlpha = true;
+        displayTexture.needsUpdate = true;
+
+        canvasRef.current = canvas;
+        displayTextureRef.current = displayTexture;
 
         screenMesh.material = new THREE.MeshBasicMaterial({ color: 0x000000 });
-        const plane = attachScreenPlane(screenMesh, screenTextureFront);
+        const plane = attachScreenPlane(screenMesh, displayTexture);
         planeRef.current = plane;
         showingBack.current = false;
+        slideIndex.current = 0;
+        nextIndex.current = 1 % PHONE_SCREEN_SLIDES.length;
+        fade.current = 1;
+        fadingOut.current = false;
+        lastSwap.current = performance.now();
 
         return () => {
             screenMesh.remove(plane);
             plane.geometry.dispose();
             (plane.material as THREE.Material).dispose();
+            displayTexture.dispose();
             planeRef.current = null;
+            displayTextureRef.current = null;
+            canvasRef.current = null;
         };
-    }, [clonedScene, screenTextureFront, screenTextureBack]);
+    }, [clonedScene, slideTextures]);
 
     useFrame((state, delta) => {
         if (!group.current) return;
@@ -158,13 +290,55 @@ function PhoneModel({ progressRef }: ModelProps) {
         const targetHeight = height * 0.7;
         group.current.scale.setScalar(targetHeight / intrinsicHeight);
 
-        const wantsBack = p >= 0.45;
-        const isHidden = Math.cos(group.current.rotation.y) < -0.1;
-        if (wantsBack !== showingBack.current && isHidden && planeRef.current) {
-            const material = planeRef.current.material as THREE.MeshBasicMaterial;
-            material.map = wantsBack ? screenTextureBack : screenTextureFront;
-            material.needsUpdate = true;
-            showingBack.current = wantsBack;
+        const canvas = canvasRef.current;
+        const displayTexture = displayTextureRef.current;
+        const ctx = canvas?.getContext("2d");
+
+        if (canvas && ctx && displayTexture && PHONE_SCREEN_SLIDES.length > 1) {
+            const now = performance.now();
+            const wantsBack = p >= 0.45;
+            const isHidden = Math.cos(group.current.rotation.y) < -0.1;
+
+            // Mid-flip: jump to the next slide while the phone face is hidden
+            if (wantsBack !== showingBack.current && isHidden) {
+                slideIndex.current = (slideIndex.current + 1) % PHONE_SCREEN_SLIDES.length;
+                nextIndex.current = (slideIndex.current + 1) % PHONE_SCREEN_SLIDES.length;
+                paintSlide(ctx, slideTextures, slideIndex.current, PHONE_CANVAS_W, PHONE_CANVAS_H);
+                displayTexture.needsUpdate = true;
+                showingBack.current = wantsBack;
+                fadingOut.current = false;
+                fade.current = 1;
+                lastSwap.current = now;
+            } else if (p < 0.4) {
+                // Idle / early scroll: timed crossfade between slides
+                if (!fadingOut.current && now - lastSwap.current > SCREEN_SLIDE_MS) {
+                    fadingOut.current = true;
+                    nextIndex.current = (slideIndex.current + 1) % PHONE_SCREEN_SLIDES.length;
+                }
+
+                if (fadingOut.current) {
+                    fade.current = Math.max(0, fade.current - delta * (1000 / SCREEN_CROSSFADE_MS));
+                    if (fade.current <= 0) {
+                        slideIndex.current = nextIndex.current;
+                        paintSlide(ctx, slideTextures, slideIndex.current, PHONE_CANVAS_W, PHONE_CANVAS_H);
+                        displayTexture.needsUpdate = true;
+                        fade.current = 1;
+                        fadingOut.current = false;
+                        lastSwap.current = now;
+                    } else {
+                        paintSlideCrossfade(
+                            ctx,
+                            slideTextures,
+                            slideIndex.current,
+                            nextIndex.current,
+                            1 - fade.current,
+                            PHONE_CANVAS_W,
+                            PHONE_CANVAS_H,
+                        );
+                        displayTexture.needsUpdate = true;
+                    }
+                }
+            }
         }
     });
 
@@ -177,13 +351,70 @@ function PhoneModel({ progressRef }: ModelProps) {
 
 function LaptopModel({ progressRef }: ModelProps) {
     const { scene } = useGLTF("/models/laptop/scene.glb");
-    const screenTexture = useTexture("/screens/laptop-screen-placeholder.jpg");
+    const slideTextures = useTexture([...LAPTOP_SCREEN_SLIDES]) as THREE.Texture[];
     const group = useRef<THREE.Group>(null!);
     const displayed = useRef(0);
+    const materialRef = useRef<THREE.MeshStandardMaterial | null>(null);
+    const baseMapRef = useRef<THREE.Texture | null>(null);
+    const composedRef = useRef<THREE.CanvasTexture | null>(null);
+    const canvasRef = useRef<HTMLCanvasElement | null>(null);
+    const screenCanvasRef = useRef<HTMLCanvasElement | null>(null);
+    const slideIndex = useRef(0);
+    const lastSwap = useRef(0);
+    const fade = useRef(1);
+    const fadingOut = useRef(false);
+    const nextIndex = useRef(1 % LAPTOP_SCREEN_SLIDES.length);
 
     const clonedScene = useMemo(() => scene.clone(true), [scene]);
 
+    const paintLaptop = (index: number, mixNext?: { index: number; amount: number }) => {
+        const canvas = canvasRef.current;
+        const screenCanvas = screenCanvasRef.current;
+        const composed = composedRef.current;
+        const base = baseMapRef.current;
+        const material = materialRef.current;
+        if (!canvas || !screenCanvas || !composed || !base?.image || !material) return;
+
+        const ctx = canvas.getContext("2d");
+        const screenCtx = screenCanvas.getContext("2d");
+        if (!ctx || !screenCtx) return;
+
+        const scale = LAPTOP_TEXTURE_SIZE / LAPTOP_ATLAS_SIZE;
+        const dx = LAPTOP_SCREEN_RECT.x * scale;
+        const dy = LAPTOP_SCREEN_RECT.y * scale;
+        const dw = LAPTOP_SCREEN_RECT.w * scale;
+        const dh = LAPTOP_SCREEN_RECT.h * scale;
+
+        ctx.clearRect(0, 0, LAPTOP_TEXTURE_SIZE, LAPTOP_TEXTURE_SIZE);
+        ctx.drawImage(base.image, 0, 0, LAPTOP_TEXTURE_SIZE, LAPTOP_TEXTURE_SIZE);
+
+        screenCtx.clearRect(0, 0, screenCanvas.width, screenCanvas.height);
+
+        const current = imageFromTexture(slideTextures[index]);
+        if (current) {
+            drawBlurredScreen(screenCtx, current, screenCanvas.width, screenCanvas.height, { fit: "cover", alignY: "top" });
+        }
+
+        if (mixNext && mixNext.amount > 0) {
+            const incoming = imageFromTexture(slideTextures[mixNext.index]);
+            if (incoming) {
+                screenCtx.globalAlpha = mixNext.amount;
+                drawBlurredScreen(screenCtx, incoming, screenCanvas.width, screenCanvas.height, { fit: "cover", alignY: "top" });
+                screenCtx.globalAlpha = 1;
+            }
+        }
+
+        ctx.drawImage(screenCanvas, dx, dy, dw, dh);
+        composed.needsUpdate = true;
+        material.needsUpdate = true;
+    };
+
     useEffect(() => {
+        slideTextures.forEach((texture) => {
+            texture.colorSpace = THREE.SRGBColorSpace;
+            texture.needsUpdate = true;
+        });
+
         let target: THREE.Mesh | null = null;
         clonedScene.traverse((object) => {
             if (!target && (object as THREE.Mesh).isMesh) target = object as THREE.Mesh;
@@ -192,23 +423,16 @@ function LaptopModel({ progressRef }: ModelProps) {
 
         const material = (target as THREE.Mesh).material as THREE.MeshStandardMaterial;
         const base = material.map;
-        const source = screenTexture.image as CanvasImageSource | undefined;
-        if (!base?.image || !source) return;
+        if (!base?.image) return;
 
         const canvas = document.createElement("canvas");
         canvas.width = LAPTOP_TEXTURE_SIZE;
         canvas.height = LAPTOP_TEXTURE_SIZE;
-        const ctx = canvas.getContext("2d");
-        if (!ctx) return;
 
         const scale = LAPTOP_TEXTURE_SIZE / LAPTOP_ATLAS_SIZE;
-        ctx.drawImage(base.image, 0, 0, LAPTOP_TEXTURE_SIZE, LAPTOP_TEXTURE_SIZE);
-        ctx.drawImage(
-            source,
-            LAPTOP_SCREEN_SOURCE.x, LAPTOP_SCREEN_SOURCE.y, LAPTOP_SCREEN_SOURCE.w, LAPTOP_SCREEN_SOURCE.h,
-            LAPTOP_SCREEN_RECT.x * scale, LAPTOP_SCREEN_RECT.y * scale,
-            LAPTOP_SCREEN_RECT.w * scale, LAPTOP_SCREEN_RECT.h * scale
-        );
+        const screenCanvas = document.createElement("canvas");
+        screenCanvas.width = Math.round(LAPTOP_SCREEN_RECT.w * scale);
+        screenCanvas.height = Math.round(LAPTOP_SCREEN_RECT.h * scale);
 
         const composed = new THREE.CanvasTexture(canvas);
         composed.flipY = base.flipY;
@@ -216,15 +440,32 @@ function LaptopModel({ progressRef }: ModelProps) {
         composed.wrapT = base.wrapT;
         composed.colorSpace = THREE.SRGBColorSpace;
 
+        materialRef.current = material;
+        baseMapRef.current = base;
+        canvasRef.current = canvas;
+        screenCanvasRef.current = screenCanvas;
+        composedRef.current = composed;
         material.map = composed;
-        material.needsUpdate = true;
+
+        slideIndex.current = 0;
+        nextIndex.current = 1 % LAPTOP_SCREEN_SLIDES.length;
+        fade.current = 1;
+        fadingOut.current = false;
+        lastSwap.current = performance.now();
+        paintLaptop(0);
 
         return () => {
             material.map = base;
             material.needsUpdate = true;
             composed.dispose();
+            materialRef.current = null;
+            baseMapRef.current = null;
+            canvasRef.current = null;
+            screenCanvasRef.current = null;
+            composedRef.current = null;
         };
-    }, [clonedScene, screenTexture]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [clonedScene, slideTextures]);
 
     const intrinsicHeight = useMemo(() => {
         const box = new THREE.Box3().setFromObject(clonedScene);
@@ -265,6 +506,27 @@ function LaptopModel({ progressRef }: ModelProps) {
 
         const targetHeight = height * 0.42;
         group.current.scale.setScalar(targetHeight / intrinsicHeight);
+
+        if (LAPTOP_SCREEN_SLIDES.length < 2 || !composedRef.current) return;
+
+        const now = performance.now();
+        if (!fadingOut.current && now - lastSwap.current > SCREEN_SLIDE_MS) {
+            fadingOut.current = true;
+            nextIndex.current = (slideIndex.current + 1) % LAPTOP_SCREEN_SLIDES.length;
+        }
+
+        if (fadingOut.current) {
+            fade.current = Math.max(0, fade.current - delta * (1000 / SCREEN_CROSSFADE_MS));
+            if (fade.current <= 0) {
+                slideIndex.current = nextIndex.current;
+                paintLaptop(slideIndex.current);
+                fade.current = 1;
+                fadingOut.current = false;
+                lastSwap.current = now;
+            } else {
+                paintLaptop(slideIndex.current, { index: nextIndex.current, amount: 1 - fade.current });
+            }
+        }
     });
 
     return (

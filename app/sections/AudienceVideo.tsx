@@ -150,7 +150,7 @@ function PersonaTeaser() {
                         Um VOCA diferente para cada pessoa na sua empresa
                     </h2>
                     <p className="text-lg text-slate-500 mt-4">
-                        A plataforma se adapta a quem está usando, do C-level ao colaborador da ponta.
+                        A plataforma se adapta a quem usa, do C-level ao colaborador na ponta.
                     </p>
                 </div>
 
@@ -237,98 +237,99 @@ function PersonaTeaser() {
                         className="relative rounded-[2.5rem] border border-white/60 bg-white/40 shadow-xl overflow-hidden"
                         style={{ backdropFilter: "blur(28px)", WebkitBackdropFilter: "blur(28px)" }}
                     >
-                    <div
-                        className="absolute inset-0 pointer-events-none transition-colors duration-700"
-                        style={{ background: `linear-gradient(135deg, ${active.color}22, transparent 55%)` }}
-                    />
+                        <div
+                            className="absolute inset-0 pointer-events-none transition-colors duration-700"
+                            style={{ background: `linear-gradient(135deg, ${active.color}22, transparent 55%)` }}
+                        />
 
-                    <div className="relative grid grid-cols-1 lg:grid-cols-[1.1fr_1fr] items-stretch">
-                        <div className="grid order-2 lg:order-1">
-                            {personas.map((persona) => {
-                                const isActive = persona.id === activeId;
-                                const step = (order: number): CSSProperties => ({
-                                    opacity: isActive ? 1 : 0,
-                                    transform: isActive ? "translateY(0)" : "translateY(14px)",
-                                    transition: "opacity 450ms ease-out, transform 450ms ease-out",
-                                    transitionDelay: isActive ? `${100 + order * 70}ms` : "0ms",
-                                });
-                                return (
-                                    <div
-                                        key={persona.id}
-                                        className="[grid-area:1/1] p-8 sm:p-10 flex flex-col justify-center transition-opacity duration-200"
-                                        style={{
-                                            opacity: isActive ? 1 : 0,
-                                            pointerEvents: isActive ? "auto" : "none",
-                                        }}
-                                        aria-hidden={isActive ? undefined : true}
-                                    >
-                                        <p
-                                            className="text-sm font-bold uppercase tracking-widest"
-                                            style={{ color: persona.color, ...step(0) }}
-                                        >
-                                            {persona.title}
-                                        </p>
-
-                                        <p className="text-lg font-semibold text-slate-900 mt-3 max-w-md leading-snug" style={step(1)}>
-                                            {persona.headline}
-                                        </p>
-
-                                        <Link
-                                            href={`/casos-de-sucesso#${persona.stat.caseSlug}`}
-                                            className="group/stat flex items-center gap-3 rounded-2xl p-4 mt-6 w-full sm:w-fit hover:shadow-md hover:-translate-y-0.5"
-                                            style={{ backgroundColor: `${persona.color}0D`, ...step(6) }}
-                                        >
-                                            <p className="text-3xl font-extrabold shrink-0" style={{ color: persona.color }}>{persona.stat.value}</p>
-                                            <div>
-                                                <p className="text-xs text-slate-500 leading-snug">{persona.stat.label}</p>
-                                                <p className="flex items-center gap-1 text-[11px] font-bold mt-1" style={{ color: persona.color }}>
-                                                    Caso real · {persona.stat.source}
-                                                    <ArrowRight size={11} className="transition-transform group-hover/stat:translate-x-0.5" />
-                                                </p>
-                                            </div>
-                                        </Link>
-                                    </div>
-                                );
-                            })}
-                        </div>
-
-                        <div className="relative order-1 lg:order-2 h-48 lg:h-auto overflow-hidden">
-                            <div ref={parallaxRef} className="absolute -top-[8%] -bottom-[8%] inset-x-0">
+                        <div className="relative grid grid-cols-1 lg:grid-cols-[1.1fr_1fr] items-stretch">
+                            <div className="grid order-2 lg:order-1">
                                 {personas.map((persona) => {
                                     const isActive = persona.id === activeId;
+                                    const step = (order: number): CSSProperties => ({
+                                        opacity: isActive ? 1 : 0,
+                                        transform: isActive ? "translateY(0)" : "translateY(14px)",
+                                        transition: "opacity 450ms ease-out, transform 450ms ease-out",
+                                        transitionDelay: isActive ? `${100 + order * 70}ms` : "0ms",
+                                    });
                                     return (
                                         <div
                                             key={persona.id}
-                                            className="absolute inset-0 transition-opacity duration-700 ease-out"
-                                            style={{ opacity: isActive ? 1 : 0 }}
+                                            className="[grid-area:1/1] p-8 sm:p-10 flex flex-col justify-center transition-opacity duration-200"
+                                            style={{
+                                                opacity: isActive ? 1 : 0,
+                                                pointerEvents: isActive ? "auto" : "none",
+                                            }}
                                             aria-hidden={isActive ? undefined : true}
                                         >
-                                            <Image
-                                                src={persona.image}
-                                                alt={isActive ? persona.title : ""}
-                                                fill
-                                                sizes="(min-width: 1024px) 40vw, 100vw"
-                                                className={cn(
-                                                    "object-cover transition-transform ease-out",
-                                                    isActive ? "scale-105 [transition-duration:4000ms]" : "scale-100 duration-700"
-                                                )}
-                                            />
+                                            <p
+                                                className="text-sm font-bold uppercase tracking-widest"
+                                                style={{ color: persona.color, ...step(0) }}
+                                            >
+                                                {persona.title}
+                                            </p>
+
+                                            <p className="text-lg font-semibold text-slate-900 mt-3 max-w-md leading-snug" style={step(1)}>
+                                                {persona.headline}
+                                            </p>
+
+                                            <Link
+                                                href={`/casos-de-sucesso#${persona.stat.caseSlug}`}
+                                                className="group/stat flex items-center gap-3 rounded-2xl p-4 mt-6 w-full sm:w-fit hover:shadow-md hover:-translate-y-0.5"
+                                                style={{ backgroundColor: `${persona.color}0D`, ...step(6) }}
+                                            >
+                                                <p className="text-3xl font-extrabold shrink-0" style={{ color: persona.color }}>{persona.stat.value}</p>
+                                                <div>
+                                                    <p className="text-xs text-slate-500 leading-snug">{persona.stat.label}</p>
+                                                    <p className="flex items-center gap-1 text-[11px] font-bold mt-1" style={{ color: persona.color }}>
+                                                        Caso real · {persona.stat.source}
+                                                        <ArrowRight size={11} className="transition-transform group-hover/stat:translate-x-0.5" />
+                                                    </p>
+                                                </div>
+                                            </Link>
                                         </div>
                                     );
                                 })}
                             </div>
-                            <div
-                                className="absolute inset-0 transition-colors duration-700"
-                                style={{ background: `linear-gradient(0deg, ${active.color}CC 0%, transparent 55%)` }}
-                            />
-                            <div className="absolute bottom-4 left-4 right-4 flex items-center gap-2.5">
-                                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white/20 backdrop-blur-sm text-white">
-                                    <active.icon size={16} />
+
+                            <div className="relative order-1 lg:order-2 aspect-[3/4] sm:aspect-[4/5] max-h-[26rem] w-full lg:aspect-auto lg:max-h-none lg:h-auto overflow-hidden">
+                                <div ref={parallaxRef} className="absolute -top-[8%] -bottom-[8%] inset-x-0">
+                                    {personas.map((persona) => {
+                                        const isActive = persona.id === activeId;
+                                        return (
+                                            <div
+                                                key={persona.id}
+                                                className="absolute inset-0 transition-opacity duration-700 ease-out"
+                                                style={{ opacity: isActive ? 1 : 0 }}
+                                                aria-hidden={isActive ? undefined : true}
+                                            >
+                                                <Image
+                                                    src={persona.image}
+                                                    alt={isActive ? persona.title : ""}
+                                                    fill
+                                                    sizes="(min-width: 1024px) 40vw, 100vw"
+                                                    className={cn(
+                                                        "object-cover transition-transform ease-out",
+                                                        isActive ? "scale-105 [transition-duration:4000ms]" : "scale-100 duration-700"
+                                                    )}
+                                                    style={{ objectPosition: persona.imagePosition ?? "center" }}
+                                                />
+                                            </div>
+                                        );
+                                    })}
                                 </div>
-                                <p className="text-white font-bold text-sm">{active.title}</p>
+                                <div
+                                    className="absolute inset-0 transition-colors duration-700"
+                                    style={{ background: `linear-gradient(0deg, ${active.color}CC 0%, transparent 55%)` }}
+                                />
+                                <div className="absolute bottom-4 left-4 right-4 flex items-center gap-2.5">
+                                    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white/20 backdrop-blur-sm text-white">
+                                        <active.icon size={16} />
+                                    </div>
+                                    <p className="text-white font-bold text-sm">{active.title}</p>
+                                </div>
                             </div>
                         </div>
-                    </div>
                     </div>
                 </div>
 
@@ -421,7 +422,7 @@ function VideoShowcase() {
         if (!video) return;
 
         function play() {
-            video?.play().catch(() => {});
+            video?.play().catch(() => { });
             setIsPlaying(true);
         }
         function pause() {
@@ -458,7 +459,7 @@ function VideoShowcase() {
         const video = videoRef.current;
         if (!video) return;
         if (video.paused) {
-            video.play().catch(() => {});
+            video.play().catch(() => { });
             setIsPlaying(true);
         } else {
             video.pause();
@@ -478,7 +479,7 @@ function VideoShowcase() {
         const video = videoRef.current;
         if (!video) return;
         video.currentTime = 0;
-        video.play().catch(() => {});
+        video.play().catch(() => { });
         setIsPlaying(true);
     }
 

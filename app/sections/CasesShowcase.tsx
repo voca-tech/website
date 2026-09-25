@@ -14,7 +14,7 @@ import { cn } from "@/lib/utils";
 const playfair = Playfair_Display({ subsets: ["latin"], weight: ["400", "600", "700", "800"], style: ["normal", "italic"], display: "swap" });
 const playfairSC = Playfair_Display_SC({ subsets: ["latin"], weight: ["400", "700", "900"], display: "swap" });
 
-const featuredSlugs = ["engeform", "credi10-compliance", "sp-engenharia"];
+const featuredSlugs = ["grant-thornton", "credi10-compliance", "sp-engenharia"];
 
 const featuredCases = featuredSlugs.map((slug) => {
     const data = cases.find((c) => c.slug === slug)!;
@@ -342,6 +342,13 @@ export default function CasesShowcase() {
                                                 </li>
                                             ))}
                                         </ul>
+                                    </>
+                                )}
+
+                                {selected.data.result && (
+                                    <>
+                                        <p className="text-sm font-bold tracking-widest uppercase mt-6" style={{ color: selectedColor }}>Resultado</p>
+                                        <p className="text-slate-600 mt-2">{selected.data.result}</p>
                                     </>
                                 )}
                             </div>

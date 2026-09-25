@@ -596,7 +596,10 @@ export default function ProdutoPage() {
 
                 <div className="relative max-w-6xl mx-auto">
                     <div className="text-center max-w-2xl mx-auto mb-10">
-                        <h2 className="voca-title text-2xl sm:text-3xl font-extrabold">
+                        <span className="inline-flex rounded-full bg-voca-green/10 px-3 py-1 text-xs font-bold text-voca-green uppercase tracking-widest">
+                            Método VOCA
+                        </span>
+                        <h2 className="voca-title text-2xl sm:text-3xl font-extrabold mt-3">
                             DNA do Engajamento
                         </h2>
                         <p className="text-slate-500 mt-4 max-w-xl mx-auto">
@@ -742,7 +745,7 @@ export default function ProdutoPage() {
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                                 <div className="group relative rounded-[1.75rem] overflow-hidden shadow-sm transition-all duration-300 hover:shadow-lg aspect-[16/11]">
                                     <Image
-                                        src="https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&w=1000&q=80"
+                                        src="/photos/produto/plataforma-app.png"
                                         alt=""
                                         fill
                                         sizes="(max-width: 640px) 100vw, 50vw"
@@ -765,7 +768,7 @@ export default function ProdutoPage() {
 
                                 <div className="group relative rounded-[1.75rem] overflow-hidden shadow-sm transition-all duration-300 hover:shadow-lg aspect-[16/11]">
                                     <Image
-                                        src="https://images.unsplash.com/photo-1551650975-87deedd944c3?auto=format&fit=crop&w=1000&q=80"
+                                        src="/photos/produto/plataforma-web.png"
                                         alt=""
                                         fill
                                         sizes="(max-width: 640px) 100vw, 50vw"

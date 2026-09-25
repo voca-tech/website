@@ -46,7 +46,7 @@ export const reasons: Reason[] = [
 ];
 
 export const whyVocaStats: { value: string; suffix: string; label: string; source?: string }[] = [
-    { value: "60", suffix: "%", label: "das pessoas estão insatisfeitas no trabalho. As 3 principais causas se relacionam à comunicação." },
+    { value: "72", suffix: "%", label: "das pessoas estão insatisfeitas no trabalho. As 3 principais causas se relacionam à comunicação.", source: "ISMA Brasil" },
     { value: "17", suffix: "%", label: "a mais produz um funcionário engajado, com 87% menos chance de sair da empresa.", source: "Gallup" },
     { value: "47", suffix: "%", label: "de incremento financeiro médio em empresas com comunicação eficiente e propositiva.", source: "Towers Watson" },
 ];
