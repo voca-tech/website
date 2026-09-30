@@ -7,13 +7,14 @@ import { Playfair_Display } from "next/font/google";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import {
-    Check, ArrowRight, Search, GraduationCap, Rocket, BarChart3, Milestone,
+    ArrowRight, Search, GraduationCap, Rocket, BarChart3, Milestone,
 } from "lucide-react";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { WhatsappLink } from "@/components/WhatsappLink";
 import { ClientLogoMarquee } from "@/components/ClientLogoMarquee";
-import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { CaseCard, CaseLogo, CasePerson } from "@/components/cases/CaseCard";
+import { CaseDetail } from "@/components/cases/CaseDetail";
 import { useIsDesktop } from "@/components/useIsDesktop";
 import { cn } from "@/lib/utils";
 import { cases, PILLARS, type PillarId } from "./data";
@@ -22,6 +23,7 @@ const playfair = Playfair_Display({ subsets: ["latin"], weight: ["400", "600"], 
 
 const spotlight = cases.find((c) => c.slug === "woodbridge-cracha")!;
 const spotlightColor = PILLARS[spotlight.pillar].color;
+const spotlightMetric = spotlight.metrics[spotlight.heroMetricIndex ?? 0];
 
 const pillarFilters: Array<{ id: PillarId | "all"; label: string }> = [
     { id: "all", label: "Todos" },
@@ -208,10 +210,6 @@ const statWall = [
     { value: "95%", label: "taxa de resposta às pesquisas", company: "Woodbridge" },
 ];
 
-function initials(name: string) {
-    return name.split(" ").map((part) => part[0]).slice(0, 2).join("").toUpperCase();
-}
-
 function parseStatValue(raw: string) {
     const isPercent = raw.endsWith("%");
     const digits = raw.replace(/[.%]/g, "");
@@ -283,7 +281,6 @@ export default function CasosDeSucessoPage() {
     const isDesktop = useIsDesktop();
 
     const displayed = cases.find((c) => c.slug === displayedSlug)!;
-    const color = PILLARS[displayed.pillar].color;
 
     useEffect(() => {
         const hash = window.location.hash.replace("#", "");
@@ -381,21 +378,8 @@ export default function CasosDeSucessoPage() {
                             &ldquo;{spotlight.quote}&rdquo;
                         </p>
 
-                        <div className="flex items-center gap-3 mt-6 justify-center lg:justify-start">
-                            <Avatar className="h-11 w-11">
-                                {spotlight.avatar && <AvatarImage src={spotlight.avatar} />}
-                                <AvatarFallback className="font-bold" style={{ color: spotlightColor }}>
-                                    {initials(spotlight.name ?? spotlight.company)}
-                                </AvatarFallback>
-                            </Avatar>
-                            <div className="text-left">
-                                <p className="font-bold text-slate-900">{spotlight.name}</p>
-                                <p className="text-slate-500 text-sm">{spotlight.role} · {spotlight.company}</p>
-                            </div>
-                        </div>
-
                         <div className="flex flex-wrap justify-center lg:justify-start gap-x-6 gap-y-4 sm:gap-x-8 mt-8">
-                            {spotlight.metrics.slice(0, 3).map((metric) => (
+                            {spotlight.metrics.filter((metric) => metric !== spotlightMetric).slice(0, 3).map((metric) => (
                                 <div key={metric.label} className="text-center lg:text-left">
                                     <p className="text-2xl font-extrabold" style={{ color: spotlightColor }}>{metric.value}</p>
                                     <p className="text-xs text-slate-500 mt-1 max-w-[7rem]">{metric.label}</p>
@@ -417,14 +401,47 @@ export default function CasosDeSucessoPage() {
                         </button>
                     </div>
 
-                    <div className="relative rounded-[2rem] overflow-hidden shadow-2xl aspect-[4/5] max-w-sm mx-auto w-full">
-                        <Image
-                            src={spotlight.photo!}
-                            alt=""
-                            fill
-                            sizes="(max-width: 1024px) 100vw, 400px"
-                            className="object-cover"
+                    <div
+                        className="relative flex flex-col rounded-[2rem] overflow-hidden shadow-2xl max-w-sm mx-auto w-full min-h-[26rem] p-8"
+                        style={{ background: `linear-gradient(135deg, rgba(1,20,25,0.55) 0%, rgba(1,20,25,0) 70%), ${spotlightColor}` }}
+                    >
+                        <div
+                            className="absolute inset-0 opacity-[0.1] pointer-events-none"
+                            style={{
+                                backgroundImage: "radial-gradient(circle, rgba(255,255,255,0.6) 1px, transparent 1px)",
+                                backgroundSize: "22px 22px",
+                            }}
                         />
+                        <Image
+                            src="/voca-symbol.png"
+                            alt=""
+                            width={220}
+                            height={270}
+                            aria-hidden="true"
+                            className="absolute -right-10 -bottom-12 w-48 h-auto opacity-[0.08] brightness-0 invert select-none pointer-events-none"
+                        />
+
+                        <div className="relative flex flex-wrap items-center gap-3">
+                            <span className="inline-flex rounded-full bg-white/15 px-3 py-1 text-[11px] font-bold uppercase tracking-widest text-white backdrop-blur-sm">
+                                {spotlight.theme}
+                            </span>
+                            {spotlight.logo && (
+                                <span className="inline-flex items-center rounded-lg bg-white px-2.5 py-1.5">
+                                    <CaseLogo item={spotlight} className="h-5" />
+                                </span>
+                            )}
+                        </div>
+
+                        {spotlightMetric && (
+                            <div className="relative mt-10">
+                                <p className="text-6xl font-extrabold text-white leading-none">{spotlightMetric.value}</p>
+                                <p className="text-white/80 mt-3 leading-snug max-w-[16rem]">{spotlightMetric.label}</p>
+                            </div>
+                        )}
+
+                        <div className="relative mt-auto pt-8 border-t border-white/20">
+                            <CasePerson item={spotlight} size="lg" tone="dark" />
+                        </div>
                     </div>
                 </div>
             </div>
@@ -453,148 +470,24 @@ export default function CasosDeSucessoPage() {
                 </div>
 
                 <div ref={gridRef} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-                    {filteredCases.map((item) => {
-                        const itemColor = PILLARS[item.pillar].color;
-                        const heroMetric = item.metrics[item.heroMetricIndex ?? 0];
-                        return (
-                            <button
-                                key={item.slug}
-                                onClick={() => {
-                                    setActiveSlug(item.slug);
-                                    setDisplayedSlug(item.slug);
-                                    setDetailOpen(true);
-                                }}
-                                className="case-card group relative text-left rounded-2xl overflow-hidden h-80 sm:h-96 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
-                            >
-                                {item.photo && (
-                                    <Image
-                                        src={item.photo}
-                                        alt={item.company}
-                                        fill
-                                        sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
-                                        className="object-cover transition-transform duration-500 group-hover:scale-105"
-                                    />
-                                )}
-                                <div className="absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-black/60 to-transparent" />
-                                <div
-                                    className="absolute inset-x-0 bottom-0 h-3/4"
-                                    style={{ background: `linear-gradient(0deg, ${itemColor}F2 0%, ${itemColor}CC 35%, transparent 100%)` }}
-                                />
-
-                                <div className="absolute inset-0 p-5 sm:p-6 flex flex-col justify-between">
-                                    <div className="flex items-start justify-between gap-3">
-                                        {heroMetric ? (
-                                            <div>
-                                                <p className="text-3xl sm:text-4xl font-extrabold text-white drop-shadow-sm">{heroMetric.value}</p>
-                                                <p className="text-xs text-white/90 mt-1 max-w-[9rem] leading-snug drop-shadow-sm">{heroMetric.label}</p>
-                                            </div>
-                                        ) : (
-                                            <p className="text-lg font-bold text-white max-w-[9rem] leading-snug drop-shadow-sm">{item.theme}</p>
-                                        )}
-                                        <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white text-slate-900 transition-transform duration-300 group-hover:scale-110 group-hover:bg-voca-green group-hover:text-white">
-                                            <ArrowRight size={15} />
-                                        </span>
-                                    </div>
-
-                                    <div>
-                                        <p className={cn(playfair.className, "italic text-white text-sm leading-relaxed line-clamp-2 drop-shadow-sm")}>
-                                            &ldquo;{item.quote}&rdquo;
-                                        </p>
-                                        <div className="mt-3 pt-3 border-t border-white/20">
-                                            {heroMetric && (
-                                                <p className="text-sm font-bold text-white truncate">{item.theme}</p>
-                                            )}
-                                            <p className={cn("text-[11px] text-white/60 truncate", heroMetric && "mt-0.5")}>
-                                                {item.company}
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </button>
-                        );
-                    })}
+                    {filteredCases.map((item) => (
+                        <CaseCard
+                            key={item.slug}
+                            item={item}
+                            metric={item.metrics[item.heroMetricIndex ?? 0]}
+                            onClick={() => {
+                                setActiveSlug(item.slug);
+                                setDisplayedSlug(item.slug);
+                                setDetailOpen(true);
+                            }}
+                        />
+                    ))}
                 </div>
             </div>
 
             <Dialog open={detailOpen} onOpenChange={setDetailOpen}>
                 <DialogContent className="w-[95vw] max-w-4xl max-h-[88vh] p-0 rounded-3xl flex flex-col overflow-hidden">
-                    <DialogTitle className="sr-only">{displayed.company}</DialogTitle>
-
-                    {displayed.photo && (
-                        <div className="relative h-56 sm:h-72 shrink-0">
-                            <Image src={displayed.photo} alt="" fill sizes="90vw" className="object-cover rounded-t-3xl" />
-                            <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent rounded-t-3xl" />
-                            <div className="absolute bottom-5 left-6 right-6">
-                                <span className="inline-flex items-center rounded-full bg-white/15 backdrop-blur-sm px-3 py-1 text-xs font-bold tracking-widest text-white uppercase">
-                                    {displayed.theme}
-                                </span>
-                                <p className="text-3xl sm:text-4xl font-extrabold text-white mt-3">{displayed.company}</p>
-                            </div>
-                        </div>
-                    )}
-
-                    <div className="flex-1 min-h-0 overflow-y-auto p-6 sm:p-10">
-                        <p className={cn(playfair.className, "italic text-xl sm:text-2xl font-bold text-slate-900 leading-snug")}>
-                            &ldquo;{displayed.quote}&rdquo;
-                        </p>
-                        <div className="mt-4 flex items-center gap-3">
-                            {displayed.name && (
-                                <Avatar className="h-11 w-11">
-                                    {displayed.avatar && <AvatarImage src={displayed.avatar} />}
-                                    <AvatarFallback className="font-bold" style={{ color }}>
-                                        {initials(displayed.name)}
-                                    </AvatarFallback>
-                                </Avatar>
-                            )}
-                            <div>
-                                <p className="font-bold text-slate-900">{displayed.name ?? displayed.company}</p>
-                                {displayed.role && <p className="text-slate-600 text-sm">{displayed.role} · {displayed.company}</p>}
-                            </div>
-                        </div>
-
-                        {displayed.metrics.length > 0 && (
-                            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mt-6">
-                                {displayed.metrics.map((metric, i) => (
-                                    <div
-                                        key={metric.label}
-                                        className="glass-tile rounded-xl p-3 animate-in fade-in slide-in-from-bottom-1 duration-500"
-                                        style={{ animationDelay: `${140 + i * 70}ms`, animationFillMode: "both" }}
-                                    >
-                                        <p className="text-xl font-extrabold" style={{ color }}>{metric.value}</p>
-                                        <p className="text-xs font-medium text-slate-700 mt-1">{metric.label}</p>
-                                    </div>
-                                ))}
-                            </div>
-                        )}
-
-                        {displayed.objective && (
-                            <>
-                                <p className="text-sm font-bold tracking-widest uppercase mt-8" style={{ color }}>Objetivo</p>
-                                <p className="text-slate-700 mt-2">{displayed.objective}</p>
-                            </>
-                        )}
-
-                        {displayed.solution && (
-                            <>
-                                <p className="text-sm font-bold tracking-widest uppercase mt-6" style={{ color }}>Solução</p>
-                                <ul className="mt-3 flex flex-col gap-2">
-                                    {displayed.solution.map((point) => (
-                                        <li key={point} className="text-sm text-slate-700 flex gap-2">
-                                            <Check size={16} className="shrink-0 mt-0.5" style={{ color }} />
-                                            {point}
-                                        </li>
-                                    ))}
-                                </ul>
-                            </>
-                        )}
-
-                        {displayed.result && (
-                            <>
-                                <p className="text-sm font-bold tracking-widest uppercase mt-6" style={{ color }}>Resultado</p>
-                                <p className="text-slate-700 mt-2">{displayed.result}</p>
-                            </>
-                        )}
-                    </div>
+                    <CaseDetail item={displayed} />
                 </DialogContent>
             </Dialog>
 

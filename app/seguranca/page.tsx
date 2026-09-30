@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Check, ShieldCheck, ArrowRight, CalendarClock } from "lucide-react";
+import { Check, ArrowRight, RefreshCw } from "lucide-react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Button } from "@/components/ui/button";
@@ -11,7 +11,7 @@ import { WhatsappLink } from "@/components/WhatsappLink";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { ClientLogoMarquee } from "@/components/ClientLogoMarquee";
 import { cn } from "@/lib/utils";
-import { securityFeatures, nr1Support, nr1Timeline, digitalShieldLayers, awsPillars } from "./data";
+import { securityFeatures, nr1Problems, nr1Requirements, nr1SolutionPillars, nr1Outcomes, digitalShieldLayers, awsPillars } from "./data";
 
 const credi10Metrics = [
     { value: "100%", label: "conformidade para auditoria" },
@@ -190,7 +190,7 @@ export default function SegurancaPage() {
                                 </p>
                                 <div className="flex items-center gap-3 mt-6">
                                     <Avatar className="h-11 w-11 ring-2 ring-white/20 shadow-sm">
-                                        <AvatarImage src="/avatars/credi10-erika.jpg" />
+                                        <AvatarImage src="/avatars/credi10-erika.png" />
                                     </Avatar>
                                     <div>
                                         <p className="font-bold text-white text-sm">Erika Freitas</p>
@@ -312,7 +312,7 @@ export default function SegurancaPage() {
                 </div>
             </div>
 
-            <div id="nr1" className="relative py-24 sm:py-36 px-6 overflow-hidden">
+            <div id="nr1" className="relative py-20 sm:py-28 px-6 overflow-hidden">
                 <div
                     className="absolute inset-0 bg-cover bg-center"
                     style={{
@@ -321,104 +321,155 @@ export default function SegurancaPage() {
                 />
                 <div
                     className="absolute inset-0"
-                    style={{ background: "linear-gradient(160deg, rgba(1,46,49,0.88) 0%, rgba(1,107,114,0.8) 100%)" }}
+                    style={{ background: "linear-gradient(160deg, rgba(1,46,49,0.9) 0%, rgba(1,107,114,0.82) 100%)" }}
                 />
-                <div className="absolute inset-0 pointer-events-none overflow-hidden">
-                    <div
-                        className="absolute inset-0 opacity-[0.08]"
-                        style={{
-                            backgroundImage: "radial-gradient(circle, rgba(255,255,255,0.6) 1px, transparent 1px)",
-                            backgroundSize: "24px 24px",
-                        }}
-                    />
-                </div>
+                <div
+                    className="absolute inset-0 opacity-[0.08] pointer-events-none"
+                    style={{
+                        backgroundImage: "radial-gradient(circle, rgba(255,255,255,0.6) 1px, transparent 1px)",
+                        backgroundSize: "24px 24px",
+                    }}
+                />
 
                 <div className="relative max-w-5xl mx-auto">
-                    <div className="text-center max-w-2xl mx-auto">
+                    <div className="text-center max-w-3xl mx-auto">
                         <h2 className="voca-title-invert text-3xl sm:text-5xl font-extrabold leading-tight">
                             NR-1 da teoria à prática
                         </h2>
                     </div>
 
-                    <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-3xl mx-auto">
-                        {nr1Timeline.map((milestone) => (
-                            <div
-                                key={milestone.date}
-                                className="rounded-2xl border border-white/15 bg-white/[0.06] p-5 backdrop-blur-sm"
-                            >
-                                <div className="flex items-center gap-2">
-                                    <CalendarClock size={15} className="shrink-0 text-teal-300" />
-                                    <p className="text-xs font-bold uppercase tracking-widest text-teal-300">
-                                        {milestone.date}
-                                    </p>
-                                </div>
-                                <p className="mt-2.5 font-bold text-white">{milestone.title}</p>
-                                <p className="mt-1 text-sm leading-relaxed text-white/70">{milestone.description}</p>
-                            </div>
-                        ))}
+                    <div className="mt-16 sm:mt-20">
+                        <div className="text-center max-w-3xl mx-auto">
+                            <span className="inline-flex rounded-full bg-teal-300/15 px-3.5 py-1 text-xs font-bold uppercase tracking-wider text-teal-300">
+                                O problema real
+                            </span>
+                            <h3 className="mt-5 text-2xl sm:text-3xl font-extrabold leading-snug text-white">
+                                Para empresas em crescimento, o maior risco não é a NR-1, é{" "}
+                                <span className="text-teal-300">
+                                    tentar cumpri-la sem estrutura, método e histórico confiável.
+                                </span>
+                            </h3>
+                        </div>
+
+                        <div className="mt-10 max-w-3xl mx-auto rounded-2xl border border-white/15 bg-white/[0.06] backdrop-blur-sm divide-y divide-white/10 overflow-hidden">
+                            {nr1Problems.map((item) => {
+                                const Icon = item.icon;
+                                return (
+                                    <div key={item.label} className="flex items-center gap-4 px-5 py-4 sm:px-6 sm:py-5">
+                                        <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-teal-300/15 text-teal-300">
+                                            <Icon size={16} />
+                                        </span>
+                                        <p className="text-sm sm:text-base font-medium text-white/90 leading-snug">
+                                            {item.label}
+                                        </p>
+                                    </div>
+                                );
+                            })}
+                        </div>
                     </div>
 
-                    <div className="mx-auto mt-10 max-w-3xl text-center">
-                        <p className="text-white/80 text-lg leading-relaxed">
-                            A norma exige que as empresas mapeiem e gerenciem riscos psicossociais no trabalho, como
-                            estresse, sobrecarga e assédio. Vale para <span className="font-semibold text-white">toda
-                            empresa com empregados CLT</span>, de qualquer porte e grau de risco.
-                        </p>
-                        <p className="text-white/60 text-base leading-relaxed mt-4">
-                            O VOCA não substitui a avaliação técnica exigida pela norma. O que ele resolve é o resto:
-                            a escuta contínua, o diagnóstico por área e o registro que sustenta o plano de ação.
-                        </p>
-                    </div>
+                    <div className="mt-16 sm:mt-20 max-w-3xl mx-auto">
+                        <div className="text-center">
+                            <span className="inline-flex rounded-full bg-teal-300/15 px-3.5 py-1 text-xs font-bold uppercase tracking-wider text-teal-300">
+                                NR-1 na prática
+                            </span>
+                            <h3 className="mt-5 text-2xl sm:text-3xl font-extrabold text-white">
+                                O que a NR-1 passa a exigir
+                            </h3>
+                        </div>
 
-                    <div className="mt-14 flex items-center justify-center gap-2.5">
-                        <ShieldCheck size={20} className="text-teal-300" />
-                        <p className="text-sm font-bold uppercase tracking-widest text-white">Onde o VOCA entra</p>
-                    </div>
-
-                    <div className="mt-8 grid grid-cols-1 lg:grid-cols-3 gap-5">
-                        {nr1Support.map((group, index) => (
-                            <div
-                                key={group.stage}
-                                className="relative flex flex-col rounded-2xl border border-white/15 bg-white/[0.06] p-6 sm:p-7 backdrop-blur-sm"
-                            >
-                                <div className="flex items-center gap-2.5">
-                                    <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-teal-300/15 text-[11px] font-bold text-teal-300">
-                                        {index + 1}
+                        <div className="mt-8 rounded-2xl border border-white/15 bg-white/[0.06] backdrop-blur-sm divide-y divide-white/10 overflow-hidden">
+                            {nr1Requirements.map((item) => (
+                                <div key={item} className="flex items-center gap-4 px-5 py-4 sm:px-6 sm:py-5">
+                                    <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-teal-300/15 text-teal-300">
+                                        <Check size={16} strokeWidth={2.5} />
                                     </span>
-                                    <p className="text-[11px] font-bold uppercase tracking-widest text-teal-300">
-                                        {group.stage}
-                                    </p>
+                                    <p className="text-sm sm:text-base font-medium text-white/90">{item}</p>
                                 </div>
+                            ))}
+                        </div>
 
-                                <p className="mt-3 text-base font-semibold leading-snug text-white">
-                                    {group.summary}
-                                </p>
-
-                                <ul className="mt-5 flex flex-col gap-4 border-t border-white/10 pt-5">
-                                    {group.items.map((item) => (
-                                        <li key={item.label}>
-                                            <div className="flex items-start gap-2.5">
-                                                <Check size={15} className="mt-1 shrink-0 text-teal-300" />
-                                                <div>
-                                                    <p className="text-sm font-bold text-white">{item.label}</p>
-                                                    <p className="mt-1 text-sm leading-relaxed text-white/65">
-                                                        {item.detail}
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </li>
-                                    ))}
-                                </ul>
-                            </div>
-                        ))}
+                        <div className="mt-4 flex items-center gap-3.5 rounded-2xl border border-teal-300/25 bg-teal-300/10 px-5 py-4 sm:px-6 backdrop-blur-sm">
+                            <RefreshCw size={18} className="shrink-0 text-teal-300" />
+                            <p className="text-sm sm:text-base text-white/85 leading-snug">
+                                Não é um projeto pontual.{" "}
+                                <span className="font-bold text-teal-300">É um processo contínuo.</span>
+                            </p>
+                        </div>
                     </div>
 
-                    <div className="mt-12 flex justify-center">
-                        <Link href="/contact">
-                            <Button className="bg-white text-voca-green hover:bg-white/90 rounded-md px-6 h-12 text-base font-semibold">
-                                Falar sobre NR-1 com o time
-                            </Button>
-                        </Link>
+                    <div className="mt-16 sm:mt-20">
+                        <div className="text-center max-w-3xl mx-auto">
+                            <span className="inline-flex rounded-full bg-teal-300 px-3.5 py-1 text-xs font-bold uppercase tracking-wider text-[#012e31]">
+                                A solução VOCA
+                            </span>
+                            <h3 className="mt-5 text-2xl sm:text-3xl font-extrabold leading-snug text-white">
+                                O VOCA resolve boa parte disso com{" "}
+                                <span className="text-teal-300">clareza e execução</span>
+                            </h3>
+                        </div>
+
+                        <div className="mt-10 grid grid-cols-1 md:grid-cols-3 gap-4">
+                            {nr1SolutionPillars.map((pillar, index) => {
+                                const Icon = pillar.icon;
+                                return (
+                                    <div
+                                        key={pillar.title}
+                                        className="flex flex-col rounded-2xl border border-white/15 bg-white/[0.06] backdrop-blur-sm overflow-hidden"
+                                    >
+                                        <div className="flex items-center gap-3 border-b border-white/10 px-5 py-4">
+                                            <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-teal-300/15 text-[11px] font-bold text-teal-300">
+                                                {String(index + 1).padStart(2, "0")}
+                                            </span>
+                                            <Icon size={16} className="shrink-0 text-teal-300" />
+                                            <h4 className="text-base font-extrabold text-white">{pillar.title}</h4>
+                                        </div>
+                                        <ul className="flex flex-col gap-3 px-5 py-5">
+                                            {pillar.items.map((item) => (
+                                                <li key={item} className="flex items-center gap-2.5 text-sm text-white/75">
+                                                    <Check size={14} className="shrink-0 text-teal-300" strokeWidth={2.5} />
+                                                    {item}
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    </div>
+                                );
+                            })}
+                        </div>
+                    </div>
+
+                    <div className="mt-16 sm:mt-20 max-w-3xl mx-auto text-center">
+                        <h3 className="text-2xl sm:text-3xl font-extrabold leading-snug text-white">
+                            NR-1 não é apenas compliance.{" "}
+                            <span className="text-teal-300">É governança, cultura e performance.</span>
+                        </h3>
+                        <p className="mt-5 text-white/70 text-base sm:text-lg leading-relaxed">
+                            O VOCA ajuda sua empresa a reduzir riscos, dar clareza à liderança e crescer com tranquilidade, previsibilidade e controle.
+                        </p>
+
+                        <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
+                            {nr1Outcomes.map((item) => {
+                                const Icon = item.icon;
+                                return (
+                                    <div
+                                        key={item.label}
+                                        className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/[0.08] px-4 py-2 backdrop-blur-sm"
+                                    >
+                                        <Icon size={15} className="text-teal-300" />
+                                        <span className="text-sm font-semibold text-white">{item.label}</span>
+                                    </div>
+                                );
+                            })}
+                        </div>
+
+                        <div className="mt-10 flex justify-center">
+                            <Link href="/contact">
+                                <Button className="bg-white text-voca-green hover:bg-white/90 rounded-md px-6 h-12 text-base font-semibold">
+                                    Falar sobre NR-1 com o time
+                                    <ArrowRight size={16} className="ml-2" />
+                                </Button>
+                            </Link>
+                        </div>
                     </div>
                 </div>
             </div>

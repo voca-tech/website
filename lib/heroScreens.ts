@@ -18,9 +18,9 @@ export const LAPTOP_SCREEN_SLIDES = [
 
 export const SCREEN_SLIDE_MS = 4200;
 export const SCREEN_CROSSFADE_MS = 900;
-/** Light haze — details soft, layout still clear. */
-export const SCREEN_BLUR_PX = 1.25;
-export const SCREEN_FROST = "rgba(255, 255, 255, 0.08)";
+/** Light haze — details soft, layout still clear. Set to 0 to show screens sharp. */
+export const SCREEN_BLUR_PX = 0;
+export const SCREEN_FROST = "rgba(255, 255, 255, 0)";
 
 type FitMode = "cover" | "contain";
 type AlignY = "top" | "center" | "bottom";

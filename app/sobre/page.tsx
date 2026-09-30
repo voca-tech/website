@@ -68,6 +68,7 @@ const founders = [
     {
         name: "Ronaldo Palermo",
         role: "CEO e Co-fundador",
+        photo: "/avatars/socios/ronaldo.jpg",
         bio: [
             "Executivo comercial do mercado financeiro por mais de 20 anos.",
             "Liderança de equipes multidisciplinares de mais de 200 pessoas.",
@@ -78,6 +79,7 @@ const founders = [
     {
         name: "Cristiano Paranhos",
         role: "COO e Co-fundador",
+        photo: "/avatars/socios/cristiano.jpg",
         bio: [
             "Mais de 15 anos de experiência com analytics para B2B.",
             "Gestão de projetos, negócios e desenvolvimento de produtos.",
@@ -88,6 +90,7 @@ const founders = [
     {
         name: "Thiago Junqueira",
         role: "CTO e Sócio",
+        photo: "/avatars/socios/thiago.jpg",
         bio: [
             "Engenheiro de dados, desenvolvedor full stack e arquiteto cloud.",
             "Experiência na gestão e excelência de times ágeis.",
@@ -570,6 +573,7 @@ export default function SobrePage() {
                                 <div className="h-2" style={{ backgroundColor: founderColors[i] }} />
                                 <div className="p-6">
                                     <Avatar className="h-14 w-14 mb-4">
+                                        <AvatarImage src={founder.photo} alt={founder.name} className="object-cover object-top" />
                                         <AvatarFallback
                                             className="font-bold text-lg"
                                             style={{ backgroundColor: `${founderColors[i]}1A`, color: founderColors[i] }}

@@ -21,9 +21,9 @@ type Testimonial = {
 
 const testimonials: Testimonial[] = [
     { id: 3, name: 'Cristiano', role: 'Gestor de RH da Belas Artes', avatar: '/avatars/ba-cristiano.jpg', logo: '/clients/belasartes.png', testimonial: 'O VOCA é uma ferramenta muito importante para fortalecer a comunicação no ambiente corporativo. Não há dúvidas que tem ajudado muito o RH.' },
-    { id: 5, name: 'André', role: 'CEO na Engeform', avatar: '/avatars/engeform-andre.png', testimonial: 'O VOCA nos ajudou de forma simples a resolver problemas complexos.' },
-    { id: 6, name: 'Erika', role: 'Coordenadora de RH da Credi10', avatar: '/avatars/credi10-erika.jpg', logo: '/clients/credi10.png', testimonial: 'O VOCA é mais do que um sistema, é a voz dos nossos colaboradores que nos traz ideias, feedbacks e engajamento entre todos.' },
-    { id: 8, name: 'Mauricio', role: 'Head de Pessoas e Cultura na Akaer', avatar: '/avatars/akaer-mauricio.jpg', logo: '/clients/akaer.png', testimonial: 'O VOCA se destaca como uma ferramenta que vai além do convencional, promovendo uma cultura de inclusão e participação ativa. Sua contribuição para a melhoria da experiência do colaborador é evidente.' },
+    { id: 5, name: 'André', role: 'CEO na Engeform', avatar: '/avatars/engeform-andre.png', logo: '/clients/engeform.png', testimonial: 'O VOCA nos ajudou de forma simples a resolver problemas complexos.' },
+    { id: 6, name: 'Erika', role: 'Coordenadora de RH da Credi10', avatar: '/avatars/credi10-erika.png', logo: '/clients/credi10.png', testimonial: 'O VOCA é mais do que um sistema, é a voz dos nossos colaboradores que nos traz ideias, feedbacks e engajamento entre todos.' },
+    { id: 8, name: 'Mauricio', role: 'Head de Pessoas e Cultura na Akaer', avatar: '/avatars/akaer-mauricio.jpeg', logo: '/clients/akaer.png', testimonial: 'O VOCA se destaca como uma ferramenta que vai além do convencional, promovendo uma cultura de inclusão e participação ativa. Sua contribuição para a melhoria da experiência do colaborador é evidente.' },
 ];
 
 export default function TestimonialsSection() {

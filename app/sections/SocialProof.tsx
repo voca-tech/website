@@ -1,11 +1,10 @@
 'use client'
 
 import Image from "next/image";
-import Link from "next/link";
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { Users, Rocket, BookOpenCheck, Trophy, ArrowRight, type LucideIcon } from "lucide-react";
+import { Users, Rocket, BookOpenCheck, Trophy, type LucideIcon } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { ClientLogoMarquee } from "@/components/ClientLogoMarquee";
 import { homeQuotes } from "@/lib/testimonials";
@@ -112,10 +111,9 @@ export default function SocialProofSection() {
 
                     <div className="relative grid grid-cols-1 lg:grid-cols-3 gap-6 p-8 sm:p-10">
                         {homeQuotes.map((q) => (
-                            <Link
+                            <div
                                 key={q.name}
-                                href={`/casos-de-sucesso#${q.caseSlug}`}
-                                className="kpi-item group flex flex-col gap-4 rounded-2xl bg-white/60 border border-white/70 p-6 transition-all duration-300 hover:bg-white/90 hover:shadow-lg hover:-translate-y-1"
+                                className="kpi-item flex flex-col gap-4 rounded-2xl bg-white/60 border border-white/70 p-6"
                             >
                                 <div className="flex h-8 items-center">
                                     {q.logo ? (
@@ -124,10 +122,10 @@ export default function SocialProofSection() {
                                             alt={q.company}
                                             width={200}
                                             height={60}
-                                            className="h-full w-auto max-w-[10rem] object-contain object-left grayscale opacity-60 transition-all duration-300 group-hover:grayscale-0 group-hover:opacity-100"
+                                            className="h-full w-auto max-w-[10rem] object-contain object-left grayscale opacity-60"
                                         />
                                     ) : (
-                                        <span className="text-base font-extrabold text-slate-400 transition-colors duration-300 group-hover:text-slate-600">
+                                        <span className="text-base font-extrabold text-slate-400">
                                             {q.company}
                                         </span>
                                     )}
@@ -147,11 +145,7 @@ export default function SocialProofSection() {
                                         <p className="text-slate-500 text-xs truncate">{q.role} · {q.company}</p>
                                     </div>
                                 </div>
-                                <span className="inline-flex items-center gap-1.5 text-xs font-bold text-voca-green">
-                                    Ver case completo
-                                    <ArrowRight size={12} className="transition-transform group-hover:translate-x-0.5" />
-                                </span>
-                            </Link>
+                            </div>
                         ))}
                     </div>
 

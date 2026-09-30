@@ -16,21 +16,22 @@ interface Logo {
 
 const clientLogos: Logo[] = [
     { name: 'Grant Thornton', src: '/clients/grantthornton.png', width: 500, height: 93, caseSlug: 'grant-thornton' },
-    { name: 'Wine', src: '/clients/wine.png', width: 216, height: 60, caseSlug: 'grupo-wine' },
-    { name: 'Belas Artes', src: '/clients/belasartes.png', width: 140, height: 140, caseSlug: 'belas-artes' },
+    { name: 'Wine', src: '/clients/wine.png', width: 216, height: 60 },
+    { name: 'Belas Artes', src: '/clients/belasartes.png', width: 140, height: 140 },
     { name: 'Hering', src: '/clients/hering.png', width: 500, height: 101 },
     { name: 'Woodbridge', src: '/clients/woodbridge.png', width: 260, height: 130, caseSlug: 'woodbridge-pesquisa' },
-    { name: 'Akaer', src: '/clients/akaer.png', width: 140, height: 140, caseSlug: 'akaer' },
+    { name: 'Akaer', src: '/clients/akaer.png', width: 140, height: 140 },
     { name: 'SP Engenharia', src: '/clients/spEngenharia.png', width: 558, height: 186, caseSlug: 'sp-engenharia' },
     { name: 'Cantu', src: '/clients/cantu.png', width: 748, height: 220 },
     { name: 'Guess', src: '/clients/guess.png', width: 500, height: 89 },
     { name: 'Grupo Vila Nova', src: '/clients/vilaNova.png', width: 512, height: 197 },
     { name: 'Hwaseung', src: '/clients/hwaseung.png', width: 438, height: 62, caseSlug: 'hwaseung' },
     { name: 'Credi10', src: '/clients/credi10.png', width: 140, height: 140, caseSlug: 'credi10-compliance' },
-    { name: 'SPS Group', src: '/clients/spsGroup.png', width: 543, height: 216, caseSlug: 'sps-group' },
+    { name: 'SPS Group', src: '/clients/spsGroup.png', width: 543, height: 216 },
     { name: 'Alctel', src: '/clients/alctel.png', width: 411, height: 311 },
     { name: 'Freitas Ferraz', src: '/clients/freitasFerraz.png', width: 414, height: 172 },
     { name: 'Sapore', src: '/clients/sapore.png', width: 2678, height: 1054 },
+    { name: 'Engeform', src: '/clients/engeform.png', width: 139, height: 42, caseSlug: 'engeform' },
     //{ name: 'NovoNordisk', src: '/clients/novoNordisk.png', width: 110, height: 82 },
     //{ name: 'HomeroCosta', src: '/clients/homeroCosta.png', width: 140, height: 140, boxClassName: 'h-20 w-20' },
     //{ name: 'DHS', src: '/clients/DHS.png', width: 140, height: 140 },
@@ -62,7 +63,7 @@ const findLogo = (name: string) => {
 };
 
 const logosRowTop = ["Akaer", "Wine", "Grant Thornton", "Credi10", "Cantu", "Grupo Vila Nova", "SPS Group", "Freitas Ferraz"].map(findLogo);
-const logosRowBottom = ["Belas Artes", "Hering", "Woodbridge", "SP Engenharia", "Guess", "Hwaseung", "Alctel", "Sapore"].map(findLogo);
+const logosRowBottom = ["Belas Artes", "Hering", "Woodbridge", "SP Engenharia", "Guess", "Hwaseung", "Alctel", "Sapore", "Engeform"].map(findLogo);
 
 function LogoItem({ logo }: { logo: Logo }) {
     const hasCase = Boolean(logo.caseSlug);

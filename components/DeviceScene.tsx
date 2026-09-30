@@ -26,7 +26,8 @@ const PHONE_TILT_START = THREE.MathUtils.degToRad(-14);
 const PHONE_TILT_END = THREE.MathUtils.degToRad(14);
 
 const LAPTOP_ATLAS_SIZE = 4096;
-const LAPTOP_TEXTURE_SIZE = 2048;
+/** Match atlas size so the screen region stays sharp (half-res looks soft on large laptop). */
+const LAPTOP_TEXTURE_SIZE = 4096;
 const LAPTOP_SCREEN_RECT = { x: 26, y: 1445, w: 2015, h: 1294 };
 
 const LAPTOP_TILT_X = THREE.MathUtils.degToRad(16);
@@ -34,8 +35,8 @@ const LAPTOP_YAW_END = THREE.MathUtils.degToRad(-12);
 const LAPTOP_YAW_SWING = THREE.MathUtils.degToRad(150);
 const LAPTOP_ROLL_IN = THREE.MathUtils.degToRad(-6);
 
-const PHONE_CANVAS_W = 618;
-const PHONE_CANVAS_H = 1294;
+const PHONE_CANVAS_W = 1236;
+const PHONE_CANVAS_H = 2588;
 const PHONE_CANVAS_RADIUS = Math.min(PHONE_CANVAS_W, PHONE_CANVAS_H) * PHONE_SCREEN_CORNER_RATIO;
 
 function clamp01(value: number) {
@@ -62,6 +63,14 @@ function easeOutBack(t: number) {
     const c1 = 1.70158;
     const c3 = c1 + 1;
     return 1 + c3 * Math.pow(t - 1, 3) + c1 * Math.pow(t - 1, 2);
+}
+
+/** Keep UI screenshots crisp on the 3D screen (mipmaps soften text/icons). */
+function sharpenCanvasTexture(texture: THREE.CanvasTexture) {
+    texture.generateMipmaps = false;
+    texture.minFilter = THREE.LinearFilter;
+    texture.magFilter = THREE.LinearFilter;
+    texture.anisotropy = 1;
 }
 
 function clipRoundedRect(
@@ -233,6 +242,7 @@ function PhoneModel({ progressRef }: ModelProps) {
         const displayTexture = new THREE.CanvasTexture(canvas);
         displayTexture.colorSpace = THREE.SRGBColorSpace;
         displayTexture.premultiplyAlpha = true;
+        sharpenCanvasTexture(displayTexture);
         displayTexture.needsUpdate = true;
 
         canvasRef.current = canvas;
@@ -439,6 +449,7 @@ function LaptopModel({ progressRef }: ModelProps) {
         composed.wrapS = base.wrapS;
         composed.wrapT = base.wrapT;
         composed.colorSpace = THREE.SRGBColorSpace;
+        sharpenCanvasTexture(composed);
 
         materialRef.current = material;
         baseMapRef.current = base;

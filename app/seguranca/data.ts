@@ -1,4 +1,7 @@
-import { Lock, Ear, FileCheck, GraduationCap, KeyRound, UserCheck, Radar, Layers, RefreshCw, Zap, EyeOff, Brain, TrendingUp, BadgeCheck, Building2, type LucideIcon } from "lucide-react";
+import {
+    Lock, Ear, FileCheck, GraduationCap, KeyRound, UserCheck, Radar, Layers, RefreshCw, Zap, EyeOff, Brain, TrendingUp, BadgeCheck, Building2,
+    FileSpreadsheet, TrendingDown, AlertCircle, ShieldAlert, Search, BarChart3, Shield, Users, type LucideIcon,
+} from "lucide-react";
 
 export interface SecurityFeature {
     icon: LucideIcon;
@@ -73,70 +76,55 @@ export const complianceBadges: ComplianceBadge[] = [
     },
 ];
 
-export const nr1Timeline = [
+export const nr1Problems = [
     {
-        date: "26 mai 2026",
-        title: "Passou a valer",
-        description: "A gestão de riscos psicossociais virou item obrigatório do PGR.",
+        icon: FileSpreadsheet,
+        label: "Processos fragmentados de clima, feedback e saúde mental",
     },
     {
-        date: "24 ago 2026",
-        title: "Fim da fase orientativa",
-        description: "Encerrou o prazo de dupla visita. A fiscalização voltou ao regime padrão.",
+        icon: TrendingDown,
+        label: "Dependência de planilhas e pesquisas pontuais",
+    },
+    {
+        icon: AlertCircle,
+        label: "Falta de indicadores contínuos e auditáveis",
+    },
+    {
+        icon: ShieldAlert,
+        label: "Insegurança jurídica e desgaste da liderança",
     },
 ];
 
-export const nr1Support = [
+export const nr1Requirements = [
+    "Diagnóstico recorrente de riscos psicossociais",
+    "Monitoramento contínuo do clima e da saúde emocional",
+    "Evidências documentadas e prontas para auditoria",
+    "Planos de ação claros e executáveis",
+    "Capacitação das lideranças",
+];
+
+export const nr1SolutionPillars = [
     {
-        stage: "Identificar",
-        summary: "Captar o sinal antes de virar afastamento.",
-        items: [
-            {
-                label: "Termômetro de Humor",
-                detail: "Captura diária do sentimento do time, com notificação de alerta para o RH e para o gestor direto quando o indicador cai.",
-            },
-            {
-                label: "Canais de escuta",
-                detail: "Ouvidoria, Fale com a Liderança e Caixa de Ideias em canal privado, anônimo ou identificado, com anexo de evidências.",
-            },
-        ],
+        icon: Search,
+        title: "Identificar",
+        items: ["Termômetro de Humor", "Pesquisas de clima", "Análise de sentimento (IA)"],
     },
     {
-        stage: "Avaliar",
-        summary: "Transformar percepção em dado por área.",
-        items: [
-            {
-                label: "Pesquisas com modelo de NR-1",
-                detail: "Base com 200 perguntas prontas, customização ilimitada de temas e perguntas condicionais, anônimas ou identificadas.",
-            },
-            {
-                label: "Leitura de sentimento por IA",
-                detail: "Análise passiva do texto nas respostas abertas e nas interações, para captar o que a nota numérica não mostra.",
-            },
-            {
-                label: "Segmentação por área e período",
-                detail: "Resultado compilado ou recortado por área, grupo e intervalo, que é onde o risco psicossocial costuma se concentrar.",
-            },
-        ],
+        icon: BarChart3,
+        title: "Monitorar & Comprovar",
+        items: ["Dashboards por área", "Relatórios auditáveis", "Histórico rastreável"],
     },
     {
-        stage: "Acompanhar e documentar",
-        summary: "Sustentar o plano de ação e a prestação de contas.",
-        items: [
-            {
-                label: "Dashboards em tempo real",
-                detail: "Indicadores por funcionalidade, área e período, com exportação dos dados em Excel.",
-            },
-            {
-                label: "Report estratégico",
-                detail: "Highlights e recomendações de ação a cada trimestre, para embasar as decisões do plano.",
-            },
-            {
-                label: "Histórico rastreável",
-                detail: "Registro completo de interações, treinamentos e políticas internas para prestação de contas em fiscalização.",
-            },
-        ],
+        icon: Zap,
+        title: "Agir",
+        items: ["Trilhas para líderes", "Feedback e Ouvidoria", "Comunicação estruturada"],
     },
+];
+
+export const nr1Outcomes = [
+    { icon: Shield, label: "Reduzir riscos" },
+    { icon: Users, label: "Dar clareza à liderança" },
+    { icon: TrendingUp, label: "Crescer com tranquilidade" },
 ];
 
 export const digitalShieldLayers = [

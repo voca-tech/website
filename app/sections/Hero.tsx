@@ -60,7 +60,6 @@ function MobilePhoneScreen() {
                         sizes="230px"
                         className="object-cover object-top transition-opacity ease-out"
                         style={{
-                            filter: "blur(1.25px)",
                             opacity: isCurrent ? 1 : 0,
                             transitionDuration: `${SCREEN_CROSSFADE_MS}ms`,
                             zIndex: isCurrent ? 2 : 1,
@@ -68,10 +67,6 @@ function MobilePhoneScreen() {
                     />
                 );
             })}
-            <div
-                aria-hidden="true"
-                className="absolute inset-0 z-[3] bg-white/10 pointer-events-none"
-            />
         </>
     );
 }
