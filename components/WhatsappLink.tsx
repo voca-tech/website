@@ -14,9 +14,10 @@ export function WhatsappLink({ variant = 'button', className }: WhatsappLinkProp
     if (variant === 'text') {
         return (
             <a
-                aria-label="Conversar no Whatsapp"
+                aria-label="Falar com especialista"
                 href={href}
                 target="_blank"
+                rel="noopener noreferrer"
                 className={className ?? "font-semibold text-voca-green hover:underline underline-offset-4"}
             >
                 Falar com especialista →
@@ -26,9 +27,10 @@ export function WhatsappLink({ variant = 'button', className }: WhatsappLinkProp
 
     return (
         <a
-            aria-label="Conversar no Whatsapp"
+            aria-label="Falar com um Especialista"
             href={href}
             target="_blank"
+            rel="noopener noreferrer"
             className="w-full max-w-72"
         >
             <Button

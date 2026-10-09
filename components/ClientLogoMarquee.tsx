@@ -75,6 +75,7 @@ function LogoItem({ logo }: { logo: Logo }) {
                     src={logo.src}
                     alt={logo.name}
                     fill
+                    sizes="112px"
                     className="grayscale opacity-70 group-hover:grayscale-0 group-hover:opacity-100 transition-all object-contain"
                 />
             </div>

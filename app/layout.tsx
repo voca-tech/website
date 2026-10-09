@@ -19,6 +19,10 @@ export const metadata: Metadata = {
     template: '%s | VOCA',
   },
   description: 'O VOCA é a plataforma de DHO que conecta, organiza e ativa as pessoas da sua empresa — 18 funcionalidades integradas, suporte humano e resultados mensurados desde o primeiro mês.',
+  robots: {
+    index: true,
+    follow: true,
+  },
   openGraph: {
     title: 'VOCA | Comunicação, engajamento e inteligência de pessoas em uma única plataforma',
     description: 'O VOCA é a plataforma de DHO que conecta, organiza e ativa as pessoas da sua empresa — 18 funcionalidades integradas, suporte humano e resultados mensurados desde o primeiro mês.',

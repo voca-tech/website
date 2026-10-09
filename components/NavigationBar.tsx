@@ -114,9 +114,11 @@ export function NavBar() {
                 <Link href='/' className="justify-self-start">
                     <Image
                         src={onDark ? '/logo-voca-negativo.png' : '/logo-voca.png'}
-                        alt="Logomarcar VOCA"
+                        alt="Logotipo VOCA"
                         width={126}
                         height={40}
+                        priority
+                        fetchPriority="high"
                         className={cn(
                             "w-auto transition-all duration-500",
                             scrolled ? "h-6" : "h-9"

@@ -10,11 +10,11 @@ const playfair = Playfair_Display({
     display: "swap",
 });
 
-const MIN_DURATION = 450;
+const MIN_DURATION = 350;
 
-const MAX_DURATION = 1600;
+const MAX_DURATION = 1100;
 
-const EXIT_DURATION = 480;
+const EXIT_DURATION = 400;
 
 const symbolMask = {
     WebkitMaskImage: "url(/voca-symbol.png)",
@@ -41,7 +41,8 @@ export function LoadingScreen() {
         const lenis = getLenisInstance();
         lenis?.stop();
         window.scrollTo(0, 0);
-        document.documentElement.style.overflow = "hidden";
+        // Avoid overflow:hidden on <html> — it removes the scrollbar and
+        // causes a large CLS when the gutter reappears after the splash.
 
         let raf = 0;
         let exitTimer = 0;
@@ -79,7 +80,6 @@ export function LoadingScreen() {
         }, MAX_DURATION);
 
         function release() {
-            document.documentElement.style.overflow = "";
             lenis?.start();
         }
 
