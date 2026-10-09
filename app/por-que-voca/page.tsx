@@ -434,7 +434,7 @@ export default function PorQueVocaPage() {
                     </p>
                     <div className="flex items-center justify-center gap-3 mt-6">
                         <Avatar className="h-11 w-11 ring-2 ring-white shadow-sm">
-                            <AvatarImage src={featuredQuote.avatar} />
+                            <AvatarImage src={featuredQuote.avatar} alt={featuredQuote.name} />
                             <AvatarFallback className="bg-voca-green/10 text-voca-green text-xs font-bold">
                                 {featuredQuote.name.split(" ").map((part) => part[0]).slice(0, 2).join("")}
                             </AvatarFallback>

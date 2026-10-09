@@ -119,7 +119,7 @@ function FooterColumn({ title, children }: { title: string; children: ReactNode 
 
 function FooterLink({ href, children }: { href: string; children: ReactNode }) {
     return (
-        <Link href={href} className="text-sm text-white/70 hover:text-white transition-colors duration-200 w-fit">
+        <Link href={href} prefetch={false} className="text-sm text-white/70 hover:text-white transition-colors duration-200 w-fit">
             {children}
         </Link>
     )

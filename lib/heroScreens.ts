@@ -9,11 +9,11 @@ export const PHONE_SCREEN_SLIDES = [
 ] as const;
 
 export const LAPTOP_SCREEN_SLIDES = [
-    "/screens/Web/web-1.png",
-    // "/screens/Web/web-2.png",
-    "/screens/Web/web-3.png",
-    "/screens/Web/web-4.png",
-    // "/screens/Web/web-5.png",
+    "/screens/Web/web-1.jpg",
+    // "/screens/Web/web-2.jpg",
+    "/screens/Web/web-3.jpg",
+    "/screens/Web/web-4.jpg",
+    // "/screens/Web/web-5.jpg",
 ] as const;
 
 export const SCREEN_SLIDE_MS = 2600;

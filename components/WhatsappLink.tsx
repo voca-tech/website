@@ -38,7 +38,8 @@ export function WhatsappLink({ variant = 'button', className }: WhatsappLinkProp
                 <p className='text-green-700 font-bold'>Falar com um Especialista</p>
                 <Image
                     src={logo}
-                    alt='Whatsapp Icon'
+                    alt=""
+                    aria-hidden="true"
                     width={30}
                     height={30}
                     className='text-green-600'

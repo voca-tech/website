@@ -150,6 +150,7 @@ export default function HeroSection() {
     const rigRef = useRef<HTMLDivElement>(null);
     const progress = useScrollProgress(rigRef as RefObject<HTMLElement>);
     const [actTwo, setActTwo] = useState(false);
+    const [sceneReady, setSceneReady] = useState(false);
     const isDesktop = useIsDesktop();
     const mobileDeviceRef = useRef<HTMLDivElement>(null);
     const glowRef = useRef<HTMLDivElement>(null);
@@ -199,6 +200,40 @@ export default function HeroSection() {
         raf = requestAnimationFrame(tick);
         return () => cancelAnimationFrame(raf);
     }, [progress]);
+
+    // Mount WebGL only after the splash leaves (or on idle) so LCP stays clear of Three.js.
+    useEffect(() => {
+        if (!isDesktop) return;
+
+        let idleId = 0;
+        let safetyTimer = 0;
+        let delayTimer = 0;
+        let armed = false;
+
+        const arm = () => {
+            if (armed) return;
+            armed = true;
+            window.clearTimeout(safetyTimer);
+
+            const ric = window.requestIdleCallback?.bind(window);
+            if (ric) {
+                idleId = ric(() => setSceneReady(true), { timeout: 1200 });
+            } else {
+                delayTimer = window.setTimeout(() => setSceneReady(true), 200);
+            }
+        };
+
+        window.addEventListener("voca:loading-done", arm, { once: true });
+        // Safety if splash already finished or is skipped.
+        safetyTimer = window.setTimeout(arm, 2200);
+
+        return () => {
+            window.removeEventListener("voca:loading-done", arm);
+            window.clearTimeout(safetyTimer);
+            window.clearTimeout(delayTimer);
+            if (idleId && window.cancelIdleCallback) window.cancelIdleCallback(idleId);
+        };
+    }, [isDesktop]);
 
     useEffect(() => {
         const element = mobileDeviceRef.current;
@@ -530,7 +565,7 @@ export default function HeroSection() {
                 </div>
 
                 <div className="absolute inset-0 pointer-events-none hidden lg:block z-10">
-                    {isDesktop && <DeviceScene progressRef={progress} />}
+                    {isDesktop && sceneReady && <DeviceScene progressRef={progress} />}
                 </div>
             </div>
 

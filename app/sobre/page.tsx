@@ -458,7 +458,7 @@ export default function SobrePage() {
                                     <p className="text-white italic leading-relaxed">{grantThorntonQuote.text}</p>
                                     <div className="flex items-center gap-2.5 mt-4">
                                         <Avatar className="h-9 w-9 ring-2 ring-white/20">
-                                            <AvatarImage src={grantThorntonQuote.avatar} />
+                                            <AvatarImage src={grantThorntonQuote.avatar} alt={grantThorntonQuote.name} />
                                             <AvatarFallback className="text-xs text-voca-green font-bold bg-white">
                                                 {initials(grantThorntonQuote.name)}
                                             </AvatarFallback>

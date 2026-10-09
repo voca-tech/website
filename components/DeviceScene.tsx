@@ -198,7 +198,7 @@ interface ModelProps {
 }
 
 function PhoneModel({ progressRef }: ModelProps) {
-    const { scene } = useGLTF("/models/phone/scene.gltf");
+    const { scene } = useGLTF("/models/phone/scene.glb", true);
     const slideTextures = useTexture([...PHONE_SCREEN_SLIDES]) as THREE.Texture[];
     const group = useRef<THREE.Group>(null!);
     const planeRef = useRef<THREE.Mesh | null>(null);
@@ -362,7 +362,7 @@ function PhoneModel({ progressRef }: ModelProps) {
 }
 
 function LaptopModel({ progressRef }: ModelProps) {
-    const { scene } = useGLTF("/models/laptop/scene.glb");
+    const { scene } = useGLTF("/models/laptop/scene.glb", true);
     const slideTextures = useTexture([...LAPTOP_SCREEN_SLIDES]) as THREE.Texture[];
     const group = useRef<THREE.Group>(null!);
     const displayed = useRef(0);
@@ -570,8 +570,6 @@ function DeferredLaptop({ progressRef }: ModelProps) {
         </Suspense>
     );
 }
-
-useGLTF.preload("/models/phone/scene.gltf");
 
 interface DeviceSceneProps {
     progressRef: MutableRefObject<number>;

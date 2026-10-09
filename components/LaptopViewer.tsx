@@ -6,7 +6,7 @@ import { useGLTF, OrbitControls } from "@react-three/drei";
 import * as THREE from "three";
 
 function LaptopModel() {
-    const { scene } = useGLTF("/models/laptop/scene.glb");
+    const { scene } = useGLTF("/models/laptop/scene.glb", true);
     const group = useRef<THREE.Group>(null!);
 
     const clonedScene = useMemo(() => {
@@ -33,8 +33,6 @@ function LaptopModel() {
         </group>
     );
 }
-
-useGLTF.preload("/models/laptop/scene.glb");
 
 interface LaptopViewerProps {
     interactive?: boolean;

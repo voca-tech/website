@@ -30,7 +30,7 @@ const clientLogos: Logo[] = [
     { name: 'SPS Group', src: '/clients/spsGroup.png', width: 543, height: 216 },
     { name: 'Alctel', src: '/clients/alctel.png', width: 411, height: 311 },
     { name: 'Topocart', src: '/clients/topocart.png', width: 432, height: 180 },
-    { name: 'Sapore', src: '/clients/sapore.png', width: 2678, height: 1054 },
+    { name: 'Sapore', src: '/clients/sapore.png', width: 600, height: 236 },
     { name: 'Engeform', src: '/clients/engeform.png', width: 139, height: 42, caseSlug: 'engeform' },
     //{ name: 'NovoNordisk', src: '/clients/novoNordisk.png', width: 110, height: 82 },
     //{ name: 'HomeroCosta', src: '/clients/homeroCosta.png', width: 140, height: 140, boxClassName: 'h-20 w-20' },
@@ -93,7 +93,7 @@ function LogoItem({ logo }: { logo: Logo }) {
 
     if (hasCase) {
         return (
-            <Link href={`/casos-de-sucesso#${logo.caseSlug}`} className={className}>
+            <Link href={`/casos-de-sucesso#${logo.caseSlug}`} prefetch={false} className={className}>
                 {inner}
             </Link>
         );

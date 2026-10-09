@@ -104,6 +104,7 @@ export function LoadingScreen() {
                 exitTimer = window.setTimeout(() => {
                     setDone(true);
                     release();
+                    window.dispatchEvent(new Event("voca:loading-done"));
                 }, reduced ? 260 : EXIT_DURATION);
                 return;
             }

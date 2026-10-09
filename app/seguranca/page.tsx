@@ -190,7 +190,7 @@ export default function SegurancaPage() {
                                 </p>
                                 <div className="flex items-center gap-3 mt-6">
                                     <Avatar className="h-11 w-11 ring-2 ring-white/20 shadow-sm">
-                                        <AvatarImage src="/avatars/credi10-erika.png" />
+                                        <AvatarImage src="/avatars/credi10-erika.jpg" alt="Erika Freitas" />
                                     </Avatar>
                                     <div>
                                         <p className="font-bold text-white text-sm">Erika Freitas</p>

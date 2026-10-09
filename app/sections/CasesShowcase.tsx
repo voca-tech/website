@@ -179,7 +179,7 @@ export default function CasesShowcase() {
                                             } as CSSProperties}
                                             className="relative h-11 w-11 shrink-0 rounded-full overflow-hidden ring-[3px] ring-voca-green shadow-md transition-transform duration-500 ease-out group-hover:translate-x-[var(--fan)] group-hover:scale-105"
                                         >
-                                            <Image src={item.avatar!} alt="" fill sizes="44px" className="object-cover object-top" />
+                                            <Image src={item.avatar!} alt={item.name ?? item.company} fill sizes="44px" className="object-cover object-top" />
                                         </div>
                                     ))}
                                 </div>

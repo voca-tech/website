@@ -141,7 +141,7 @@ export default function SocialProofSection() {
 
                                 <div className="flex items-center gap-3 pt-4 border-t border-slate-200/70">
                                     <Avatar className="h-10 w-10 shrink-0 ring-2 ring-white shadow-sm">
-                                        <AvatarImage src={q.avatar} />
+                                        <AvatarImage src={q.avatar} alt={q.name} />
                                         <AvatarFallback className="bg-voca-green/10 text-voca-green text-xs font-bold">
                                             {q.name.split(" ").map((part) => part[0]).slice(0, 2).join("")}
                                         </AvatarFallback>
