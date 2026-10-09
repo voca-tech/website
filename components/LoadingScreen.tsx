@@ -10,11 +10,11 @@ const playfair = Playfair_Display({
     display: "swap",
 });
 
-const MIN_DURATION = 1100;
+const MIN_DURATION = 450;
 
-const MAX_DURATION = 3200;
+const MAX_DURATION = 1600;
 
-const EXIT_DURATION = 900;
+const EXIT_DURATION = 480;
 
 const symbolMask = {
     WebkitMaskImage: "url(/voca-symbol.png)",
@@ -45,7 +45,9 @@ export function LoadingScreen() {
 
         let raf = 0;
         let exitTimer = 0;
-        let pageReady = document.readyState === "complete";
+        let fontCap = 0;
+        // Don't wait for window.load (videos/images below the fold inflate it).
+        let pageReady = document.readyState !== "loading";
         let fontsReady = false;
         let value = 0;
 
@@ -56,10 +58,20 @@ export function LoadingScreen() {
             pageReady = true;
         }
 
-        if (!pageReady) window.addEventListener("load", markPageReady, { once: true });
+        if (!pageReady) {
+            document.addEventListener("DOMContentLoaded", markPageReady, { once: true });
+        }
 
-        if (document.fonts) document.fonts.ready.then(() => { fontsReady = true; });
-        else fontsReady = true;
+        if (document.fonts) {
+            // Cap font wait so a slow webfont can't hold the splash.
+            fontCap = window.setTimeout(() => { fontsReady = true; }, 700);
+            document.fonts.ready.then(() => {
+                window.clearTimeout(fontCap);
+                fontsReady = true;
+            });
+        } else {
+            fontsReady = true;
+        }
 
         const cap = window.setTimeout(() => {
             pageReady = true;
@@ -104,8 +116,9 @@ export function LoadingScreen() {
         return () => {
             cancelAnimationFrame(raf);
             window.clearTimeout(cap);
+            window.clearTimeout(fontCap);
             window.clearTimeout(exitTimer);
-            window.removeEventListener("load", markPageReady);
+            document.removeEventListener("DOMContentLoaded", markPageReady);
             release();
         };
     }, []);

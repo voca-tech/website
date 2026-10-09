@@ -196,7 +196,7 @@ export const cases: Case[] = [
         pillar: "performance",
         theme: "Avaliação de desempenho",
         name: "Marcelo de Freitas",
-        role: "Coordenador de RH",
+        role: "Diretor Executivo",
         company: "SP Engenharia",
         avatar: "/avatars/sp-engenharia-marcelo.jpeg",
         logo: "/clients/spEngenharia.png",
@@ -244,7 +244,7 @@ export const cases: Case[] = [
         metrics: [
             { value: "20.000", label: "publicações na rede social" },
             { value: "260.000", label: "visualizações na rede social" },
-            { value: "103.000", label: "interações na rede social" },
+            { value: "406.000", label: "visualizações na rede social" },
             { value: "350", label: "treinamentos criados" },
             { value: "2.400", label: "avaliações de desempenho criadas" },
             { value: "1.300", label: "PDIs criados" },

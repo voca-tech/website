@@ -54,9 +54,9 @@ const roiFaqs = [
 ];
 
 const sizePresets = [
-    { label: "Pequena", sublabel: "até 50", value: 30, max: 50 },
-    { label: "Média", sublabel: "50–200", value: 120, max: 200 },
-    { label: "Grande", sublabel: "200+", value: 400, max: Infinity },
+    { label: "Pequena", sublabel: "50–100", value: 75, max: 100 },
+    { label: "Média", sublabel: "101–400", value: 250, max: 400 },
+    { label: "Grande", sublabel: "401–1.000", value: 700, max: 1000 },
 ];
 
 const STEP_TITLES = ["Sua operação hoje", "Suas funcionalidades", "Quanto isso custa", "Sua economia com o VOCA"];
@@ -191,6 +191,7 @@ export default function ROIPage() {
     const [monthlySpendInput, setMonthlySpendInput] = useState("");
 
     const isLastStep = step === STEP_COUNT - 1;
+    const canAdvanceStep0 = companyName.trim().length > 0;
     const canAdvanceStep1 = selectedFeatures.size > 0;
 
     const customSpend = monthlySpendInput.trim() === "" ? undefined : Number(monthlySpendInput);
@@ -314,16 +315,18 @@ export default function ROIPage() {
                                 <div className="mx-auto max-w-xl">
                                     <div className="space-y-8">
                                     <p className="text-slate-500 text-base leading-relaxed text-center">
-                                        Em poucos passos, mostramos quanto sua empresa pode economizar consolidando várias ferramentas de gestão de pessoas numa plataforma só.
+                                    Em poucos passos, mostramos quanto sua empresa pode economizar consolidando várias ferramentas de DHO na mesma plataforma.
                                     </p>
 
                                     <div>
-                                        <FieldLabel icon={Building} text="Nome da empresa" hint="opcional" />
+                                        <FieldLabel icon={Building} text="Nome da empresa" />
                                         <input
                                             type="text"
                                             placeholder="Ex: Acme Ltda"
                                             value={companyName}
                                             onChange={(event) => setCompanyName(event.target.value)}
+                                            required
+                                            aria-required="true"
                                             className={FIELD_CLASS}
                                         />
                                     </div>
@@ -377,8 +380,11 @@ export default function ROIPage() {
                                         />
                                         <div className="flex justify-between text-xs text-slate-400 mt-2">
                                             <span>10</span>
-                                            <span>1000+</span>
+                                            <span>1.000</span>
                                         </div>
+                                        <p className="text-[11px] text-slate-400 text-center mt-3">
+                                            Acima de 1.000 colaboradores sob consulta
+                                        </p>
                                     </div>
                                     </div>
                                 </div>
@@ -686,7 +692,7 @@ export default function ROIPage() {
                             <Button
                                 type="button"
                                 onClick={handleNext}
-                                disabled={step === 1 && !canAdvanceStep1}
+                                disabled={(step === 0 && !canAdvanceStep0) || (step === 1 && !canAdvanceStep1)}
                                 className="rounded-xl w-full h-12 bg-voca-green hover:bg-voca-green/90 font-semibold shadow-md shadow-voca-green/20 disabled:opacity-40 disabled:cursor-not-allowed disabled:shadow-none"
                             >
                                 <span className="flex items-center gap-2">
@@ -706,6 +712,9 @@ export default function ROIPage() {
                         )}
                     </div>
 
+                    {step === 0 && !canAdvanceStep0 && (
+                        <p className="text-xs text-center text-slate-400 mt-3">Informe o nome da empresa pra continuar.</p>
+                    )}
                     {step === 1 && !canAdvanceStep1 && (
                         <p className="text-xs text-center text-slate-400 mt-3">Selecione ao menos uma funcionalidade pra continuar.</p>
                     )}

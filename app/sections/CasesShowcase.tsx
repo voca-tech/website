@@ -49,21 +49,17 @@ export default function CasesShowcase() {
     useEffect(() => {
         gsap.registerPlugin(ScrollTrigger);
         const ctx = gsap.context(() => {
-            gsap.fromTo(
-                revealRef.current,
-                { opacity: 0, y: 60 },
-                {
-                    opacity: 1,
-                    y: 0,
-                    ease: "none",
-                    scrollTrigger: {
-                        trigger: sectionRef.current,
-                        start: "top 75%",
-                        end: "top 30%",
-                        scrub: 0.8,
-                    },
-                }
-            );
+            gsap.from(revealRef.current, {
+                opacity: 0,
+                y: 40,
+                duration: 0.75,
+                ease: "power2.out",
+                scrollTrigger: {
+                    trigger: sectionRef.current,
+                    start: "top 75%",
+                    toggleActions: "play none none reverse",
+                },
+            });
         }, sectionRef);
         return () => ctx.revert();
     }, []);
@@ -71,13 +67,10 @@ export default function CasesShowcase() {
     return (
         <div ref={sectionRef} id="cases" className="relative bg-white py-16 sm:py-24 px-6 overflow-hidden">
             <div className="absolute inset-0 pointer-events-none">
+                <div className="absolute -top-40 left-1/2 -translate-x-1/2 w-[36rem] h-[36rem] rounded-full bg-voca-green/18 blur-2xl" />
                 <div
-                    className="absolute -top-52 left-1/2 -translate-x-1/2 w-[50rem] h-[50rem] rounded-full bg-voca-green/30 blur-3xl"
-                    style={{ animation: "drift-b 26s ease-in-out infinite" }}
-                />
-                <div
-                    className="absolute -top-24 right-[8%] w-[34rem] h-[34rem] rounded-full blur-3xl"
-                    style={{ backgroundColor: "rgba(232,178,61,0.25)", animation: "drift-a 30s ease-in-out infinite" }}
+                    className="absolute -top-16 right-[8%] w-[22rem] h-[22rem] rounded-full blur-2xl"
+                    style={{ backgroundColor: "rgba(232,178,61,0.14)" }}
                 />
                 <div
                     className="absolute inset-0 opacity-[0.3]"

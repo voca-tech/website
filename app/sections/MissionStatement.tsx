@@ -17,7 +17,6 @@ export default function MissionStatement() {
                     backgroundImage: "url(https://images.unsplash.com/photo-1543269664-56d93c1b41a6?auto=format&fit=crop&w=1600&q=70)",
                     backgroundSize: "cover",
                     backgroundPosition: "center",
-                    backgroundAttachment: "fixed",
                 }}
             />
             <div
@@ -33,10 +32,7 @@ export default function MissionStatement() {
                         backgroundSize: "28px 28px",
                     }}
                 />
-                <div
-                    className="absolute -top-24 left-[15%] w-[30rem] h-[30rem] rounded-full bg-teal-300/10 blur-3xl"
-                    style={{ animation: "drift-c 30s ease-in-out infinite" }}
-                />
+                <div className="absolute -top-16 left-[15%] w-[18rem] h-[18rem] rounded-full bg-teal-300/8 blur-2xl" />
                 <Image
                     src="/voca-symbol.png"
                     alt=""

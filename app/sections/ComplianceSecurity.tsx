@@ -20,19 +20,17 @@ export default function ComplianceSecurity() {
                 scrollTrigger: {
                     trigger: sectionRef.current,
                     start: "top 70%",
-                    end: "top 20%",
-                    scrub: 0.8,
+                    toggleActions: "play none none reverse",
                 },
             });
-            tl.fromTo(
+            tl.from(
                 ".compliance-row",
-                { opacity: 0, x: -12 },
-                { opacity: 1, x: 0, stagger: 0.15, ease: "none" }
+                { opacity: 0, x: -12, duration: 0.55, stagger: 0.1, ease: "power2.out" }
             ).fromTo(
                 ".compliance-stamp",
                 { opacity: 0, scale: 0.6, borderColor: "rgba(255,255,255,0.25)", color: "rgba(255,255,255,0.25)" },
-                { opacity: 1, scale: 1, borderColor: "#2dd4bf", color: "#2dd4bf", stagger: 0.15, ease: "none" },
-                "-=0.5"
+                { opacity: 1, scale: 1, borderColor: "#2dd4bf", color: "#2dd4bf", duration: 0.45, stagger: 0.1, ease: "power2.out" },
+                "-=0.35"
             );
         }, sectionRef);
         return () => ctx.revert();
@@ -46,7 +44,6 @@ export default function ComplianceSecurity() {
                     backgroundImage: "url(https://images.unsplash.com/photo-1614064641938-3bbee52942c7?auto=format&fit=crop&w=1800&q=80)",
                     backgroundSize: "cover",
                     backgroundPosition: "center",
-                    backgroundAttachment: "fixed",
                 }}
             />
             <div
@@ -60,10 +57,7 @@ export default function ComplianceSecurity() {
                     backgroundSize: "26px 26px",
                 }}
             />
-            <div
-                className="absolute -bottom-24 -left-20 w-[26rem] h-[26rem] rounded-full bg-teal-300/10 blur-3xl pointer-events-none"
-                style={{ animation: "drift-a 28s ease-in-out infinite" }}
-            />
+            <div className="absolute -bottom-20 -left-16 w-[18rem] h-[18rem] rounded-full bg-teal-300/8 blur-2xl pointer-events-none" />
 
             <div className="relative max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-[1.1fr_1fr] gap-12 lg:gap-16 items-start lg:pt-4">
                 <div>
@@ -90,10 +84,7 @@ export default function ComplianceSecurity() {
                     </div>
                 </div>
 
-                <div
-                    className="rounded-[1.75rem] border border-white/15 bg-white/[0.07] shadow-2xl"
-                    style={{ backdropFilter: "blur(16px)", WebkitBackdropFilter: "blur(16px)" }}
-                >
+                <div className="rounded-[1.75rem] border border-white/15 bg-[#012e31]/80 shadow-2xl">
                     <div className="flex items-center justify-between px-6 sm:px-7 py-5 rounded-t-[1.75rem] bg-white/[0.05] border-b border-white/10">
                         <div className="flex items-center gap-2.5">
                             <ShieldCheck size={20} className="text-teal-300" />

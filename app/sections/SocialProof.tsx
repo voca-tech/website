@@ -30,30 +30,41 @@ export default function SocialProofSection() {
     useEffect(() => {
         gsap.registerPlugin(ScrollTrigger);
         const ctx = gsap.context(() => {
-            gsap.fromTo(
-                ".kpi-item",
-                { opacity: 0, y: 70 },
-                {
-                    opacity: 1,
-                    y: 0,
-                    stagger: 0.2,
-                    ease: "none",
+            gsap.from(".kpi-item", {
+                opacity: 0,
+                y: 48,
+                duration: 0.7,
+                stagger: 0.12,
+                ease: "power2.out",
+                scrollTrigger: {
+                    trigger: sectionRef.current,
+                    start: "top 70%",
+                    toggleActions: "play none none reverse",
+                },
+            });
+
+            stats.forEach((stat, i) => {
+                const el = statRefs.current[i];
+                if (!el) return;
+                const { target, suffix } = parseStatValue(stat.value);
+                const counter = { val: 0 };
+                gsap.to(counter, {
+                    val: target,
+                    duration: 1.1,
+                    ease: "power2.out",
                     scrollTrigger: {
-                        trigger: sectionRef.current,
-                        start: "top 75%",
-                        end: "top 20%",
-                        scrub: 0.8,
-                        onUpdate: (self) => {
-                            stats.forEach((stat, i) => {
-                                const el = statRefs.current[i];
-                                if (!el) return;
-                                const { target, suffix } = parseStatValue(stat.value);
-                                el.textContent = Math.round(self.progress * target) + suffix;
-                            });
-                        },
+                        trigger: el,
+                        start: "top 85%",
+                        toggleActions: "play none none reverse",
                     },
-                }
-            );
+                    onUpdate: () => {
+                        el.textContent = Math.round(counter.val) + suffix;
+                    },
+                    onReverseComplete: () => {
+                        el.textContent = `0${suffix}`;
+                    },
+                });
+            });
         }, sectionRef);
         return () => ctx.revert();
     }, []);
@@ -68,10 +79,7 @@ export default function SocialProofSection() {
                         backgroundSize: "28px 28px",
                     }}
                 />
-                <div
-                    className="absolute -top-32 right-[8%] w-[30rem] h-[30rem] rounded-full bg-voca-green/10 blur-3xl"
-                    style={{ animation: "drift-b 26s ease-in-out infinite" }}
-                />
+                <div className="absolute -top-32 right-[8%] w-[24rem] h-[24rem] rounded-full bg-voca-green/8 blur-2xl" />
             </div>
 
             <div className="relative max-w-6xl mx-auto">
@@ -97,11 +105,9 @@ export default function SocialProofSection() {
                 </div>
 
                 <div
-                    className="relative mt-14 rounded-[2.5rem] border border-white/60 bg-white/70 overflow-hidden"
+                    className="relative mt-14 rounded-[2.5rem] border border-slate-200/80 bg-white overflow-hidden"
                     style={{
-                        backdropFilter: "blur(28px)",
-                        WebkitBackdropFilter: "blur(28px)",
-                        boxShadow: "0 30px 70px -25px rgba(0,121,128,0.45), 0 15px 45px -15px rgba(0,121,128,0.3), 0 4px 20px rgba(15,23,42,0.06)",
+                        boxShadow: "0 24px 50px -28px rgba(0,121,128,0.35), 0 8px 24px rgba(15,23,42,0.06)",
                     }}
                 >
                     <div

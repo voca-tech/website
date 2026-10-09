@@ -30,7 +30,6 @@ function PersonaTeaser() {
     const active = personas.find((p) => p.id === activeId)!;
     const sectionRef = useRef<HTMLDivElement>(null);
     const revealRef = useRef<HTMLDivElement>(null);
-    const parallaxRef = useRef<HTMLDivElement>(null);
 
     const [autoplay, setAutoplay] = useState(true);
     const [inView, setInView] = useState(false);
@@ -93,37 +92,18 @@ function PersonaTeaser() {
     useEffect(() => {
         gsap.registerPlugin(ScrollTrigger);
         const ctx = gsap.context(() => {
-            gsap.fromTo(
-                ".reveal-item",
-                { opacity: 0, y: 44 },
-                {
-                    opacity: 1,
-                    y: 0,
-                    ease: "none",
-                    stagger: 0.18,
-                    scrollTrigger: {
-                        trigger: sectionRef.current,
-                        start: "top 82%",
-                        end: "top 32%",
-                        scrub: 0.8,
-                    },
-                }
-            );
-
-            gsap.fromTo(
-                parallaxRef.current,
-                { yPercent: -6 },
-                {
-                    yPercent: 6,
-                    ease: "none",
-                    scrollTrigger: {
-                        trigger: sectionRef.current,
-                        start: "top bottom",
-                        end: "bottom top",
-                        scrub: true,
-                    },
-                }
-            );
+            gsap.from(".reveal-item", {
+                opacity: 0,
+                y: 32,
+                duration: 0.65,
+                stagger: 0.1,
+                ease: "power2.out",
+                scrollTrigger: {
+                    trigger: sectionRef.current,
+                    start: "top 78%",
+                    toggleActions: "play none none reverse",
+                },
+            });
         }, sectionRef);
         return () => ctx.revert();
     }, []);
@@ -139,7 +119,7 @@ function PersonaTeaser() {
                     }}
                 />
                 <div
-                    className="absolute -bottom-28 -left-20 w-[28rem] h-[28rem] rounded-full bg-voca-green/10 blur-3xl"
+                    className="absolute -bottom-20 -left-16 w-[18rem] h-[18rem] rounded-full bg-voca-green/8 blur-2xl"
                     style={{ animation: "drift-a 24s ease-in-out infinite" }}
                 />
             </div>
@@ -233,10 +213,7 @@ function PersonaTeaser() {
                         })}
                     </div>
 
-                    <div
-                        className="relative rounded-[2.5rem] border border-white/60 bg-white/40 shadow-xl overflow-hidden"
-                        style={{ backdropFilter: "blur(28px)", WebkitBackdropFilter: "blur(28px)" }}
-                    >
+                    <div className="relative rounded-[2.5rem] border border-slate-200/70 bg-white shadow-xl overflow-hidden">
                         <div
                             className="absolute inset-0 pointer-events-none transition-colors duration-700"
                             style={{ background: `linear-gradient(135deg, ${active.color}22, transparent 55%)` }}
@@ -293,7 +270,7 @@ function PersonaTeaser() {
                             </div>
 
                             <div className="relative order-1 lg:order-2 aspect-[3/4] sm:aspect-[4/5] max-h-[26rem] w-full lg:aspect-auto lg:max-h-none lg:h-auto overflow-hidden">
-                                <div ref={parallaxRef} className="absolute -top-[8%] -bottom-[8%] inset-x-0">
+                                <div className="absolute inset-0">
                                     {personas.map((persona) => {
                                         const isActive = persona.id === activeId;
                                         return (
@@ -382,36 +359,28 @@ function VideoShowcase() {
     useEffect(() => {
         gsap.registerPlugin(ScrollTrigger);
         const ctx = gsap.context(() => {
-            gsap.fromTo(
-                revealRef.current,
-                { opacity: 0, y: 60 },
-                {
-                    opacity: 1,
-                    y: 0,
-                    ease: "none",
-                    scrollTrigger: {
-                        trigger: sectionRef.current,
-                        start: "top 75%",
-                        end: "top 30%",
-                        scrub: 0.8,
-                    },
-                }
-            );
+            gsap.from(revealRef.current, {
+                opacity: 0,
+                y: 36,
+                duration: 0.7,
+                ease: "power2.out",
+                scrollTrigger: {
+                    trigger: sectionRef.current,
+                    start: "top 75%",
+                    toggleActions: "play none none reverse",
+                },
+            });
 
-            gsap.fromTo(
-                frameRef.current,
-                { scale: 0.92 },
-                {
-                    scale: 1,
-                    ease: "none",
-                    scrollTrigger: {
-                        trigger: frameRef.current,
-                        start: "top 90%",
-                        end: "top 45%",
-                        scrub: 0.8,
-                    },
-                }
-            );
+            gsap.from(frameRef.current, {
+                scale: 0.96,
+                duration: 0.75,
+                ease: "power2.out",
+                scrollTrigger: {
+                    trigger: frameRef.current,
+                    start: "top 85%",
+                    toggleActions: "play none none reverse",
+                },
+            });
         }, sectionRef);
         return () => ctx.revert();
     }, []);
@@ -509,12 +478,12 @@ function VideoShowcase() {
                 }}
             />
             <div
-                className="absolute -top-24 -left-24 w-[32rem] h-[32rem] rounded-full blur-3xl pointer-events-none"
-                style={{ backgroundColor: "rgba(45,212,191,0.14)", animation: "drift-a 26s ease-in-out infinite" }}
+                className="absolute -top-16 -left-16 w-[18rem] h-[18rem] rounded-full blur-2xl pointer-events-none"
+                style={{ backgroundColor: "rgba(45,212,191,0.1)" }}
             />
             <div
-                className="absolute -bottom-32 -right-20 w-[28rem] h-[28rem] rounded-full blur-3xl pointer-events-none"
-                style={{ backgroundColor: "rgba(45,212,191,0.1)", animation: "drift-b 30s ease-in-out infinite" }}
+                className="absolute -bottom-16 -right-12 w-[16rem] h-[16rem] rounded-full blur-2xl pointer-events-none"
+                style={{ backgroundColor: "rgba(45,212,191,0.08)" }}
             />
 
             <div ref={revealRef} className="relative max-w-6xl mx-auto">
@@ -533,7 +502,7 @@ function VideoShowcase() {
                         src="/videos/institucional.mp4"
                         playsInline
                         muted={isMuted}
-                        preload="auto"
+                        preload="metadata"
                         className="absolute inset-0 h-full w-full object-cover"
                     />
 

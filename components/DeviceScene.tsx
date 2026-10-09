@@ -9,6 +9,8 @@ import {
     LAPTOP_SCREEN_SLIDES,
     SCREEN_SLIDE_MS,
     SCREEN_CROSSFADE_MS,
+    LAPTOP_SCREEN_SLIDE_MS,
+    LAPTOP_SCREEN_CROSSFADE_MS,
     drawBlurredScreen,
 } from "@/lib/heroScreens";
 
@@ -26,8 +28,8 @@ const PHONE_TILT_START = THREE.MathUtils.degToRad(-14);
 const PHONE_TILT_END = THREE.MathUtils.degToRad(14);
 
 const LAPTOP_ATLAS_SIZE = 4096;
-/** Match atlas size so the screen region stays sharp (half-res looks soft on large laptop). */
-const LAPTOP_TEXTURE_SIZE = 4096;
+/** Half atlas res: sharp enough on screen, ~4× less GPU memory than 4096. */
+const LAPTOP_TEXTURE_SIZE = 2048;
 const LAPTOP_SCREEN_RECT = { x: 26, y: 1445, w: 2015, h: 1294 };
 
 const LAPTOP_TILT_X = THREE.MathUtils.degToRad(16);
@@ -35,8 +37,8 @@ const LAPTOP_YAW_END = THREE.MathUtils.degToRad(-12);
 const LAPTOP_YAW_SWING = THREE.MathUtils.degToRad(150);
 const LAPTOP_ROLL_IN = THREE.MathUtils.degToRad(-6);
 
-const PHONE_CANVAS_W = 1236;
-const PHONE_CANVAS_H = 2588;
+const PHONE_CANVAS_W = 828;
+const PHONE_CANVAS_H = 1736;
 const PHONE_CANVAS_RADIUS = Math.min(PHONE_CANVAS_W, PHONE_CANVAS_H) * PHONE_SCREEN_CORNER_RATIO;
 
 function clamp01(value: number) {
@@ -364,7 +366,7 @@ function LaptopModel({ progressRef }: ModelProps) {
     const slideTextures = useTexture([...LAPTOP_SCREEN_SLIDES]) as THREE.Texture[];
     const group = useRef<THREE.Group>(null!);
     const displayed = useRef(0);
-    const materialRef = useRef<THREE.MeshStandardMaterial | null>(null);
+    const materialRef = useRef<THREE.MeshBasicMaterial | null>(null);
     const baseMapRef = useRef<THREE.Texture | null>(null);
     const composedRef = useRef<THREE.CanvasTexture | null>(null);
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -431,8 +433,8 @@ function LaptopModel({ progressRef }: ModelProps) {
         });
         if (!target) return;
 
-        const material = (target as THREE.Mesh).material as THREE.MeshStandardMaterial;
-        const base = material.map;
+        const original = (target as THREE.Mesh).material as THREE.MeshStandardMaterial;
+        const base = original.map;
         if (!base?.image) return;
 
         const canvas = document.createElement("canvas");
@@ -451,12 +453,18 @@ function LaptopModel({ progressRef }: ModelProps) {
         composed.colorSpace = THREE.SRGBColorSpace;
         sharpenCanvasTexture(composed);
 
+        // Unlit material — no specular highlight while the laptop rotates.
+        const material = new THREE.MeshBasicMaterial({
+            map: composed,
+            toneMapped: false,
+        });
+        (target as THREE.Mesh).material = material;
+
         materialRef.current = material;
         baseMapRef.current = base;
         canvasRef.current = canvas;
         screenCanvasRef.current = screenCanvas;
         composedRef.current = composed;
-        material.map = composed;
 
         slideIndex.current = 0;
         nextIndex.current = 1 % LAPTOP_SCREEN_SLIDES.length;
@@ -466,8 +474,8 @@ function LaptopModel({ progressRef }: ModelProps) {
         paintLaptop(0);
 
         return () => {
-            material.map = base;
-            material.needsUpdate = true;
+            (target as THREE.Mesh).material = original;
+            material.dispose();
             composed.dispose();
             materialRef.current = null;
             baseMapRef.current = null;
@@ -521,13 +529,13 @@ function LaptopModel({ progressRef }: ModelProps) {
         if (LAPTOP_SCREEN_SLIDES.length < 2 || !composedRef.current) return;
 
         const now = performance.now();
-        if (!fadingOut.current && now - lastSwap.current > SCREEN_SLIDE_MS) {
+        if (!fadingOut.current && now - lastSwap.current > LAPTOP_SCREEN_SLIDE_MS) {
             fadingOut.current = true;
             nextIndex.current = (slideIndex.current + 1) % LAPTOP_SCREEN_SLIDES.length;
         }
 
         if (fadingOut.current) {
-            fade.current = Math.max(0, fade.current - delta * (1000 / SCREEN_CROSSFADE_MS));
+            fade.current = Math.max(0, fade.current - delta * (1000 / LAPTOP_SCREEN_CROSSFADE_MS));
             if (fade.current <= 0) {
                 slideIndex.current = nextIndex.current;
                 paintLaptop(slideIndex.current);
@@ -571,7 +579,11 @@ interface DeviceSceneProps {
 
 export function DeviceScene({ progressRef }: DeviceSceneProps) {
     return (
-        <Canvas camera={{ position: [0, 0, 8], fov: 35 }} style={{ pointerEvents: "none" }}>
+        <Canvas
+            camera={{ position: [0, 0, 8], fov: 35 }}
+            dpr={[1, 1.5]}
+            style={{ pointerEvents: "none" }}
+        >
             <ambientLight intensity={1.15} />
             <directionalLight position={[3, 5, 5]} intensity={1.35} />
             <directionalLight position={[-3, -2, 4]} intensity={0.45} />

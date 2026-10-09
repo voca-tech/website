@@ -1,15 +1,20 @@
 'use client'
 
 import { useCallback, useEffect, useRef, useState, type RefObject } from "react";
+import dynamic from "next/dynamic";
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { WhatsappLink } from "@/components/WhatsappLink";
-import { DeviceScene } from "@/components/DeviceScene";
 import { useScrollProgress } from "@/components/useScrollProgress";
 import { useIsDesktop } from "@/components/useIsDesktop";
 import { getLenisInstance } from "@/lib/lenis";
 import { PHONE_SCREEN_SLIDES, SCREEN_SLIDE_MS, SCREEN_CROSSFADE_MS } from "@/lib/heroScreens";
+
+const DeviceScene = dynamic(
+    () => import("@/components/DeviceScene").then((mod) => ({ default: mod.DeviceScene })),
+    { ssr: false },
+);
 
 const FADE_START = 0.16;
 const FADE_END = 0.46;
@@ -144,27 +149,43 @@ function Sparkline({ active }: { active: boolean }) {
 export default function HeroSection() {
     const rigRef = useRef<HTMLDivElement>(null);
     const progress = useScrollProgress(rigRef as RefObject<HTMLElement>);
-    const [heroOpacity, setHeroOpacity] = useState(1);
     const [actTwo, setActTwo] = useState(false);
     const isDesktop = useIsDesktop();
     const mobileDeviceRef = useRef<HTMLDivElement>(null);
     const glowRef = useRef<HTMLDivElement>(null);
+    const heroLayerRef = useRef<HTMLDivElement>(null);
+    const turnoverBgRef = useRef<HTMLDivElement>(null);
+    const turnoverLayerRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
         let raf: number;
+        let lastActTwo = false;
 
         function tick() {
             const p = progress.current;
             const linear = 1 - Math.min(1, Math.max(0, (p - FADE_START) / (FADE_END - FADE_START)));
             const eased = easeInOutCubic(linear);
+            const turnover = 1 - eased;
 
-            setHeroOpacity((prev) => (Math.abs(prev - eased) < 0.002 ? prev : eased));
-            setActTwo((prev) => {
-                const turnover = 1 - eased;
-                if (!prev && turnover > 0.55) return true;
-                if (prev && turnover < 0.15) return false;
-                return prev;
-            });
+            if (heroLayerRef.current) {
+                heroLayerRef.current.style.opacity = eased.toFixed(3);
+                heroLayerRef.current.style.pointerEvents = eased > 0.5 ? "auto" : "none";
+            }
+            if (turnoverBgRef.current) {
+                turnoverBgRef.current.style.opacity = turnover.toFixed(3);
+            }
+            if (turnoverLayerRef.current) {
+                turnoverLayerRef.current.style.opacity = turnover.toFixed(3);
+                turnoverLayerRef.current.style.pointerEvents = turnover > 0.5 ? "auto" : "none";
+            }
+
+            const nextActTwo = lastActTwo
+                ? turnover >= 0.15
+                : turnover > 0.55;
+            if (nextActTwo !== lastActTwo) {
+                lastActTwo = nextActTwo;
+                setActTwo(nextActTwo);
+            }
 
             if (glowRef.current) {
                 const travel = Math.min(1, p / PHONE_TRAVEL_END);
@@ -223,8 +244,6 @@ export default function HeroSection() {
         else target.scrollIntoView({ behavior: "smooth", block: "start" });
     }, []);
 
-    const turnoverOpacity = 1 - heroOpacity;
-
     const enter = (delay: number) => ({
         animationDelay: `${delay}ms`,
         animationFillMode: "both" as const,
@@ -244,28 +263,18 @@ export default function HeroSection() {
 
                     <div
                         ref={glowRef}
-                        className="absolute top-1/2 left-[52%] h-[34rem] w-[34rem] -translate-y-1/2 rounded-full bg-voca-green/25 blur-[100px] will-change-transform"
+                        className="absolute top-1/2 left-[52%] h-[28rem] w-[28rem] -translate-y-1/2 rounded-full bg-voca-green/20 blur-3xl will-change-transform"
                     />
-                    <div
-                        className="absolute -top-24 -right-24 w-[36rem] h-[36rem] bg-voca-green/20 rounded-full blur-3xl"
-                        style={{ animation: "drift-a 22s ease-in-out infinite" }}
-                    />
-                    <div
-                        className="absolute -bottom-32 -left-24 w-[32rem] h-[32rem] bg-teal-300/25 rounded-full blur-3xl"
-                        style={{ animation: "drift-b 26s ease-in-out infinite" }}
-                    />
-                    <div
-                        className="absolute top-1/3 left-1/2 w-[24rem] h-[24rem] bg-voca-yellow/20 rounded-full blur-3xl"
-                        style={{ animation: "drift-c 30s ease-in-out infinite" }}
-                    />
+                    <div className="absolute -top-20 -right-20 w-[22rem] h-[22rem] bg-voca-green/14 rounded-full blur-2xl" />
+                    <div className="absolute -bottom-24 -left-16 w-[20rem] h-[20rem] bg-teal-300/16 rounded-full blur-2xl" />
                 </div>
 
                 <div
-
+                    ref={turnoverBgRef}
                     data-nav-dark={actTwo ? "" : undefined}
                     className="absolute inset-0 pointer-events-none overflow-hidden"
                     style={{
-                        opacity: turnoverOpacity,
+                        opacity: 0,
                         background: "linear-gradient(135deg, #012e31 0%, #016b72 100%)",
                     }}
                 >
@@ -286,8 +295,9 @@ export default function HeroSection() {
                 </div>
 
                 <div
+                    ref={heroLayerRef}
                     className="absolute inset-0 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center max-w-7xl mx-auto px-6"
-                    style={{ opacity: heroOpacity, pointerEvents: heroOpacity > 0.5 ? "auto" : "none" }}
+                    style={{ opacity: 1, pointerEvents: "auto" }}
                 >
                     <div className="flex flex-col gap-6 items-center text-center lg:items-start lg:text-start">
                         <p
@@ -329,10 +339,12 @@ export default function HeroSection() {
                         </h1>
 
                         <p
-                            className="text-lg text-slate-500 max-w-lg animate-in fade-in slide-in-from-bottom-3 duration-700"
+                            className="text-lg text-slate-500 max-w-xl animate-in fade-in slide-in-from-bottom-3 duration-700"
                             style={enter(340)}
                         >
-                            Comunicação, cultura, engajamento, clima, capacitação, performance, gamificação, inteligência de dados e operação.
+                            Comunicação, cultura, engajamento, clima, capacitação,
+                            <br className="hidden sm:inline" />
+                            {" "}performance, gamificação, inteligência de dados e operação.
                         </p>
 
                         <div
@@ -353,8 +365,9 @@ export default function HeroSection() {
                 </div>
 
                 <div
+                    ref={turnoverLayerRef}
                     className="absolute inset-0 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center max-w-7xl mx-auto px-6"
-                    style={{ opacity: turnoverOpacity, pointerEvents: turnoverOpacity > 0.5 ? "auto" : "none" }}
+                    style={{ opacity: 0, pointerEvents: "none" }}
                 >
                     <div className="hidden lg:block" />
 
@@ -397,12 +410,12 @@ export default function HeroSection() {
                         </h2>
 
                         <p className="text-base text-white/70">
-                            &ldquo;Waze&rdquo;  para o RH e lideranças - Dashboards em tempo real com indicadores de clima, engajamento, comunicação, capacitação e performance.
+                            &ldquo;Bússola&rdquo;  para o RH e lideranças - Dashboards em tempo real com indicadores de clima, engajamento, comunicação, capacitação e performance.
                         </p>
 
                         <div className="w-full grid grid-cols-2 gap-3 mt-1">
                             <div
-                                className="rounded-2xl border border-white/50 bg-white/75 p-4 text-left shadow-xl backdrop-blur-xl backdrop-saturate-150"
+                                className="rounded-2xl border border-white/60 bg-white/90 p-4 text-left shadow-xl"
                                 style={{
                                     opacity: actTwo ? 1 : 0,
                                     transform: actTwo ? "translateY(0) scale(1)" : "translateY(20px) scale(0.95)",
@@ -430,7 +443,7 @@ export default function HeroSection() {
                             </div>
 
                             <div
-                                className="rounded-2xl border border-white/50 bg-white/75 p-4 text-left shadow-xl backdrop-blur-xl backdrop-saturate-150"
+                                className="rounded-2xl border border-white/60 bg-white/90 p-4 text-left shadow-xl"
                                 style={{
                                     opacity: actTwo ? 1 : 0,
                                     transform: actTwo ? "translateY(0) scale(1)" : "translateY(20px) scale(0.95)",
@@ -460,7 +473,7 @@ export default function HeroSection() {
                         </div>
 
                         <div
-                            className="w-full rounded-2xl border border-white/20 bg-white/[0.08] p-4 text-left backdrop-blur-md backdrop-saturate-150"
+                            className="w-full rounded-2xl border border-white/20 bg-white/[0.12] p-4 text-left"
                             style={{
                                 opacity: actTwo ? 1 : 0,
                                 transform: actTwo ? "translateY(0)" : "translateY(20px)",
@@ -531,12 +544,10 @@ export default function HeroSection() {
                         }}
                     />
                     <div
-                        className="absolute -top-16 -right-16 w-72 h-72 bg-voca-green/20 rounded-full blur-3xl"
-                        style={{ animation: "drift-a 22s ease-in-out infinite" }}
+                        className="absolute -top-12 -right-12 w-48 h-48 bg-voca-green/14 rounded-full blur-2xl"
                     />
                     <div
-                        className="absolute -bottom-20 -left-16 w-64 h-64 bg-teal-300/25 rounded-full blur-3xl"
-                        style={{ animation: "drift-b 26s ease-in-out infinite" }}
+                        className="absolute -bottom-14 -left-12 w-44 h-44 bg-teal-300/16 rounded-full blur-2xl"
                     />
                 </div>
 
@@ -580,10 +591,12 @@ export default function HeroSection() {
                     </h1>
 
                     <p
-                        className="text-lg text-slate-500 max-w-lg animate-in fade-in slide-in-from-bottom-3 duration-700"
+                        className="text-lg text-slate-500 max-w-xl animate-in fade-in slide-in-from-bottom-3 duration-700"
                         style={enter(340)}
                     >
-                        Comunicação, cultura, engajamento, clima, capacitação, performance, gamificação, inteligência de dados e operação.
+                        Comunicação, cultura, engajamento, clima, capacitação,
+                        <br className="hidden sm:inline" />
+                        {" "}performance, gamificação, inteligência de dados e operação.
                     </p>
 
                     <div
@@ -604,7 +617,7 @@ export default function HeroSection() {
                         className="relative mt-4 w-full max-w-[230px] will-change-transform animate-in fade-in zoom-in-95 duration-1000"
                         style={enter(600)}
                     >
-                        <div className="absolute -inset-8 -z-10 rounded-full bg-voca-green/15 blur-3xl" />
+                        <div className="absolute -inset-6 -z-10 rounded-full bg-voca-green/12 blur-2xl" />
 
                         <div className="relative rounded-[2.25rem] border-[8px] border-slate-900 bg-slate-900 shadow-2xl overflow-hidden aspect-[618/1294]">
                             <div className="absolute top-0 left-1/2 -translate-x-1/2 w-16 h-4 bg-slate-900 rounded-b-xl z-10" />

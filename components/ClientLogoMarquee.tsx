@@ -29,7 +29,7 @@ const clientLogos: Logo[] = [
     { name: 'Credi10', src: '/clients/credi10.png', width: 140, height: 140, caseSlug: 'credi10-compliance' },
     { name: 'SPS Group', src: '/clients/spsGroup.png', width: 543, height: 216 },
     { name: 'Alctel', src: '/clients/alctel.png', width: 411, height: 311 },
-    { name: 'Freitas Ferraz', src: '/clients/freitasFerraz.png', width: 414, height: 172 },
+    { name: 'Topocart', src: '/clients/topocart.png', width: 432, height: 180 },
     { name: 'Sapore', src: '/clients/sapore.png', width: 2678, height: 1054 },
     { name: 'Engeform', src: '/clients/engeform.png', width: 139, height: 42, caseSlug: 'engeform' },
     //{ name: 'NovoNordisk', src: '/clients/novoNordisk.png', width: 110, height: 82 },
@@ -62,7 +62,7 @@ const findLogo = (name: string) => {
     return logo;
 };
 
-const logosRowTop = ["Akaer", "Wine", "Grant Thornton", "Credi10", "Cantu", "Grupo Vila Nova", "SPS Group", "Freitas Ferraz"].map(findLogo);
+const logosRowTop = ["Akaer", "Wine", "Grant Thornton", "Credi10", "Cantu", "Grupo Vila Nova", "SPS Group", "Topocart"].map(findLogo);
 const logosRowBottom = ["Belas Artes", "Hering", "Woodbridge", "SP Engenharia", "Guess", "Hwaseung", "Alctel", "Sapore", "Engeform"].map(findLogo);
 
 function LogoItem({ logo }: { logo: Logo }) {

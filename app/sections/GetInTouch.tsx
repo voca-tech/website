@@ -21,21 +21,17 @@ export default function GetInTouchSection() {
     useEffect(() => {
         gsap.registerPlugin(ScrollTrigger);
         const ctx = gsap.context(() => {
-            gsap.fromTo(
-                revealRef.current,
-                { opacity: 0, y: 40 },
-                {
-                    opacity: 1,
-                    y: 0,
-                    ease: "none",
-                    scrollTrigger: {
-                        trigger: sectionRef.current,
-                        start: "top 75%",
-                        end: "top 35%",
-                        scrub: 0.8,
-                    },
-                }
-            );
+            gsap.from(revealRef.current, {
+                opacity: 0,
+                y: 32,
+                duration: 0.7,
+                ease: "power2.out",
+                scrollTrigger: {
+                    trigger: sectionRef.current,
+                    start: "top 75%",
+                    toggleActions: "play none none reverse",
+                },
+            });
         }, sectionRef);
         return () => ctx.revert();
     }, []);
@@ -64,12 +60,12 @@ export default function GetInTouchSection() {
                     }}
                 />
                 <div
-                    className="absolute -top-24 -left-24 w-[28rem] h-[28rem] rounded-full blur-3xl"
-                    style={{ backgroundColor: "rgba(255,255,255,0.08)", animation: "drift-a 24s ease-in-out infinite" }}
+                    className="absolute -top-16 -left-16 w-[18rem] h-[18rem] rounded-full blur-2xl"
+                    style={{ backgroundColor: "rgba(255,255,255,0.06)" }}
                 />
                 <div
-                    className="absolute -bottom-28 -right-16 w-[26rem] h-[26rem] rounded-full blur-3xl"
-                    style={{ backgroundColor: "rgba(45,212,191,0.14)", animation: "drift-b 28s ease-in-out infinite" }}
+                    className="absolute -bottom-16 -right-12 w-[16rem] h-[16rem] rounded-full blur-2xl"
+                    style={{ backgroundColor: "rgba(45,212,191,0.1)" }}
                 />
             </div>
 
@@ -104,8 +100,8 @@ export default function GetInTouchSection() {
 
                     <div className="relative max-w-md w-full mx-auto lg:mx-0">
                         <div
-                            className="absolute -inset-6 rounded-[2.5rem] opacity-70 blur-2xl pointer-events-none"
-                            style={{ background: "radial-gradient(circle, rgba(45,212,191,0.25), transparent 70%)" }}
+                            className="absolute -inset-4 rounded-[2.5rem] opacity-50 blur-xl pointer-events-none"
+                            style={{ background: "radial-gradient(circle, rgba(45,212,191,0.18), transparent 70%)" }}
                         />
                         <ContactForm
                             title="Fale com um especialista"

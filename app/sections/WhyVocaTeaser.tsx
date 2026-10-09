@@ -19,21 +19,17 @@ export default function WhyVocaTeaser() {
     useEffect(() => {
         gsap.registerPlugin(ScrollTrigger);
         const ctx = gsap.context(() => {
-            gsap.fromTo(
-                revealRef.current,
-                { opacity: 0, y: 60 },
-                {
-                    opacity: 1,
-                    y: 0,
-                    ease: "none",
-                    scrollTrigger: {
-                        trigger: sectionRef.current,
-                        start: "top 75%",
-                        end: "top 30%",
-                        scrub: 0.8,
-                    },
-                }
-            );
+            gsap.from(revealRef.current, {
+                opacity: 0,
+                y: 40,
+                duration: 0.75,
+                ease: "power2.out",
+                scrollTrigger: {
+                    trigger: sectionRef.current,
+                    start: "top 75%",
+                    toggleActions: "play none none reverse",
+                },
+            });
         }, sectionRef);
         return () => ctx.revert();
     }, []);
@@ -57,7 +53,7 @@ export default function WhyVocaTeaser() {
                     className="absolute -right-16 -bottom-20 w-72 sm:w-96 h-auto opacity-[0.06] brightness-0 invert select-none"
                 />
                 <div
-                    className="absolute -top-32 left-1/2 -translate-x-1/2 w-[42rem] h-[42rem] rounded-full bg-teal-300/10 blur-3xl"
+                    className="absolute -top-24 left-1/2 -translate-x-1/2 w-[28rem] h-[28rem] rounded-full bg-teal-300/8 blur-2xl"
                     style={{ animation: "drift-b 26s ease-in-out infinite" }}
                 />
             </div>
@@ -85,7 +81,7 @@ export default function WhyVocaTeaser() {
                         return (
                             <div
                                 key={reason.title}
-                                className="rounded-2xl border border-white/15 bg-white/[0.06] backdrop-blur-sm p-5 transition-colors duration-300 hover:bg-white/[0.1]"
+                                className="rounded-2xl border border-white/15 bg-white/[0.08] p-5 transition-colors duration-300 hover:bg-white/[0.12]"
                                 onMouseEnter={() => iconRefs.current[i]?.startAnimation()}
                                 onMouseLeave={() => iconRefs.current[i]?.stopAnimation()}
                             >
@@ -103,7 +99,7 @@ export default function WhyVocaTeaser() {
                 </div>
 
                 <div
-                    className="relative mt-10 rounded-[2rem] border border-white/15 bg-white/[0.06] backdrop-blur-sm overflow-hidden p-8 sm:p-10 flex flex-col sm:flex-row items-center gap-8 sm:gap-10"
+                    className="relative mt-10 rounded-[2rem] border border-white/15 bg-white/[0.08] overflow-hidden p-8 sm:p-10 flex flex-col sm:flex-row items-center gap-8 sm:gap-10"
                 >
                     <div className="flex items-baseline gap-1 shrink-0">
                         <span className="text-5xl sm:text-6xl font-extrabold text-white">{highlightStat.value}</span>

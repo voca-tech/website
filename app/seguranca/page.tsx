@@ -28,10 +28,10 @@ const securityFaqs = [
         question: "Como funciona a conformidade com a LGPD na prática?",
         answer: "Adotamos boas práticas de segurança e compliance desde a implantação, garantindo privacidade e confidencialidade dos dados nos processos da empresa. Fazemos uso responsável de IA, com governança alinhada às diretrizes da LGPD e às recomendações da ANPD. E disponibilizamos relatórios de auditoria com rastreabilidade completa para fiscalização e prestação de contas.",
     },
-    {
-        question: "Vocês têm certificação ISO 27001 ou SOC 2?",
-        answer: "Ainda não. O VOCA segue a LGPD e mantém processos rastreáveis e auditáveis, mas ainda não possui certificações internacionais como ISO 27001 ou SOC 2.",
-    },
+    // {
+    //     question: "Vocês têm certificação ISO 27001 ou SOC 2?",
+    //     answer: "Ainda não. O VOCA segue a LGPD e mantém processos rastreáveis e auditáveis, mas ainda não possui certificações internacionais como ISO 27001 ou SOC 2.",
+    // },
     {
         question: "A ouvidoria é realmente anônima?",
         answer: "Sim, sempre que o colaborador escolhe o anonimato. Nesse caso a manifestação chega sem nenhum dado que permita rastrear quem enviou: nem o RH nem a liderança conseguem identificar o autor. O canal também aceita manifestações identificadas, e essa decisão é sempre do colaborador. Os relatórios do canal já foram usados em auditoria externa por clientes como a Credi10, com 100% de conformidade.",

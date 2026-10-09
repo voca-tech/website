@@ -98,13 +98,13 @@ export function NavBar() {
             ref={navRef}
             id="home"
             className={cn(
-                "sticky top-0 inset-x-0 z-50 px-6 border-b backdrop-saturate-150 transition-[padding,background-color,backdrop-filter,border-color,box-shadow] duration-500",
+                "sticky top-0 inset-x-0 z-50 px-6 border-b transition-[padding,background-color,border-color,box-shadow] duration-500",
                 scrolled && (onDark
-                    ? "py-1.5 bg-slate-950/25 backdrop-blur-2xl border-white/15 shadow-lg"
-                    : "py-1.5 bg-white/30 backdrop-blur-2xl border-white/40 shadow-lg"),
+                    ? "py-1.5 bg-slate-950/80 backdrop-blur-sm border-white/15 shadow-lg"
+                    : "py-1.5 bg-white/85 backdrop-blur-sm border-slate-200/70 shadow-lg"),
                 !scrolled && (onDark
-                    ? "py-4 bg-slate-950/10 backdrop-blur-md border-transparent shadow-none"
-                    : "py-4 bg-white/20 backdrop-blur-md border-transparent shadow-none")
+                    ? "py-4 bg-slate-950/40 backdrop-blur-sm border-transparent shadow-none"
+                    : "py-4 bg-white/70 backdrop-blur-sm border-transparent shadow-none")
             )}
             style={{ transitionTimingFunction: "cubic-bezier(0.16, 1, 0.3, 1)" }}
         >

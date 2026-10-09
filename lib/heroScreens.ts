@@ -16,8 +16,11 @@ export const LAPTOP_SCREEN_SLIDES = [
     // "/screens/Web/web-5.png",
 ] as const;
 
-export const SCREEN_SLIDE_MS = 4200;
-export const SCREEN_CROSSFADE_MS = 900;
+export const SCREEN_SLIDE_MS = 2600;
+export const SCREEN_CROSSFADE_MS = 550;
+/** Laptop slideshow — a bit snappier than the phone. */
+export const LAPTOP_SCREEN_SLIDE_MS = 2000;
+export const LAPTOP_SCREEN_CROSSFADE_MS = 400;
 /** Light haze — details soft, layout still clear. Set to 0 to show screens sharp. */
 export const SCREEN_BLUR_PX = 0;
 export const SCREEN_FROST = "rgba(255, 255, 255, 0)";
@@ -75,6 +78,21 @@ export function drawCover(
     drawFitted(ctx, source, destW, destH, "cover", "center");
 }
 
+let blurSlab: HTMLCanvasElement | null = null;
+let blurSlabCtx: CanvasRenderingContext2D | null = null;
+
+function getBlurSlab(destW: number, destH: number) {
+    if (!blurSlab) {
+        blurSlab = document.createElement("canvas");
+        blurSlabCtx = blurSlab.getContext("2d");
+    }
+    if (blurSlab.width !== destW || blurSlab.height !== destH) {
+        blurSlab.width = destW;
+        blurSlab.height = destH;
+    }
+    return blurSlabCtx;
+}
+
 export function drawBlurredScreen(
     ctx: CanvasRenderingContext2D,
     source: CanvasImageSource,
@@ -92,29 +110,35 @@ export function drawBlurredScreen(
     const fit = options?.fit ?? "cover";
     const alignY = options?.alignY ?? "top";
 
+    // Hot path: no blur — paint straight to the target (avoids per-frame canvas alloc).
+    if (blurPx <= 0) {
+        drawFitted(ctx, source, destW, destH, fit, alignY);
+        if (frost && frost !== "transparent" && frost !== "rgba(255, 255, 255, 0)") {
+            ctx.fillStyle = frost;
+            ctx.fillRect(0, 0, destW, destH);
+        }
+        return;
+    }
+
     // Paint at exact size first so framing stays stable across slides,
     // then re-blit with a light blur (tiny pad only to hide filter edges).
-    const slab = document.createElement("canvas");
-    slab.width = destW;
-    slab.height = destH;
-    const slabCtx = slab.getContext("2d");
-    if (!slabCtx) {
+    const slabCtx = getBlurSlab(destW, destH);
+    if (!slabCtx || !blurSlab) {
         drawFitted(ctx, source, destW, destH, fit, alignY);
         return;
     }
 
+    slabCtx.clearRect(0, 0, destW, destH);
     drawFitted(slabCtx, source, destW, destH, fit, alignY);
 
     ctx.save();
-    if (blurPx > 0) {
-        const pad = Math.ceil(blurPx * 2);
-        ctx.filter = `blur(${blurPx}px)`;
-        ctx.drawImage(slab, -pad, -pad, destW + pad * 2, destH + pad * 2);
-    } else {
-        ctx.drawImage(slab, 0, 0);
-    }
+    const pad = Math.ceil(blurPx * 2);
+    ctx.filter = `blur(${blurPx}px)`;
+    ctx.drawImage(blurSlab, -pad, -pad, destW + pad * 2, destH + pad * 2);
     ctx.restore();
 
-    ctx.fillStyle = frost;
-    ctx.fillRect(0, 0, destW, destH);
+    if (frost && frost !== "transparent" && frost !== "rgba(255, 255, 255, 0)") {
+        ctx.fillStyle = frost;
+        ctx.fillRect(0, 0, destW, destH);
+    }
 }
