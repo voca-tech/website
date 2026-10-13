@@ -1,7 +1,7 @@
 /** Screenshots shown on the hero phone/laptop. Add paths here as you drop files in /public/screens. */
 export const PHONE_SCREEN_SLIDES = [
     "/screens/App/app-1.jpeg",
-    "/screens/App/app-2.jpeg",
+    "/screens/App/app-7.jpeg",
     "/screens/App/app-3.jpeg",
     // "/screens/App/app-4.jpeg",
     // "/screens/App/app-5.jpeg",
