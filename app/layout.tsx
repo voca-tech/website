@@ -1,18 +1,34 @@
 import { NavBar } from '@/components/NavigationBar'
+import 'lenis/dist/lenis.css'
 import './globals.css'
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
+import Script from 'next/script'
 import Footer from './sections/Footer'
 import { Toaster } from '@/components/ui/toaster'
+import SmoothScrollProvider from '@/components/SmoothScrollProvider'
+import { LoadingScreen } from '@/components/LoadingScreen'
 
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'VOCA • Gestão de Pessoas',
-  description: 'Cuidamos de pessoas para que elas possam cuidar das empresas',
+  metadataBase: new URL('https://www.voca.com.br'),
+
+  title: {
+    default: 'VOCA | Plataforma de DHO completa para gestão, comunicação e inteligência de dados',
+    template: '%s | VOCA',
+  },
+  description: 'O VOCA é a plataforma de DHO que conecta, organiza e ativa as pessoas da sua empresa — 18 funcionalidades integradas, suporte humano e resultados mensurados desde o primeiro mês.',
+  robots: {
+    index: true,
+    follow: true,
+  },
   openGraph: {
-    title: 'VOCA • Gestão de Pessoas',
-    description: 'Cuidamos de pessoas para que elas possam cuidar das empresas',
+    title: 'VOCA | Comunicação, engajamento e inteligência de pessoas em uma única plataforma',
+    description: 'O VOCA é a plataforma de DHO que conecta, organiza e ativa as pessoas da sua empresa — 18 funcionalidades integradas, suporte humano e resultados mensurados desde o primeiro mês.',
+    type: 'website',
+    locale: 'pt_BR',
+    siteName: 'VOCA',
   }
 }
 
@@ -22,18 +38,32 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" className='scroll-smooth'>
-      <body className={`${inter.className}`}>
-        <NavBar />
+    <html lang="pt-BR">
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              if ('scrollRestoration' in history) { history.scrollRestoration = 'manual'; }
+              if (location.hash) { history.replaceState(null, '', location.pathname + location.search); }
+            `,
+          }}
+        />
+      </head>
+      <body className={`${inter.className} overflow-x-hidden`}>
+        <SmoothScrollProvider>
+          <NavBar />
 
-        <div className=''>
-          <Toaster />
-          <div className='m-auto'>
-            {children}
+          <div className=''>
+            <Toaster />
+            <div className='m-auto'>
+              {children}
+            </div>
           </div>
-        </div>
 
-        <Footer />
+          <Footer />
+        </SmoothScrollProvider>
+
+        <LoadingScreen />
       </body>
     </html>
   )

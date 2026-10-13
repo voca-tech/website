@@ -1,13 +1,13 @@
 import { Lexend } from 'next/font/google'
 import HeroSection from './sections/Hero';
-import ChallengesSection from './sections/Challenges';
-import DashboardPreviewSection from './sections/DashboardsPreview';
-import PartnersSection from './sections/Partners';
-import KPIsSection from './sections/KPIs';
-import Functionalities from './sections/Functionalities';
-import OurClientsSection from './sections/OurClients';
-import TestimonialsSection from './sections/Testimonials';
-import Gamification from './sections/Gamification';
+import SocialProofSection from './sections/SocialProof';
+import ProblemSolutionSelector from './sections/ProblemSolutionSelector';
+import CasesShowcase from './sections/CasesShowcase';
+import AudienceVideo from './sections/AudienceVideo';
+import MissionStatement from './sections/MissionStatement';
+import WhyVocaTeaser from './sections/WhyVocaTeaser';
+import ComplianceSecurity from './sections/ComplianceSecurity';
+import GetInTouchSection from './sections/GetInTouch';
 
 const lexendFont = Lexend({ weight: ['200', '300', '400', '500', '600', '700'], subsets: ['latin'] })
 
@@ -16,21 +16,21 @@ export default function Home() {
     <div className={`${lexendFont.className} flex flex-col`}>
       <HeroSection />
 
-      <ChallengesSection />
+      <SocialProofSection />
 
-      <KPIsSection />
+      <ProblemSolutionSelector />
 
-      <Functionalities />
+      <CasesShowcase />
 
-      <DashboardPreviewSection />
+      <AudienceVideo />
 
-      <Gamification />
+      <MissionStatement />
 
-      <OurClientsSection />
+      <WhyVocaTeaser />
 
-      <TestimonialsSection />
+      <ComplianceSecurity />
 
-      <PartnersSection />
+      <GetInTouchSection />
     </div>
   )
 }
