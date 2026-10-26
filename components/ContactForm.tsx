@@ -26,6 +26,8 @@ import { Textarea } from "./ui/textarea"
 import { Button } from "./ui/button"
 import { ArrowLeft, ArrowRight, CheckCheck, Mail, MessageSquare, Phone, Send, User, type LucideIcon } from "lucide-react"
 import { sendEmail } from "@/lib/utils"
+import { isFreeEmailDomain } from "@/lib/corporateEmail"
+import { formatPhoneBR, isValidPhoneBR, phoneDigits } from "@/lib/phoneBR"
 import { useToast } from "@/components/ui/use-toast"
 import { LoadingSpinner } from "./Loading"
 
@@ -45,8 +47,18 @@ interface ContactFormProps {
 
 const formSchema = z.object({
     leadName: z.string().min(3, 'Por favor insira o seu nome'),
-    phone: z.string().optional(),
-    email: z.string().email('Por favor insira um Email válido'),
+    phone: z
+        .string()
+        .optional()
+        .refine((value) => !value || phoneDigits(value).length === 0 || isValidPhoneBR(value), {
+            message: 'Informe um telefone válido com DDD, no formato (11) 98765-4321.',
+        }),
+    email: z
+        .string()
+        .email('Por favor insira um Email válido')
+        .refine((value) => !isFreeEmailDomain(value), {
+            message: 'Use um e-mail corporativo. Domínios pessoais como Gmail, Outlook e Yahoo não são aceitos.',
+        }),
     message: z.string().optional()
 })
 
@@ -64,7 +76,7 @@ interface Step {
 const steps: Step[] = [
     { field: "leadName", label: "Qual é o seu nome?", placeholder: "Digite seu nome", icon: User },
     { field: "email", label: "Qual o seu e-mail corporativo?", placeholder: "Digite seu e-mail", icon: Mail },
-    { field: "phone", label: "Um telefone para contato", placeholder: "Digite o seu telefone", icon: Phone, optional: true },
+    { field: "phone", label: "Um telefone para contato", placeholder: "(11) 98765-4321", icon: Phone, optional: true },
     { field: "message", label: "Conte um pouco sobre o seu desafio", placeholder: "Descreva em poucas palavras", icon: MessageSquare, optional: true, multiline: true },
 ];
 
@@ -195,8 +207,26 @@ export function ContactForm({ title, description, buttonText, defaultMessage }: 
                                                                 <Input
                                                                     autoFocus={hasInteracted.current}
                                                                     placeholder={current.placeholder}
+                                                                    type={current.field === "phone" ? "tel" : current.field === "email" ? "email" : "text"}
+                                                                    inputMode={current.field === "phone" ? "numeric" : undefined}
+                                                                    autoComplete={
+                                                                        current.field === "phone"
+                                                                            ? "tel-national"
+                                                                            : current.field === "email"
+                                                                              ? "email"
+                                                                              : current.field === "leadName"
+                                                                                ? "name"
+                                                                                : undefined
+                                                                    }
                                                                     className="h-11 rounded-xl border-slate-200 bg-slate-50 pl-10 focus-visible:ring-voca-green/40 focus-visible:bg-white"
                                                                     {...field}
+                                                                    onChange={(event) => {
+                                                                        const value =
+                                                                            current.field === "phone"
+                                                                                ? formatPhoneBR(event.target.value)
+                                                                                : event.target.value
+                                                                        field.onChange(value)
+                                                                    }}
                                                                 />
                                                             </div>
                                                         )}

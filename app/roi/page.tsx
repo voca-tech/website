@@ -7,6 +7,7 @@ import { AnimatePresence, motion } from "motion/react";
 import gsap from "gsap";
 import {
     Users, Check, ArrowLeft, ArrowRight, Minus, Plus, TrendingDown, Building, Building2, Wallet, ListChecks, Trophy, Calculator,
+    User, Mail, Phone,
     type LucideIcon,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -15,6 +16,9 @@ import { WhatsappLink } from "@/components/WhatsappLink";
 import { ClientLogoMarquee } from "@/components/ClientLogoMarquee";
 import { cn } from "@/lib/utils";
 import { getLenisInstance } from "@/lib/lenis";
+import { isCorporateEmail, isFreeEmailDomain, isValidEmailFormat } from "@/lib/corporateEmail";
+import { formatPhoneBR, isValidPhoneBR } from "@/lib/phoneBR";
+import { sendRoiLeadEmail } from "@/lib/sendRoiLeadEmail";
 import { calculateCustomSavings } from "@/app/roi/constants";
 import { pillars } from "@/app/produto/data";
 import { cases as caseStudies, PILLARS } from "@/app/casos-de-sucesso/data";
@@ -184,14 +188,24 @@ export default function ROIPage() {
     const [direction, setDirection] = useState(1);
     const cardRef = useRef<HTMLDivElement>(null);
     const hasSteppedRef = useRef(false);
-    const [companyName, setCompanyName] = useState("");
+    const leadSentRef = useRef(false);
+    const [fullName, setFullName] = useState("");
+    const [email, setEmail] = useState("");
+    const [phone, setPhone] = useState("");
     const [employees, setEmployees] = useState(100);
     const [selectedFeatures, setSelectedFeatures] = useState<Set<string>>(new Set());
     const [platformCount, setPlatformCount] = useState(3);
     const [monthlySpendInput, setMonthlySpendInput] = useState("");
 
     const isLastStep = step === STEP_COUNT - 1;
-    const canAdvanceStep0 = companyName.trim().length > 0;
+    const emailTrimmed = email.trim();
+    const emailTouched = emailTrimmed.length > 0;
+    const emailFormatOk = isValidEmailFormat(emailTrimmed);
+    const emailIsFree = emailFormatOk && isFreeEmailDomain(emailTrimmed);
+    const emailIsCorporate = isCorporateEmail(emailTrimmed);
+    const phoneTouched = phone.trim().length > 0;
+    const phoneIsValid = isValidPhoneBR(phone);
+    const canAdvanceStep0 = fullName.trim().length > 0 && emailIsCorporate && phoneIsValid;
     const canAdvanceStep1 = selectedFeatures.size > 0;
 
     const customSpend = monthlySpendInput.trim() === "" ? undefined : Number(monthlySpendInput);
@@ -216,9 +230,33 @@ export default function ROIPage() {
         });
     }
 
+    function submitRoiLead() {
+        if (leadSentRef.current) return;
+        leadSentRef.current = true;
+
+        void sendRoiLeadEmail({
+            leadName: fullName.trim(),
+            email: emailTrimmed,
+            phone: phone.trim(),
+            employees,
+            features: Array.from(selectedFeatures),
+            platformCount,
+            monthlySpendInformed: hasCustomSpend ? customSpend! : null,
+            currentMonthlySpend: result.currentMonthlySpend,
+            vocaMonthlySpend: result.vocaMonthlySpend,
+            monthlySavings: result.monthlySavings,
+            totalSavings: result.totalSavings,
+            percentSavings: result.percentSavings,
+            contractMonths: CONTRACT_LENGTH_MONTHS,
+            noSavings,
+        });
+    }
+
     function handleNext() {
+        const next = Math.min(step + 1, STEP_COUNT - 1);
+        if (next === STEP_COUNT - 1) submitRoiLead();
         setDirection(1);
-        setStep((s) => Math.min(s + 1, STEP_COUNT - 1));
+        setStep(next);
     }
 
     function handleBack() {
@@ -319,16 +357,67 @@ export default function ROIPage() {
                                     </p>
 
                                     <div>
-                                        <FieldLabel icon={Building} text="Nome da empresa" />
+                                        <FieldLabel icon={User} text="Nome" />
                                         <input
                                             type="text"
-                                            placeholder="Ex: Acme Ltda"
-                                            value={companyName}
-                                            onChange={(event) => setCompanyName(event.target.value)}
+                                            placeholder="Ex: Ana Silva"
+                                            value={fullName}
+                                            onChange={(event) => setFullName(event.target.value)}
                                             required
                                             aria-required="true"
+                                            autoComplete="name"
                                             className={FIELD_CLASS}
                                         />
+                                    </div>
+
+                                    <div>
+                                        <FieldLabel icon={Mail} text="E-mail corporativo" />
+                                        <input
+                                            type="email"
+                                            placeholder="Ex: ana.silva@suaempresa.com.br"
+                                            value={email}
+                                            onChange={(event) => setEmail(event.target.value)}
+                                            required
+                                            aria-required="true"
+                                            aria-invalid={emailTouched && !emailIsCorporate}
+                                            autoComplete="email"
+                                            className={cn(
+                                                FIELD_CLASS,
+                                                emailTouched && !emailIsCorporate && "border-red-300 focus:border-red-400 focus:ring-red-100"
+                                            )}
+                                        />
+                                        {emailTouched && !emailFormatOk && (
+                                            <p className="mt-2 text-xs text-red-500">Informe um e-mail válido.</p>
+                                        )}
+                                        {emailTouched && emailIsFree && (
+                                            <p className="mt-2 text-xs text-red-500">
+                                                Use um e-mail corporativo. Domínios pessoais como Gmail, Outlook e Yahoo não são aceitos.
+                                            </p>
+                                        )}
+                                    </div>
+
+                                    <div>
+                                        <FieldLabel icon={Phone} text="Telefone" />
+                                        <input
+                                            type="tel"
+                                            inputMode="numeric"
+                                            placeholder="Ex: (11) 98765-4321"
+                                            value={phone}
+                                            onChange={(event) => setPhone(formatPhoneBR(event.target.value))}
+                                            required
+                                            aria-required="true"
+                                            aria-invalid={phoneTouched && !phoneIsValid}
+                                            autoComplete="tel-national"
+                                            className={cn(
+                                                FIELD_CLASS,
+                                                phoneTouched && !phoneIsValid && "border-red-300 focus:border-red-400 focus:ring-red-100"
+                                            )}
+                                        />
+                                        {phoneTouched && !phoneIsValid && (
+                                            <p className="mt-2 text-xs text-red-500">
+                                                Informe um telefone válido com DDD, no formato (11) 98765-4321.
+                                            </p>
+                                        )}
                                     </div>
 
                                     <div>
@@ -561,7 +650,7 @@ export default function ROIPage() {
                                                 </p>
                                                 <p className="text-white/80 text-base sm:text-lg mt-4 max-w-xl mx-auto leading-relaxed">
                                                     O valor que a{" "}
-                                                    <span className="font-bold text-white">{companyName.trim() || "sua empresa"}</span>{" "}
+                                                    <span className="font-bold text-white">sua empresa</span>{" "}
                                                     informou já está abaixo da nossa estimativa para um time de {employees} pessoas.
                                                     O que muda é a consolidação: {selectedFeatures.size} funcionalidades num contrato só,
                                                     em vez de {platformCount}.
@@ -576,7 +665,7 @@ export default function ROIPage() {
                                                     O VOCA faz tudo isso sozinho, numa única plataforma.
                                                 </p>
                                                 <p className="text-white/80 text-base sm:text-lg mt-5">
-                                                    Com o VOCA, a <span className="font-bold text-white">{companyName.trim() || "sua empresa"}</span> pode economizar até
+                                                    Com o VOCA, a <span className="font-bold text-white">sua empresa</span> pode economizar até
                                                 </p>
                                                 <p className="text-5xl sm:text-7xl font-extrabold text-white mt-2 leading-none">
                                                     {monthlyDisplay}
@@ -713,7 +802,9 @@ export default function ROIPage() {
                     </div>
 
                     {step === 0 && !canAdvanceStep0 && (
-                        <p className="text-xs text-center text-slate-400 mt-3">Informe o nome da empresa pra continuar.</p>
+                        <p className="text-xs text-center text-slate-400 mt-3">
+                            Informe nome, e-mail corporativo e telefone com DDD pra continuar.
+                        </p>
                     )}
                     {step === 1 && !canAdvanceStep1 && (
                         <p className="text-xs text-center text-slate-400 mt-3">Selecione ao menos uma funcionalidade pra continuar.</p>
