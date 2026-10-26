@@ -66,14 +66,14 @@ export async function POST(request: NextRequest) {
     subject: `[Site VOCA] Novo LEAD ROI: ${leadName}`,
     html: `
       <h2>Lead — Calculadora de ROI</h2>
-      <h3>Contato</h3>
+      <h3>Informações do lead</h3>
       <b>Nome:</b> ${escapeHtml(String(leadName))} <br />
       <b>Telefone:</b> ${escapeHtml(String(phone || "Não Informado"))} <br />
       <b>Email Corporativo:</b> ${escapeHtml(String(email))} <br />
 
-      <h3>Operação informada</h3>
+      <h3>Informações da empresa</h3>
       <b>Colaboradores:</b> ${Number(employees)} <br />
-      <b>Plataformas hoje:</b> ${Number(platformCount)} <br />
+      <b>Quantidade plataformas contratadas atualmente:</b> ${Number(platformCount)} <br />
       <b>Gasto mensal informado:</b> ${spendInformedBlock} <br />
       <b>Funcionalidades (${Array.isArray(features) ? features.length : 0}):</b> ${featuresList} <br />
 
