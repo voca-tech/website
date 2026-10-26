@@ -1,6 +1,7 @@
 import Image from "next/image";
 
 import logo from '@/public/whatsapp.svg'
+import { cn } from "@/lib/utils";
 import { Button } from "./ui/button";
 
 interface WhatsappLinkProps {
@@ -18,8 +19,19 @@ export function WhatsappLink({ variant = 'button', className }: WhatsappLinkProp
                 href={href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className={className ?? "font-semibold text-voca-green hover:underline underline-offset-4"}
+                className={cn(
+                    "inline-flex items-center gap-2 font-semibold text-voca-green hover:underline underline-offset-4",
+                    className,
+                )}
             >
+                <Image
+                    src={logo}
+                    alt=""
+                    aria-hidden="true"
+                    width={20}
+                    height={20}
+                    className="shrink-0"
+                />
                 Falar com especialista →
             </a>
         )
